@@ -538,6 +538,7 @@
         state.progress = ''; state.error = ''; state.query = ''; state.filter = 'all'; state.sort = 'due';
         state.legacyRaw = null; state.legacyTasks = []; state.legacyError = '';
         $('search').value = ''; $('sort').value = 'due'; $('auth-email').value = ''; $('auth-password').value = ''; $('auth-password-confirm').value = '';
+        $('account').hidden = true; $('account-email').textContent = ''; $('account-email').title = '';
         clearTimeout(toastTimer); $('toast').textContent = ''; resetForm(); render();
       }
       function onUserChanged(user) {
@@ -726,7 +727,7 @@
         $('task-form').setAttribute('aria-busy', String(state.busy));
       }
       function cloudFeedback() {
-        let label = !state.authReady ? '연결 확인 중' : !state.user ? '로그인 필요' : state.busy ? '저장 처리 중' : state.ready && navigator.onLine ? '클라우드 동기화' : '연결 확인 필요';
+        let label = !state.authReady ? '연결 확인 중' : !state.user ? '로그인 필요' : state.busy ? '저장 처리 중' : state.error ? '작업 확인 필요' : state.ready && navigator.onLine ? '클라우드 동기화' : '연결 확인 필요';
         $('storage-label').textContent = label;
         $('storage-chip').classList.toggle('warning', Boolean(state.user && (!state.ready || state.error || !navigator.onLine)));
         let message = '';
