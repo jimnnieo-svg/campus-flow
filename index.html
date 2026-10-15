@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#7560cf">
-  <meta name="description" content="과제부터 마감일까지, 나만의 속도로 정리하는 대학생 학습 대시보드 Campus Flow.">
+  <meta name="description" content="로그인하고 나만의 과제를 클라우드에 보관하는 Campus Flow 학습 대시보드.">
   <title>Campus Flow · 나의 학습 대시보드</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2214%22%20fill%3D%22%237157c7%22%2F%3E%3Cpath%20d%3D%22M10%2013c5-1%209%200%2014%203%205-3%209-4%2014-3v23c-5-1-9%200-14%203-5-3-9-4-14-3zM24%2016v23%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%222.5%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
   <style>
@@ -274,11 +274,43 @@
       .footer { flex-direction: column; align-items: flex-start; gap: 4px; padding-block: 20px; }
       .notice { font-size: 12px; padding: 13px; }
     }
+
+    /* Firebase 인증 화면도 기존 대시보드의 색상·버튼·입력 토큰을 공유합니다. */
+    .auth-shell { min-height: calc(100vh - 190px); padding: 52px 0; display: grid; place-items: center; }
+    .auth-layout { width: min(940px, 100%); display: grid; grid-template-columns: 1fr 420px; align-items: center; gap: 70px; }
+    .auth-intro h1 { font-size: 35px; line-height: 1.5; margin-bottom: 16px; }
+    .auth-intro > p { color: var(--muted); line-height: 1.9; }
+    .auth-benefits { padding: 0; margin: 27px 0 0; list-style: none; display: grid; gap: 14px; color: var(--muted); font-size: 13px; }
+    .auth-benefits li { display: flex; gap: 10px; align-items: center; }
+    .auth-benefits .icon { color: var(--purple); }
+    .auth-card { padding: 30px; width: 100%; }
+    .auth-card h2 { font-size: 23px; letter-spacing: -.6px; margin-bottom: 5px; }
+    .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border-radius: 10px; padding: 4px; gap: 4px; margin: 22px 0; }
+    .auth-tabs button { border: 0; background: transparent; min-height: 43px; border-radius: 7px; font-weight: 650; color: var(--muted); }
+    .auth-tabs button[aria-pressed="true"] { background: white; color: var(--purple-dark); box-shadow: var(--shadow); }
+    .auth-card .button.primary { width: 100%; margin-top: 6px; }
+    .auth-help { font-size: 12px; color: var(--muted); line-height: 1.8; margin-top: 18px; }
+    .auth-error { color: var(--red); background: var(--red-bg); border-radius: 9px; padding: 12px; margin-bottom: 14px; font-size: 13px; overflow-wrap: anywhere; }
+    .auth-loading { max-width: 490px; padding: 32px; text-align: center; }
+    .auth-loading .brand-mark { margin: 0 auto 20px; }
+    .auth-loading h2 { font-size: 22px; }
+    .auth-loading p { margin: 12px 0 20px; color: var(--muted); }
+    .account { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .account-email { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 12px; }
+    .cloud-notice { background: #f0ecfb; border: 1px solid #dfd5f2; color: var(--purple-dark); }
+    .legacy-notice { background: #f3f5fb; border: 1px solid var(--line); color: var(--ink); }
+    .legacy-notice .notice-actions button { border-color: #d0c6e4; color: var(--purple-dark); }
+    .connection-status { margin-top: 16px; color: var(--muted); font-size: 12px; }
+    button:disabled, input:disabled { cursor: not-allowed; }
+    #main[inert] { opacity: .8; }
+    @media (max-width: 900px) { .auth-layout { gap: 30px; grid-template-columns: 1fr 380px; } .auth-intro h1 { font-size: 28px; } .header-meta { gap: 10px; } .header-meta .date-label { display: none; } }
+    @media (max-width: 700px) { .auth-shell { padding-block: 28px; } .auth-layout { grid-template-columns: minmax(0, 440px); justify-content: center; gap: 24px; } .auth-intro h1 { font-size: 25px; margin-bottom: 8px; } .auth-benefits { display: none; } .auth-card { padding: 24px; } .account { flex-wrap: wrap; justify-content: flex-end; gap: 3px 8px; } .account-email { max-width: 150px; } .header-meta { flex-direction: column; align-items: flex-end; gap: 6px; padding-block: 12px; } .topbar-inner { gap: 12px; } .account .button { min-height: 40px; font-size: 11px; padding: 7px 10px; } }
+    @media (max-width: 400px) { .account-email { max-width: 115px; font-size: 10px; } .brand-name { font-size: 16px; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
 <body>
-  <a href="#main" class="skip-link">본문으로 바로 가기</a>
+  <a href="#auth-shell" class="skip-link">로그인 화면으로 바로 가기</a>
   <!-- 재사용 아이콘: 모든 경로는 문서 안에 있어 오프라인에서도 표시됩니다. -->
   <svg xmlns="http://www.w3.org/2000/svg" class="sr-only" aria-hidden="true">
     <defs>
@@ -308,12 +340,38 @@
         <div><div class="brand-name">Campus Flow</div><div class="brand-caption">대학 생활에, 나만의 흐름을.</div></div>
       </div>
       <div class="header-meta">
+        <div class="account" id="account" hidden><span class="account-email" id="account-email"></span><button type="button" class="button" id="logout">로그아웃</button></div>
         <span class="date-label"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><time id="today-label"></time></span>
-        <span id="storage-chip" class="storage-chip" title="이 브라우저에 저장됩니다. 다른 기기와 자동 동기화되지 않습니다."><span class="storage-dot"></span><span id="storage-label">브라우저 저장</span></span>
+        <span id="storage-chip" class="storage-chip" title="로그인한 계정의 과제만 Cloud Firestore에 저장됩니다."><span class="storage-dot"></span><span id="storage-label">연결 확인 중</span></span>
       </div>
     </div>
   </header>
-  <main id="main" class="wrap">
+
+  <section class="wrap auth-shell" id="auth-shell" aria-label="계정 인증">
+    <div class="panel auth-loading" id="auth-loading" role="status" aria-live="polite">
+      <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+      <h2 id="auth-loading-title">나의 학습 공간을 준비하고 있어요</h2>
+      <p id="auth-loading-message">안전하게 로그인 상태를 확인하고 있어요.</p>
+      <button class="button" type="button" id="restart-app" hidden>연결 다시 시도</button>
+    </div>
+    <div class="auth-layout" id="auth-layout" hidden>
+      <div class="auth-intro"><p class="eyebrow">CAMPUS FLOW · 나의 학습 공간</p><h1>어디서 시작하든,<br>나의 흐름 그대로.</h1><p>과제부터 마감일까지 차곡차곡.<br>나만의 계정에 담아, 어떤 기기에서든 이어가세요.</p><ul class="auth-benefits"><li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>내 계정에 안전하게 보관하는 과제</li><li><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>놓치지 않는 마감일과 학습 흐름</li><li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>작은 성취를 기록하는 나만의 대시보드</li></ul></div>
+      <div class="panel auth-card">
+        <h2 id="auth-title">다시 만나 반가워요</h2><p class="section-description" id="auth-description">로그인하고 나의 과제를 이어서 관리하세요.</p>
+        <div class="auth-tabs" role="group" aria-label="인증 방식"><button type="button" data-auth-mode="login" aria-pressed="true">로그인</button><button type="button" data-auth-mode="signup" aria-pressed="false">회원가입</button></div>
+        <form id="auth-form" novalidate>
+          <div class="field"><label for="auth-email">이메일</label><input type="email" id="auth-email" autocomplete="username" required maxlength="254" placeholder="student@example.com" aria-describedby="auth-error"></div>
+          <div class="field"><label for="auth-password">비밀번호</label><input type="password" id="auth-password" autocomplete="current-password" required maxlength="4096" placeholder="비밀번호를 입력해 주세요" aria-describedby="auth-error"></div>
+          <div class="field" id="confirm-password-field" hidden><label for="auth-password-confirm">비밀번호 확인</label><input type="password" id="auth-password-confirm" autocomplete="new-password" maxlength="4096" placeholder="비밀번호를 한 번 더 입력해 주세요" aria-describedby="auth-error"></div>
+          <p class="auth-error" id="auth-error" role="alert" hidden></p>
+          <button type="submit" class="button primary" id="auth-submit">로그인</button>
+        </form>
+        <p class="auth-help" id="auth-help">공용 컴퓨터에서는 사용을 마친 뒤 꼭 로그아웃해 주세요.</p>
+        <p class="auth-help" id="persistence-warning" role="status" hidden></p>
+      </div>
+    </div>
+  </section>
+  <main id="main" class="wrap" hidden>
     <section class="welcome" aria-labelledby="welcome-title">
       <div>
         <p class="eyebrow"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>나의 학습 공간</p>
@@ -341,9 +399,8 @@
       </div>
       <div class="notice deadline-notice" id="deadline-notice" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><p id="deadline-message"></p></div>
     </section>
-    <section class="notice storage-notice" id="storage-notice" role="alert" hidden aria-label="데이터 저장 안내">
-      <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><div class="notice-content"><p id="storage-message"></p><div class="notice-actions"><button type="button" id="download-raw" hidden>저장 원본 내려받기</button><button type="button" id="retry-storage">저장 다시 시도</button><button type="button" id="backup-unsaved">현재 과제 백업</button></div></div>
-    </section>
+    <section class="notice cloud-notice" id="cloud-notice" role="status" aria-live="polite" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><div class="notice-content"><p id="cloud-message"></p><div class="notice-actions"><button type="button" id="retry-cloud" hidden>연결 다시 확인</button></div></div></section>
+    <section class="notice legacy-notice" id="legacy-notice" hidden aria-label="기존 브라우저 과제 가져오기"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><div class="notice-content"><p id="legacy-message"></p><div class="notice-actions"><button type="button" id="import-legacy">현재 계정으로 가져오기</button><button type="button" id="download-legacy">기존 원본 내려받기</button></div></div></section>
     <div class="workspace">
       <section class="panel form-panel" aria-labelledby="form-title">
         <h2 class="section-heading" id="form-title"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span id="form-title-text">새 과제 추가</span></h2>
@@ -374,7 +431,7 @@
         <p id="result-announcement" class="sr-only" role="status" aria-live="polite"></p>
       </section>
     </div>
-    <section class="panel backup-panel" aria-labelledby="backup-title"><div class="backup-intro"><span class="backup-icon"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></span><div><h2 class="backup-title" id="backup-title">소중한 기록, 안전하게 보관하세요</h2><p class="backup-description">이 브라우저에만 저장돼요. 다른 기기로 옮길 때는 JSON 백업을 이용하세요.</p></div></div><div class="backup-actions"><button class="button" id="export-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>백업 내보내기</button><button class="button" id="import-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>백업 가져오기</button><input id="import-file" type="file" accept=".json,application/json" hidden aria-label="JSON 백업 파일 선택"></div></section>
+    <section class="panel backup-panel" aria-labelledby="backup-title"><div class="backup-intro"><span class="backup-icon"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></span><div><h2 class="backup-title" id="backup-title">소중한 기록, 안전하게 보관하세요</h2><p class="backup-description">로그인한 계정에 클라우드로 저장돼요. 기존 앱의 JSON 백업도 가져올 수 있어요.</p><label for="import-mode" style="margin-top:10px">백업 가져오기 방식</label><select id="import-mode" style="font-size:12px;max-width:240px"><option value="replace">전체 교체 · 최대 500개 문서 변경</option><option value="merge">누락된 과제 추가 · 기존 과제 유지</option></select></div></div><div class="backup-actions"><button class="button" id="export-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>백업 내보내기</button><button class="button" id="import-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>백업 가져오기</button><input id="import-file" type="file" accept=".json,application/json" hidden aria-label="JSON 백업 파일 선택"></div></section>
   </main>
   <footer class="wrap footer"><p><span class="footer-brand">Campus Flow</span><span class="footer-dot">·</span>대학 생활을 조금 더 가볍게.</p><p>바이브코딩 특강 · 서연경 교수님</p></footer>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
@@ -383,18 +440,177 @@
   <script>
     (() => {
       'use strict';
-
-      // 1. 데이터 모델과 화면 상태. 사용자 데이터는 항상 안전한 DOM API로 표시합니다.
-      const STORAGE_KEY = 'campus-flow.tasks.v1';
+      // Firebase Web SDK 12.4.0: 웹 설정은 공개 식별자이며 관리자 자격 증명이 아닙니다.
+      const firebaseConfig = {
+        apiKey: "AIzaSyARxY3olmHfKdX44ER6EVTSgf-mQZ6D58A",
+        authDomain: "campus-flow-97128.firebaseapp.com",
+        projectId: "campus-flow-97128",
+        storageBucket: "campus-flow-97128.firebasestorage.app",
+        messagingSenderId: "1065083374025",
+        appId: "1:1065083374025:web:6fb990b5126ac0eafe0018",
+        measurementId: "G-7QTWGEFMGB"
+      };
+      const SDK_ROOT = 'https://www.gstatic.com/firebasejs/12.4.0/';
+      const STORAGE_KEY = 'campus-flow.tasks.v1'; // 읽기 전용: 이전 버전의 원본을 삭제하거나 덮어쓰지 않습니다.
       const MAX_TASKS = 1000;
       const MAX_FILE_BYTES = 16 * 1024 * 1024;
       const PRIORITIES = { high: { label: '높음', rank: 0 }, normal: { label: '보통', rank: 1 }, low: { label: '낮음', rank: 2 } };
-      const $ = (id) => document.getElementById(id);
+      const $ = id => document.getElementById(id);
       const form = $('task-form');
-      const state = { tasks: [], filter: 'all', query: '', sort: 'due', editingId: null, storageIssue: null, knownRaw: null, damagedRaw: null };
-      let toastTimer;
-      let announcementTimer;
+      const state = { tasks: [], filter: 'all', query: '', sort: 'due', editingId: null, editingRevision: null,
+        user: null, authReady: false, authMode: 'login', authBusy: false, loggingOut: false,
+        ready: false, loaded: false, busy: false, preparing: false, progress: '', error: '', epoch: 0, watch: 0, snapshotVersion: 0,
+        legacyRaw: null, legacyTasks: [], legacyError: '' };
+      let F, auth, db, unsubscribe;
+      let toastTimer, announcementTimer, readTimer, bootTimer;
       let lastLocalDay = localDateKey();
+
+      // 계정 전환 때마다 세대 번호를 올려 늦게 도착한 이전 요청/구독 결과를 무시합니다.
+      function session() { return { uid: state.user?.uid, epoch: state.epoch }; }
+      function isCurrent(ticket) { return ticket.uid && state.user?.uid === ticket.uid && ticket.epoch === state.epoch && !state.loggingOut; }
+      function appError(message) { const error = new Error(message); error.code = 'campus/notice'; return error; }
+      function assertSession(ticket) { if (!isCurrent(ticket)) throw appError('계정이 변경되어 작업을 중단했어요.'); }
+      function todoCollection(uid) { return F.collection(db, 'users', uid, 'todos'); }
+      function todoRef(uid, id) { return F.doc(todoCollection(uid), id); }
+      function revision(timestamp) { return `${timestamp.seconds}:${timestamp.nanoseconds}`; }
+      function errorMessage(error) {
+        const messages = {
+          'auth/invalid-email': '이메일 주소 형식을 확인해 주세요.',
+          'auth/email-already-in-use': '이미 사용 중인 이메일이에요. 로그인하거나 다른 이메일을 입력해 주세요.',
+          'auth/weak-password': '비밀번호가 프로젝트의 보안 정책에 맞지 않아요. 더 긴 비밀번호와 다양한 문자를 사용해 주세요.',
+          'auth/password-does-not-meet-requirements': '비밀번호가 프로젝트의 보안 정책에 맞지 않아요.',
+          'auth/invalid-credential': '이메일 또는 비밀번호를 확인해 주세요.',
+          'auth/wrong-password': '이메일 또는 비밀번호를 확인해 주세요.',
+          'auth/user-not-found': '이메일 또는 비밀번호를 확인해 주세요.',
+          'auth/too-many-requests': '요청이 많아 잠시 제한됐어요. 잠시 후 다시 시도해 주세요.',
+          'auth/network-request-failed': '인증 서버에 연결하지 못했어요. 인터넷 연결을 확인해 주세요.',
+          'auth/user-disabled': '사용이 중지된 계정이에요. 관리자에게 문의해 주세요.',
+          'auth/operation-not-allowed': '이메일/비밀번호 로그인이 활성화되어 있는지 Firebase 설정을 확인해 주세요.',
+          'auth/unauthorized-domain': '현재 접속 호스트가 승인되지 않았어요. Firebase Authentication의 승인된 도메인을 확인해 주세요.',
+          'auth/invalid-api-key': 'Firebase 웹 설정 또는 API 키 제한을 확인해 주세요.',
+          'permission-denied': '과제에 접근할 권한이 없어요. 로그인 상태와 Firestore 보안 규칙을 확인해 주세요.',
+          'unauthenticated': '인증이 만료됐어요. 다시 로그인해 주세요.',
+          'unavailable': '서버에 연결하지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.',
+          'deadline-exceeded': '서버 응답이 지연됐어요. 연결 상태를 확인해 주세요.',
+          'resource-exhausted': '서비스 사용량 한도에 도달했어요. 잠시 후 다시 시도해 주세요.',
+          'aborted': '다른 곳에서 과제가 변경됐어요. 최신 목록을 확인하고 다시 시도해 주세요.'
+        };
+        if (error?.code === 'campus/notice') return error.message;
+        return messages[error?.code] || '요청을 완료하지 못했어요. 연결 상태를 확인하고 다시 시도해 주세요.';
+      }
+
+      // 1. 인증: SDK 로드 실패도 앱 안에서 설명하고, 인증 확인 전에는 대시보드를 숨깁니다.
+      async function initializeFirebase() {
+        bootTimer = setTimeout(() => {
+          $('auth-loading-message').textContent = '연결 확인이 지연되고 있어요. 인터넷과 Firebase 서비스 접근 설정을 확인해 주세요.';
+          $('restart-app').hidden = false;
+        }, 15000);
+        try {
+          const modules = await Promise.all([
+            import(SDK_ROOT + 'firebase-app.js'), import(SDK_ROOT + 'firebase-auth.js'), import(SDK_ROOT + 'firebase-firestore.js')
+          ]);
+          F = Object.assign({}, ...modules);
+          const app = F.initializeApp(firebaseConfig);
+          auth = F.getAuth(app);
+          // 기본 메모리 캐시만 사용합니다. 공용 기기에 Firestore 영구 캐시를 남기지 않습니다.
+          db = F.getFirestore(app);
+          try { await F.setPersistence(auth, F.browserLocalPersistence); }
+          catch {
+            await F.setPersistence(auth, F.inMemoryPersistence);
+            $('persistence-warning').hidden = false;
+            $('persistence-warning').textContent = '이 브라우저는 로그인 상태 저장을 허용하지 않아요. 새로고침하면 다시 로그인해야 해요.';
+          }
+          F.onAuthStateChanged(auth, onUserChanged, () => {
+            clearSession(); state.authReady = false; showBootError('로그인 상태를 확인하지 못했어요. 다시 연결해 주세요.');
+          });
+        } catch { showBootError('Firebase에 연결하지 못했어요. 인터넷 연결과 공식 SDK 접근을 확인한 뒤 다시 시도해 주세요.'); }
+      }
+      function showBootError(message) {
+        clearTimeout(bootTimer); $('auth-loading-title').textContent = '연결을 확인해 주세요';
+        $('auth-loading-message').textContent = message; $('restart-app').hidden = false;
+        $('auth-shell').hidden = false; $('auth-loading').hidden = false; $('auth-layout').hidden = true; $('main').hidden = true;
+        $('storage-label').textContent = '연결 확인 필요'; $('storage-chip').classList.add('warning');
+      }
+      function clearSession() {
+        state.epoch++; state.watch++; if (unsubscribe) unsubscribe(); unsubscribe = null; clearTimeout(readTimer);
+        if ($('confirm-dialog').open) $('confirm-dialog').close('cancel');
+        state.user = null; state.tasks = []; state.ready = false; state.loaded = false; state.busy = false; state.preparing = false;
+        state.progress = ''; state.error = ''; state.query = ''; state.filter = 'all'; state.sort = 'due';
+        state.legacyRaw = null; state.legacyTasks = []; state.legacyError = '';
+        $('search').value = ''; $('sort').value = 'due'; $('auth-email').value = ''; $('auth-password').value = ''; $('auth-password-confirm').value = '';
+        clearTimeout(toastTimer); $('toast').textContent = ''; resetForm(); render();
+      }
+      function onUserChanged(user) {
+        clearTimeout(bootTimer); clearSession(); state.authReady = true; state.loggingOut = false;
+        state.user = user; renderAuth();
+        if (user) { inspectLegacy(); subscribeTasks(); }
+      }
+      function renderAuth() {
+        const signedIn = Boolean(state.user) && !state.loggingOut;
+        const skipLink = document.querySelector('.skip-link');
+        skipLink.href = signedIn ? '#main' : '#auth-shell';
+        skipLink.textContent = signedIn ? '본문으로 바로 가기' : '로그인 화면으로 바로 가기';
+        $('main').hidden = !signedIn; $('auth-shell').hidden = signedIn;
+        $('auth-loading').hidden = state.authReady && !state.loggingOut;
+        $('auth-layout').hidden = !state.authReady || state.loggingOut;
+        $('account').hidden = !signedIn;
+        $('account-email').textContent = signedIn ? state.user.email || '로그인한 계정' : '';
+        $('account-email').title = signedIn ? state.user.email || '' : '';
+        cloudFeedback();
+      }
+      function setAuthMode(mode) {
+        if (state.authBusy) return;
+        state.authMode = mode;
+        const signup = mode === 'signup';
+        document.querySelectorAll('[data-auth-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.authMode === mode)));
+        $('auth-title').textContent = signup ? '나만의 흐름을 시작해요' : '다시 만나 반가워요';
+        $('auth-description').textContent = signup ? '계정을 만들고 과제를 안전하게 보관하세요.' : '로그인하고 나의 과제를 이어서 관리하세요.';
+        $('auth-submit').textContent = signup ? '회원가입' : '로그인';
+        $('confirm-password-field').hidden = !signup; $('auth-password-confirm').required = signup;
+        $('auth-password').autocomplete = signup ? 'new-password' : 'current-password';
+        $('auth-password').value = ''; $('auth-password-confirm').value = ''; $('auth-error').hidden = true;
+        $('auth-help').textContent = signup ? '비밀번호는 6자 이상이며 프로젝트의 비밀번호 정책을 충족해야 해요.' : '공용 컴퓨터에서는 사용을 마친 뒤 꼭 로그아웃해 주세요.';
+        ['auth-email', 'auth-password', 'auth-password-confirm'].forEach(id => $(id).removeAttribute('aria-invalid'));
+      }
+      function authError(message, field) {
+        $('auth-error').textContent = message; $('auth-error').hidden = false;
+        if (field) { $(field).setAttribute('aria-invalid', 'true'); $(field).focus(); }
+      }
+      async function submitAuth(event) {
+        event.preventDefault(); if (!auth || state.authBusy || state.user) return;
+        $('auth-error').hidden = true;
+        ['auth-email', 'auth-password', 'auth-password-confirm'].forEach(id => $(id).removeAttribute('aria-invalid'));
+        const email = $('auth-email').value.trim(); const password = $('auth-password').value;
+        const signup = state.authMode === 'signup';
+        if (!email || !$('auth-email').validity.valid || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return authError('올바른 이메일 주소를 입력해 주세요.', 'auth-email');
+        if (!password || (signup && password.length < 6)) return authError(signup ? '비밀번호를 6자 이상 입력해 주세요.' : '비밀번호를 입력해 주세요.', 'auth-password');
+        if (signup && password !== $('auth-password-confirm').value) return authError('비밀번호 확인이 일치하지 않아요.', 'auth-password-confirm');
+        state.authBusy = true;
+        document.querySelectorAll('#auth-form input, #auth-form button, [data-auth-mode]').forEach(el => { el.disabled = true; });
+        $('auth-submit').textContent = signup ? '계정을 만드는 중…' : '로그인하는 중…';
+        try {
+          if (signup) {
+            const policy = await F.validatePassword(auth, password);
+            if (!policy.isValid) throw appError('비밀번호 정책을 확인해 주세요. 충분한 길이와 대문자·소문자·숫자·특수문자가 필요할 수 있어요.');
+          }
+          const result = signup ? await F.createUserWithEmailAndPassword(auth, email, password) : await F.signInWithEmailAndPassword(auth, email, password);
+          if (auth.currentUser?.uid === result.user.uid) notify(signup ? '회원가입을 완료했어요. 나만의 흐름을 시작해 보세요!' : '로그인했어요. 나의 과제를 불러올게요.');
+        } catch (error) { if (!state.user) authError(errorMessage(error)); }
+        finally {
+          state.authBusy = false;
+          document.querySelectorAll('#auth-form input, #auth-form button, [data-auth-mode]').forEach(el => { el.disabled = false; });
+          $('auth-submit').textContent = signup ? '회원가입' : '로그인';
+        }
+      }
+      async function logout() {
+        if (!state.user || state.loggingOut) return;
+        const ticket = session();
+        if ((state.busy || hasFormDraft()) && !await confirmAction('로그아웃할까요?', state.busy ? '전송된 요청은 서버에서 완료될 수 있어요. 로그아웃하면 현재 화면의 과제는 모두 숨겨져요.' : '저장하지 않은 입력 내용은 사라져요. 저장된 과제는 계정에 남아 있어요.', '로그아웃')) return;
+        if (!isCurrent(ticket)) return;
+        state.loggingOut = true; clearSession(); renderAuth();
+        try { await F.signOut(auth); }
+        catch (error) { state.loggingOut = false; onUserChanged(auth.currentUser); state.error = errorMessage(error); cloudFeedback(); notify(state.error); }
+      }
 
       // 2. 로컬 달력 날짜를 UTC 일련번호로 비교합니다. 문자열을 UTC 날짜로 파싱하지 않아
       // 시간대에 따른 하루 오차가 없고, 일광 절약 시간의 23/25시간짜리 날도 정확합니다.
@@ -435,10 +651,9 @@
           percent: total ? Math.round(completed / total * 1000) / 10 : 0 };
       }
 
-      // 3. 저장소와 백업은 같은 스키마로 검증합니다. 일부만 가져오거나 ID를 묵시적으로
-      // 바꾸지 않고, 하나라도 잘못되면 전체를 거부하여 원래 데이터가 유지되도록 합니다.
+
       function validateData(data) {
-        if (!data || typeof data !== 'object' || Array.isArray(data) || data.version !== 1 || !Array.isArray(data.tasks)) throw new Error('Campus Flow 버전 1 백업 형식이 아니에요.');
+        if (!data || typeof data !== 'object' || Array.isArray(data) || ![1, 2].includes(data.version) || !Array.isArray(data.tasks)) throw new Error('Campus Flow 버전 1 또는 2 백업 형식이 아니에요.');
         if (data.app !== undefined && data.app !== 'CampusFlow') throw new Error('Campus Flow 백업 파일을 선택해 주세요.');
         if (data.tasks.length > MAX_TASKS) throw new Error(`과제는 최대 ${MAX_TASKS.toLocaleString('ko-KR')}개까지 가져올 수 있어요.`);
         const ids = new Set();
@@ -451,54 +666,170 @@
           if (typeof task.note !== 'string' || task.note.length > 2000) invalid();
           if (!validDate(task.dueDate) || typeof task.priority !== 'string' || !Object.hasOwn(PRIORITIES, task.priority) || typeof task.completed !== 'boolean') invalid();
           if (!Number.isSafeInteger(task.createdAt) || task.createdAt < 0 || task.createdAt > 8640000000000000 || !Number.isSafeInteger(task.updatedAt) || task.updatedAt < task.createdAt || task.updatedAt > 8640000000000000) invalid();
+          const completedAt = data.version === 1 ? (task.completed ? task.updatedAt : null) : task.completedAt;
+          if (task.completed ? !Number.isSafeInteger(completedAt) || completedAt < task.createdAt || completedAt > task.updatedAt : completedAt !== null) invalid();
           ids.add(task.id);
           return { id: task.id, subject: task.subject.trim(), title: task.title.trim(), dueDate: task.dueDate,
-            priority: task.priority, note: task.note.trim(), completed: task.completed, createdAt: task.createdAt, updatedAt: task.updatedAt };
+            priority: task.priority, note: task.note.trim(), completed: task.completed, createdAt: task.createdAt, updatedAt: task.updatedAt, completedAt };
         });
       }
 
-      function loadTasks() {
-        try { state.knownRaw = localStorage.getItem(STORAGE_KEY); }
-        catch { state.storageIssue = 'unavailable'; return; }
-        if (state.knownRaw === null) return;
-        try { state.tasks = validateData(JSON.parse(state.knownRaw)); }
-        catch { state.damagedRaw = state.knownRaw; state.storageIssue = 'damaged'; }
-      }
 
-      function storageFeedback() {
-        const issue = state.storageIssue;
-        $('storage-chip').classList.toggle('warning', Boolean(issue));
-        $('storage-label').textContent = issue ? '저장 확인 필요' : '브라우저 저장';
-        $('storage-notice').hidden = !issue;
-        $('download-raw').hidden = state.damagedRaw === null;
-        const messages = {
-          unavailable: '브라우저에 저장하지 못했어요. 변경 내용은 현재 화면에만 남아 있어요. 새로고침하거나 닫기 전에 현재 과제를 백업해 주세요. 저장 공간과 브라우저 설정도 확인해 주세요.',
-          damaged: '저장된 데이터를 읽을 수 없어 원본을 보존했어요. 새로 입력한 과제는 현재 화면에만 남아요. 저장 원본과 현재 과제를 백업한 뒤 저장을 복구하거나, 정상 백업 파일을 가져와 주세요.',
-          conflict: '다른 탭에서 저장 데이터가 변경됐어요. 덮어쓰기를 막기 위해 이 화면의 저장을 멈췄어요. 현재 과제를 백업한 뒤 새로고침하거나, 이 화면의 과제로 다시 저장해 주세요.'
-        };
-        $('storage-message').textContent = messages[issue] || '';
+      // 3. 저장소 경계: Firestore Timestamp ↔ 화면/백업의 밀리초를 명시적으로 변환합니다.
+      function decodeTasks(snapshot) {
+        const tasks = snapshot.docs.map(item => {
+          const data = item.data();
+          for (const key of ['createdAt', 'updatedAt']) if (!(data[key] instanceof F.Timestamp)) throw appError('저장된 과제의 시각 형식이 올바르지 않아요. 원본은 변경하지 않았어요.');
+          if (data.completedAt !== null && !(data.completedAt instanceof F.Timestamp)) throw appError('완료 시각 형식이 올바르지 않아요.');
+          return { id: item.id, title: data.title, subject: data.subject, dueDate: data.dueDate, priority: data.priority,
+            note: data.memo, completed: data.completed, createdAt: Math.floor(data.createdAt.toMillis()), updatedAt: Math.floor(data.updatedAt.toMillis()),
+            completedAt: data.completedAt === null ? null : Math.floor(data.completedAt.toMillis()) };
+        });
+        const valid = validateData({ version: 2, tasks });
+        return valid.map((task, index) => ({ ...task, revision: revision(snapshot.docs[index].data().updatedAt) }));
       }
-
-      function saveTasks(tasks, force = false) {
-        if (!force && ['damaged', 'conflict'].includes(state.storageIssue)) { storageFeedback(); return false; }
+      function subscribeTasks() {
+        if (!state.user || state.loggingOut) return;
+        if (unsubscribe) unsubscribe(); clearTimeout(readTimer);
+        const ticket = session(); const watch = ++state.watch;
+        state.ready = false; state.error = ''; cloudFeedback();
+        readTimer = setTimeout(() => {
+          if (isCurrent(ticket) && state.watch === watch && !state.ready) { state.error = '과제 연결이 지연되고 있어요. 인터넷과 Firestore 접근 설정을 확인해 주세요.'; cloudFeedback(); }
+        }, 20000);
+        unsubscribe = F.onSnapshot(todoCollection(ticket.uid), { includeMetadataChanges: true }, snapshot => {
+          if (!isCurrent(ticket) || state.watch !== watch) return;
+          // 캐시나 아직 서버 승인을 받지 않은 변경을 저장 성공으로 표시하지 않습니다.
+          if (snapshot.metadata.hasPendingWrites || snapshot.metadata.fromCache) {
+            if (snapshot.metadata.fromCache) { state.ready = false; cloudFeedback(); }
+            return;
+          }
+          try {
+            const tasks = decodeTasks(snapshot);
+            state.tasks = tasks; state.snapshotVersion++; state.ready = true; state.loaded = true; state.error = '';
+            clearTimeout(readTimer); render();
+          } catch (error) { state.ready = false; state.error = error.code ? errorMessage(error) : '저장된 과제 형식이 올바르지 않아요. 기존 화면과 서버 원본은 유지했어요.'; cloudFeedback(); }
+        }, error => {
+          if (!isCurrent(ticket) || state.watch !== watch) return;
+          clearTimeout(readTimer); state.ready = false; state.error = errorMessage(error); cloudFeedback();
+        });
+      }
+      function canWrite() { return Boolean(state.user && state.ready && !state.busy && !state.preparing && !state.loggingOut && navigator.onLine); }
+      function syncControls() {
+        const disabled = !canWrite();
+        document.querySelectorAll('#task-form input, #task-form textarea, #task-form button, #task-list button, #task-list input').forEach(el => { el.disabled = disabled; });
+        $('cancel-edit').disabled = !state.user || state.busy || state.preparing;
+        $('import-data').disabled = disabled; $('import-mode').disabled = disabled;
+        $('import-legacy').disabled = disabled || !state.legacyTasks.length;
+        $('export-data').disabled = !state.user || !state.loaded || state.busy;
+        $('download-legacy').disabled = !state.user || state.legacyRaw === null;
+        $('retry-cloud').disabled = state.busy;
+        $('task-form').setAttribute('aria-busy', String(state.busy));
+      }
+      function cloudFeedback() {
+        let label = !state.authReady ? '연결 확인 중' : !state.user ? '로그인 필요' : state.busy ? '저장 처리 중' : state.ready && navigator.onLine ? '클라우드 동기화' : '연결 확인 필요';
+        $('storage-label').textContent = label;
+        $('storage-chip').classList.toggle('warning', Boolean(state.user && (!state.ready || state.error || !navigator.onLine)));
+        let message = '';
+        if (state.user) {
+          if (state.busy) message = state.progress || '서버에서 저장을 확인하고 있어요. 완료될 때까지 기다려 주세요.';
+          else if (!navigator.onLine) message = '인터넷 연결이 끊겼어요. 마지막으로 확인한 과제는 표시하지만 변경은 잠시 멈췄어요.';
+          else if (state.error) message = state.error;
+          else if (!state.ready) message = state.loaded ? '서버 연결을 다시 확인하고 있어요. 마지막으로 확인한 과제를 표시해요.' : '내 계정의 과제를 안전하게 불러오고 있어요.';
+        }
+        $('cloud-notice').hidden = !message; $('cloud-message').textContent = message;
+        $('retry-cloud').hidden = !state.user || state.busy || (state.ready && !state.error);
+        $('empty-state').hidden = !state.loaded || visibleTasks().length > 0;
+        syncControls();
+      }
+      // 트랜잭션은 오프라인 쓰기를 성공으로 대기열에 넣지 않습니다. 완료된 서버 응답만
+      // 성공으로 알리고, 지연 시 중복 전송을 막은 채 로그아웃은 계속 허용합니다.
+      async function performWrite(ticket, operation, successMessage) {
+        if (!isCurrent(ticket) || !canWrite()) { if (isCurrent(ticket)) notify('클라우드 연결과 진행 중인 작업을 확인해 주세요.'); return false; }
+        state.busy = true; state.error = ''; state.progress = ''; cloudFeedback();
+        const timer = setTimeout(() => {
+          if (isCurrent(ticket) && state.busy) { state.progress = '서버 응답이 지연되고 있어요. 아직 완료로 확인되지 않았으며 중복 요청은 보내지 않아요.'; cloudFeedback(); }
+        }, 15000);
         try {
-          const currentRaw = localStorage.getItem(STORAGE_KEY);
-          if (!force && currentRaw !== state.knownRaw) { state.storageIssue = 'conflict'; storageFeedback(); return false; }
-          const raw = JSON.stringify({ version: 1, tasks });
-          localStorage.setItem(STORAGE_KEY, raw);
-          state.knownRaw = raw;
-          state.storageIssue = null;
-          state.damagedRaw = null;
-          storageFeedback();
+          await operation();
+          if (!isCurrent(ticket)) return false;
+          notify(typeof successMessage === 'function' ? successMessage() : successMessage);
           return true;
-        } catch { state.storageIssue = 'unavailable'; storageFeedback(); return false; }
+        } catch (error) {
+          if (isCurrent(ticket)) { state.error = errorMessage(error); notify(state.error); }
+          return false;
+        } finally {
+          clearTimeout(timer);
+          if (isCurrent(ticket)) { state.busy = false; state.progress = ''; cloudFeedback(); }
+        }
+      }
+      function assertUnchanged(snapshot, expected) {
+        if (!snapshot.exists()) throw appError('이 과제는 다른 곳에서 삭제됐어요. 최신 목록을 확인해 주세요.');
+        const timestamp = snapshot.data().updatedAt;
+        if (!(timestamp instanceof F.Timestamp) || revision(timestamp) !== expected) throw appError('다른 곳에서 과제가 변경됐어요. 수정을 취소하고 최신 내용을 다시 열어 주세요.');
+      }
+      function cloudFields(values) { return { subject: values.subject, title: values.title, dueDate: values.dueDate, priority: values.priority, memo: values.note }; }
+      async function submitTask(event) {
+        event.preventDefault(); if (!canWrite()) return;
+        const values = formValues(); if (!values) return;
+        const ticket = session(); const editing = state.editingId;
+        if (!editing && state.tasks.length >= MAX_TASKS) { notify('과제는 최대 1,000개까지 등록할 수 있어요. 먼저 백업하고 필요 없는 과제를 정리해 주세요.'); return; }
+        const ref = editing ? todoRef(ticket.uid, editing) : F.doc(todoCollection(ticket.uid));
+        const expectedRevision = state.editingRevision;
+        const succeeded = await performWrite(ticket, () => F.runTransaction(db, async transaction => {
+          assertSession(ticket);
+          const previous = await transaction.get(ref); assertSession(ticket);
+          if (editing) {
+            assertUnchanged(previous, expectedRevision);
+            transaction.update(ref, { ...cloudFields(values), updatedAt: F.serverTimestamp() });
+          } else {
+            if (previous.exists()) throw appError('과제 ID가 중복됐어요. 다시 시도해 주세요.');
+            transaction.set(ref, { ...cloudFields(values), completed: false, createdAt: F.serverTimestamp(), updatedAt: F.serverTimestamp(), completedAt: null });
+          }
+        }, { maxAttempts: 3 }), editing ? '과제 수정을 클라우드에 저장했어요.' : '새 과제를 클라우드에 저장했어요.');
+        if (succeeded && isCurrent(ticket)) {
+          if (!editing) { state.filter = 'all'; state.query = ''; $('search').value = ''; }
+          resetForm(true); renderList(); cloudFeedback();
+        }
+      }
+      async function toggleTask(event) {
+        if (!event.target.matches('[data-action="toggle"]')) return;
+        const control = event.target; const id = control.closest('[data-id]').dataset.id;
+        const task = state.tasks.find(item => item.id === id); if (!task) return;
+        const completed = control.checked; control.checked = task.completed;
+        if (!canWrite()) return;
+        const ticket = session();
+        const index = [...$('task-list').children].findIndex(card => card.dataset.id === id);
+        const succeeded = await performWrite(ticket, () => F.runTransaction(db, async transaction => {
+          assertSession(ticket); const ref = todoRef(ticket.uid, id); const previous = await transaction.get(ref); assertSession(ticket);
+          assertUnchanged(previous, task.revision);
+          transaction.update(ref, { completed, updatedAt: F.serverTimestamp(), completedAt: completed ? F.serverTimestamp() : null });
+        }, { maxAttempts: 3 }), completed ? '과제를 완료했어요. 클라우드에 저장했어요!' : '다시 진행 중으로 변경했어요.');
+        if (succeeded && isCurrent(ticket)) focusTaskControl(id, 'toggle', index);
+      }
+      async function handleListClick(event) {
+        const control = event.target.closest('button[data-action]'); if (!control || !canWrite()) return;
+        const card = control.closest('[data-id]'); const task = state.tasks.find(item => item.id === card.dataset.id); if (!task) return;
+        const ticket = session();
+        if (control.dataset.action === 'edit') { await editTask(task); return; }
+        const index = [...$('task-list').children].indexOf(card);
+        if (!await confirmAction('이 과제를 삭제할까요?', `“${task.title}” 과제가 계정에서 삭제돼요. 삭제 후에는 되돌릴 수 없어요.`, '삭제하기', true) || !isCurrent(ticket)) return;
+        const succeeded = await performWrite(ticket, () => F.runTransaction(db, async transaction => {
+          assertSession(ticket); const ref = todoRef(ticket.uid, task.id); const previous = await transaction.get(ref); assertSession(ticket);
+          assertUnchanged(previous, task.revision); transaction.delete(ref);
+        }, { maxAttempts: 3 }), '과제를 클라우드에서 삭제했어요.');
+        if (succeeded && isCurrent(ticket)) { if (state.editingId === task.id) resetForm(); focusTaskControl(null, 'delete', index); }
       }
 
-      function updateTasks(tasks, message) {
-        state.tasks = tasks;
-        const saved = saveTasks(tasks);
-        render();
-        notify(saved ? message : '변경 내용을 현재 화면에 반영했어요. 브라우저에 저장하지 못했으니 현재 과제를 백업해 주세요.');
+      // 이전 로컬 데이터는 읽기만 합니다. 로그인한 계정으로의 이동은 별도 확인이 필요합니다.
+      function inspectLegacy() {
+        state.legacyTasks = []; state.legacyRaw = null; state.legacyError = '';
+        try {
+          state.legacyRaw = localStorage.getItem(STORAGE_KEY);
+          if (state.legacyRaw !== null) state.legacyTasks = validateData(JSON.parse(state.legacyRaw));
+        } catch { state.legacyError = state.legacyRaw === null ? '기존 브라우저 저장소에 접근할 수 없어요. 이전 앱에서 내보낸 JSON 파일을 이용해 주세요.' : '기존 브라우저 과제 형식이 올바르지 않아 가져오기를 멈췄어요. 원본은 그대로 보존했어요.'; }
+        $('legacy-notice').hidden = !state.user || (!state.legacyRaw && !state.legacyError) || (!state.legacyTasks.length && !state.legacyError);
+        $('legacy-message').textContent = state.legacyError || `이 브라우저에 예전 과제 ${state.legacyTasks.length}개가 있어요. 소유자를 확인할 수 없어 자동으로 가져오지 않았어요. 내 기록인지 확인한 뒤 현재 계정에 추가할 수 있어요.`;
+        $('import-legacy').hidden = Boolean(state.legacyError); syncControls();
       }
 
       // 4. DOM 렌더링. innerHTML에 사용자 문자열을 넣지 않습니다.
@@ -584,6 +915,10 @@
       }
 
       function renderList() {
+        const focused = document.activeElement;
+        const focusId = focused.closest?.('[data-id]')?.dataset.id;
+        const focusAction = focused.dataset?.action;
+        const focusIndex = [...$('task-list').children].findIndex(card => card.dataset.id === focusId);
         const tasks = visibleTasks();
         $('task-list').replaceChildren(...tasks.map(taskCard));
         $('list-count').textContent = tasks.length;
@@ -595,11 +930,13 @@
         $('empty-title').textContent = empty ? '가벼운 시작, 첫 번째 과제' : '조건에 맞는 과제가 없어요';
         $('empty-description').textContent = empty ? '머릿속에 담아 둔 과제를 적어 보세요. 마감일까지 함께 챙겨 드릴게요.' : '검색어를 바꾸거나 필터를 해제해 보세요. 등록한 과제는 그대로 보관되어 있어요.';
         $('empty-action-label').textContent = empty ? '첫 과제 작성하기' : '전체 과제 보기';
+        syncControls();
+        if (focusId && focusAction) focusTaskControl(focusId, focusAction, Math.max(0, focusIndex));
         clearTimeout(announcementTimer);
         announcementTimer = setTimeout(() => { $('result-announcement').textContent = `${tasks.length}개의 과제가 표시되어 있어요.`; }, 250);
       }
 
-      function render() { renderDashboard(); renderList(); storageFeedback(); }
+      function render() { renderDashboard(); renderList(); cloudFeedback(); }
 
       // 5. 입력과 수정. 실패하면 입력을 그대로 두고 첫 오류 위치로 포커스를 옮깁니다.
       function clearErrors() {
@@ -621,46 +958,27 @@
       }
 
       function resetForm(focus = false) {
-        form.reset(); state.editingId = null; clearErrors();
+        form.reset(); state.editingId = null; state.editingRevision = null; clearErrors();
         $('form-title-text').textContent = '새 과제 추가'; $('submit-label').textContent = '과제 추가';
         $('form-description').textContent = '해야 할 일을 적고, 머릿속은 가볍게.';
         $('cancel-edit').hidden = true; $('note-counter').textContent = '0 / 2,000';
         if (focus) $('subject').focus();
       }
 
-      function newId() {
-        let id;
-        do { id = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : `${Date.now().toString(36)}-${Array.from(crypto.getRandomValues(new Uint32Array(3)), n => n.toString(36)).join('-')}`; }
-        while (state.tasks.some(task => task.id === id));
-        return id;
-      }
-
-      function submitTask(event) {
-        event.preventDefault();
-        const values = formValues(); if (!values) return;
-        if (state.editingId) {
-          const current = state.tasks.find(task => task.id === state.editingId);
-          if (!current) { notify('수정할 과제를 찾지 못했어요. 목록을 다시 확인해 주세요.'); return; }
-          updateTasks(state.tasks.map(task => task.id === current.id ? { ...task, ...values, updatedAt: Math.max(Date.now(), task.createdAt) } : task), '과제 수정을 저장했어요.');
-        } else {
-          if (state.tasks.length >= MAX_TASKS) { notify('과제는 최대 1,000개까지 등록할 수 있어요. 백업 후 필요 없는 과제를 정리해 주세요.'); return; }
-          const now = Date.now();
-          state.filter = 'all'; state.query = ''; $('search').value = '';
-          updateTasks([...state.tasks, { ...values, id: newId(), completed: false, createdAt: now, updatedAt: now }], '새 과제를 추가했어요.');
-        }
-        resetForm(true);
-      }
 
       function hasFormDraft() {
         if (!state.editingId) return Boolean($('subject').value || $('title').value || $('due-date').value || $('note').value || form.elements.priority.value !== 'normal');
         const task = state.tasks.find(item => item.id === state.editingId);
-        return task && ($('subject').value !== task.subject || $('title').value !== task.title || $('due-date').value !== task.dueDate || $('note').value !== task.note || form.elements.priority.value !== task.priority);
+        return !task || ($('subject').value !== task.subject || $('title').value !== task.title || $('due-date').value !== task.dueDate || $('note').value !== task.note || form.elements.priority.value !== task.priority);
       }
 
       async function editTask(task) {
+        if (!canWrite()) return;
+        const ticket = session();
         if (state.editingId === task.id) { $('subject').focus(); return; }
         if (hasFormDraft() && !await confirmAction('작성 중인 내용을 바꿀까요?', '아직 저장하지 않은 입력 내용이 사라지고 선택한 과제를 수정하게 돼요.', '수정하기')) return;
-        state.editingId = task.id; clearErrors();
+        if (!isCurrent(ticket) || !canWrite()) return;
+        state.editingId = task.id; state.editingRevision = task.revision; clearErrors();
         $('subject').value = task.subject; $('title').value = task.title; $('due-date').value = task.dueDate;
         form.elements.priority.value = task.priority; $('note').value = task.note;
         $('note-counter').textContent = `${task.note.length.toLocaleString('ko-KR')} / 2,000`;
@@ -668,6 +986,7 @@
         $('form-description').textContent = '변경한 내용은 수정 저장을 눌러 반영하세요.'; $('cancel-edit').hidden = false;
         $('subject').focus();
       }
+
 
       // 6. 확인 대화상자: 기본 포커스는 취소, Escape도 취소로 처리합니다.
       function confirmAction(title, description, confirmLabel = '확인', danger = false) {
@@ -696,20 +1015,7 @@
         else $('search').focus();
       }
 
-      async function handleListClick(event) {
-        const control = event.target.closest('button[data-action]'); if (!control) return;
-        const card = control.closest('[data-id]');
-        const task = state.tasks.find(item => item.id === card.dataset.id); if (!task) return;
-        if (control.dataset.action === 'edit') { await editTask(task); return; }
-        const index = [...$('task-list').children].indexOf(card);
-        if (!await confirmAction('이 과제를 삭제할까요?', `“${task.title}” 과제가 삭제돼요. 삭제 후에는 되돌릴 수 없어요.`, '삭제하기', true)) return;
-        if (state.editingId === task.id) resetForm();
-        updateTasks(state.tasks.filter(item => item.id !== task.id), '과제를 삭제했어요.');
-        focusTaskControl(null, 'delete', index);
-      }
 
-      // 7. JSON 백업/복원. 파일 검증과 교체 확인, 저장 성공까지 마친 후에만
-      // 메모리의 기존 목록을 교체하므로 읽기/파싱/저장 실패에도 기존 과제가 남습니다.
       function downloadText(contents, filename, type = 'application/json') {
         const blob = new Blob([contents], { type });
         const url = URL.createObjectURL(blob);
@@ -718,97 +1024,161 @@
         setTimeout(() => URL.revokeObjectURL(url), 60000);
       }
 
-      function exportBackup() {
-        try {
-          downloadText(JSON.stringify({ app: 'CampusFlow', version: 1, exportedAt: new Date().toISOString(), tasks: state.tasks }, null, 2), `campus-flow-backup-${localDateKey()}.json`);
-          notify('백업 파일 다운로드를 요청했어요. 브라우저의 다운로드 목록을 확인해 주세요.');
-        } catch { notify('백업 파일을 만들지 못했어요. 브라우저의 다운로드 설정을 확인해 주세요.'); }
-      }
 
-      async function importBackup(event) {
-        const file = event.target.files[0]; event.target.value = ''; if (!file) return;
-        $('import-data').disabled = true;
+      // 7. 백업은 현재 로그인한 계정의 서버 확인 목록만 사용합니다.
+      function exportBackup() {
+        if (!state.user || !state.loaded || state.busy) return;
         try {
-          if (file.size > MAX_FILE_BYTES) throw new Error('백업 파일은 16MB 이하여야 해요.');
+          const tasks = state.tasks.map(({ revision: ignored, ...task }) => task);
+          downloadText(JSON.stringify({ app: 'CampusFlow', version: 2, exportedAt: new Date().toISOString(), tasks }, null, 2), `campus-flow-cloud-${localDateKey()}.json`);
+          notify('현재 계정의 과제 백업 다운로드를 요청했어요.');
+        } catch { notify('백업 파일을 만들지 못했어요. 다운로드 설정을 확인해 주세요.'); }
+      }
+      function restoredFields(task, previous) {
+        const createdAt = previous?.createdAt || F.Timestamp.fromMillis(task.createdAt);
+        let completedAt = task.completed ? F.Timestamp.fromMillis(task.completedAt) : null;
+        // 기존 문서의 나노초 정밀도를 유지합니다. 밀리초로 반올림해 생성 시각보다
+        // 완료 시각이 아주 조금 앞서게 되는 것을 막습니다.
+        if (completedAt && (completedAt.seconds < createdAt.seconds
+          || (completedAt.seconds === createdAt.seconds && completedAt.nanoseconds < createdAt.nanoseconds))) completedAt = createdAt;
+        // 복원 행위는 새 수정입니다. 기존 문서의 생성 시각은 바꾸지 않습니다.
+        return { ...cloudFields(task), completed: task.completed, createdAt, updatedAt: F.serverTimestamp(), completedAt };
+      }
+      async function restoreTasks(tasks, mode, ticket, legacy = false) {
+        assertSession(ticket);
+        if (tasks.some(task => task.createdAt > Date.now())) throw appError('생성 시각이 미래인 과제가 있어요. 백업 파일과 기기 시각을 확인해 주세요.');
+        const baseline = new Map(state.tasks.map(task => [task.id, task]));
+        const target = new Map(tasks.map(task => [task.id, task]));
+        const ids = [...new Set([...baseline.keys(), ...target.keys()])];
+        if (mode === 'replace' && ids.length > 500) throw appError('전체 교체는 한 번에 500개 문서 변경까지 안전하게 처리할 수 있어요. 큰 백업은 “누락된 과제 추가”를 선택해 주세요. 기존 과제는 유지됐어요.');
+        const missing = tasks.filter(task => !baseline.has(task.id));
+        if (mode === 'merge' && baseline.size + missing.length > MAX_TASKS) throw appError('가져오면 과제가 1,000개를 넘어요. 먼저 기존 과제를 정리해 주세요.');
+        const version = state.snapshotVersion;
+        const description = mode === 'replace'
+          ? `현재 계정(${state.user.email})의 과제 ${baseline.size}개를 백업의 ${tasks.length}개로 교체해요. 필요한 기록은 먼저 백업해 주세요.`
+          : `현재 계정(${state.user.email})에 누락된 과제만 추가해요. 같은 ID의 과제는 덮어쓰지 않아요. 여러 묶음으로 저장하며 중간에 실패하면 완료된 묶음은 남아요. 같은 파일로 다시 시도할 수 있어요.`;
+        if (!await confirmAction(legacy ? '예전 과제를 이 계정으로 가져올까요?' : '백업을 현재 계정으로 가져올까요?', description + (hasFormDraft() ? '\n성공하면 작성 중인 입력 내용은 초기화돼요.' : ''), mode === 'replace' ? '교체하기' : '추가하기', mode === 'replace')) return;
+        assertSession(ticket);
+        if (mode === 'replace' && version !== state.snapshotVersion) throw appError('확인하는 동안 과제가 변경됐어요. 최신 목록을 보고 다시 가져와 주세요.');
+        state.preparing = false;
+        let imported = 0;
+        const succeeded = await performWrite(ticket, async () => {
+          if (mode === 'replace') {
+            await F.runTransaction(db, async transaction => {
+              assertSession(ticket);
+              const snapshots = await Promise.all(ids.map(id => transaction.get(todoRef(ticket.uid, id))));
+              assertSession(ticket);
+              snapshots.forEach((snapshot, index) => {
+                const previous = baseline.get(ids[index]);
+                if (previous) assertUnchanged(snapshot, previous.revision);
+                else if (snapshot.exists()) throw appError('동일한 ID의 과제가 다른 곳에서 추가됐어요. 최신 목록을 확인해 주세요.');
+              });
+              ids.forEach((id, index) => {
+                const ref = todoRef(ticket.uid, id);
+                if (target.has(id)) transaction.set(ref, restoredFields(target.get(id), snapshots[index].exists() ? snapshots[index].data() : null));
+                else transaction.delete(ref);
+              });
+            }, { maxAttempts: 3 });
+            imported = tasks.length;
+          } else {
+            // SDK의 트랜잭션 500회 쓰기 제한보다 작은 묶음. 이미 존재하는 ID는 건너뛰어
+            // 재시도/다른 탭의 동시 가져오기에서도 동일 과제를 중복 생성하지 않습니다.
+            try {
+              for (let start = 0; start < missing.length; start += 250) {
+                assertSession(ticket);
+                const chunk = missing.slice(start, start + 250);
+                const added = await F.runTransaction(db, async transaction => {
+                  assertSession(ticket);
+                  const snapshots = await Promise.all(chunk.map(task => transaction.get(todoRef(ticket.uid, task.id))));
+                  assertSession(ticket); let count = 0;
+                  chunk.forEach((task, index) => {
+                    if (!snapshots[index].exists()) { transaction.set(todoRef(ticket.uid, task.id), restoredFields(task)); count++; }
+                  });
+                  return count;
+                }, { maxAttempts: 3 });
+                imported += added;
+                if (isCurrent(ticket)) { state.progress = `${imported}개를 저장했어요. 나머지 과제를 가져오고 있어요.`; cloudFeedback(); }
+              }
+            } catch (error) { throw appError(`${imported}개를 저장한 뒤 가져오기를 멈췄어요. ${errorMessage(error)} 같은 파일로 다시 가져오면 이미 있는 ID는 건너뛰어요.`); }
+          }
+        }, () => mode === 'replace' ? `${imported}개의 과제로 교체했어요.` : `${imported}개를 추가했어요. 이미 있는 과제는 그대로 유지했어요.`);
+        if (succeeded && isCurrent(ticket)) { state.query = ''; state.filter = 'all'; $('search').value = ''; resetForm(); render(); }
+      }
+      async function importBackup(event) {
+        const file = event.target.files[0]; event.target.value = '';
+        if (!file || !canWrite()) return;
+        const ticket = session(); state.preparing = true; syncControls();
+        try {
+          if (file.size > MAX_FILE_BYTES) throw appError('백업 파일은 16MB 이하여야 해요.');
           let data;
           try { data = JSON.parse((await file.text()).replace(/^\uFEFF/, '')); }
-          catch { throw new Error('JSON 파일을 읽을 수 없어요. 올바른 백업 파일인지 확인해 주세요.'); }
-          const tasks = validateData(data);
-          const extra = hasFormDraft() ? '\n작성 중인 입력 내용도 초기화돼요.' : '';
-          if (!await confirmAction('백업으로 과제를 교체할까요?', `현재 과제 ${state.tasks.length}개를 백업의 과제 ${tasks.length}개로 교체해요. 필요한 기록은 먼저 내보내 주세요.${extra}`, '교체하기', true)) return;
-          // 확인 창을 연 이후 다른 탭이 바뀌면 덮어쓰지 않습니다.
-          let currentRaw;
-          try { currentRaw = localStorage.getItem(STORAGE_KEY); }
-          catch { state.storageIssue = 'unavailable'; storageFeedback(); notify('저장소에 접근할 수 없어 복원하지 않았어요. 기존 과제는 유지돼요.'); return; }
-          if (currentRaw !== state.knownRaw) { state.storageIssue = 'conflict'; storageFeedback(); notify('다른 탭의 변경을 확인해 주세요. 기존 과제는 유지돼요.'); return; }
-          if (!saveTasks(tasks, true)) { notify('백업을 저장하지 못해 복원하지 않았어요. 기존 과제는 유지돼요.'); return; }
-          state.tasks = tasks; state.query = ''; state.filter = 'all'; $('search').value = ''; resetForm(); render();
-          notify(`${tasks.length}개의 과제를 복원했어요.`);
-        } catch (error) { notify(`${error.message} 기존 과제는 유지돼요.`); }
-        finally { $('import-data').disabled = false; $('import-data').focus(); }
+          catch { throw appError('JSON 파일을 읽을 수 없어요. 기존 과제는 유지돼요.'); }
+          assertSession(ticket);
+          let tasks;
+          try { tasks = validateData(data); } catch (error) { throw appError(`${error.message} 기존 과제는 유지돼요.`); }
+          await restoreTasks(tasks, $('import-mode').value, ticket);
+        } catch (error) { if (isCurrent(ticket)) notify(errorMessage(error)); }
+        finally { if (isCurrent(ticket)) { state.preparing = false; syncControls(); $('import-data').focus(); } }
+      }
+      async function importLegacy() {
+        if (!canWrite() || !state.legacyTasks.length) return;
+        const ticket = session(); state.preparing = true; syncControls();
+        try {
+          // JSON 복원과 동일한 원본 ID를 사용해 두 경로로 가져와도 중복을 만들지 않습니다.
+          await restoreTasks(state.legacyTasks, 'merge', ticket, true);
+        } catch (error) { if (isCurrent(ticket)) notify(errorMessage(error)); }
+        finally { if (isCurrent(ticket)) { state.preparing = false; syncControls(); } }
       }
 
-      async function retryStorage() {
-        if (state.storageIssue) {
-          if (!await confirmAction('현재 과제를 브라우저에 저장할까요?', '현재 화면의 과제로 브라우저 저장 내용을 교체해요. 기존 원본이나 다른 탭의 기록이 필요하면 먼저 백업해 주세요.', '현재 과제 저장', true)) return;
-        }
-        if (saveTasks(state.tasks, true)) notify('현재 과제를 브라우저에 저장했어요.');
-        else notify('아직 저장할 수 없어요. 현재 과제를 백업해 주세요.');
-      }
-
-      // 8. 이벤트 연결. 목록을 다시 그린 뒤에도 키보드 포커스를 이어 줍니다.
+      // 8. 이벤트: 사용자 세션과 서버 상태를 확인한 뒤에만 변경 요청을 보냅니다.
+      $('auth-form').addEventListener('submit', submitAuth);
+      document.querySelectorAll('[data-auth-mode]').forEach(button => button.addEventListener('click', () => setAuthMode(button.dataset.authMode)));
+      $('logout').addEventListener('click', logout);
+      $('restart-app').addEventListener('click', () => location.reload());
+      $('retry-cloud').addEventListener('click', () => { if (!state.busy) subscribeTasks(); });
       form.addEventListener('submit', submitTask);
       $('cancel-edit').addEventListener('click', () => { resetForm(true); notify('수정을 취소했어요. 원래 과제는 유지돼요.'); });
       $('note').addEventListener('input', () => { $('note-counter').textContent = `${$('note').value.length.toLocaleString('ko-KR')} / 2,000`; });
       for (const id of ['subject', 'title', 'due-date', 'note']) $(id).addEventListener('input', () => { $(id).removeAttribute('aria-invalid'); $(`${id}-error`).hidden = true; });
       $('task-list').addEventListener('click', handleListClick);
-      $('task-list').addEventListener('change', event => {
-        if (!event.target.matches('[data-action="toggle"]')) return;
-        const card = event.target.closest('[data-id]'); const id = card.dataset.id;
-        const index = [...$('task-list').children].indexOf(card); const completed = event.target.checked;
-        updateTasks(state.tasks.map(task => task.id === id ? { ...task, completed, updatedAt: Math.max(Date.now(), task.createdAt) } : task), completed ? '과제를 완료했어요. 한 걸음 더 나아갔네요!' : '다시 진행 중인 과제로 변경했어요.');
-        focusTaskControl(id, 'toggle', index);
-      });
-      $('search').addEventListener('input', () => { state.query = $('search').value; renderList(); });
-      $('clear-search').addEventListener('click', () => { state.query = ''; $('search').value = ''; renderList(); $('search').focus(); });
-      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; renderList(); }));
-      $('sort').addEventListener('change', () => { state.sort = $('sort').value; renderList(); });
+      $('task-list').addEventListener('change', toggleTask);
+      $('search').addEventListener('input', () => { state.query = $('search').value; renderList(); cloudFeedback(); });
+      $('clear-search').addEventListener('click', () => { state.query = ''; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); });
+      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; renderList(); cloudFeedback(); }));
+      $('sort').addEventListener('change', () => { state.sort = $('sort').value; renderList(); cloudFeedback(); });
       $('empty-action').addEventListener('click', () => {
         if (!state.tasks.length) $('subject').focus();
-        else { state.query = ''; state.filter = 'all'; $('search').value = ''; renderList(); $('search').focus(); }
+        else { state.query = ''; state.filter = 'all'; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); }
       });
       $('export-data').addEventListener('click', exportBackup);
-      $('backup-unsaved').addEventListener('click', exportBackup);
-      $('import-data').addEventListener('click', () => $('import-file').click());
+      $('import-data').addEventListener('click', () => { if (canWrite()) $('import-file').click(); });
       $('import-file').addEventListener('change', importBackup);
-      $('retry-storage').addEventListener('click', retryStorage);
-      $('download-raw').addEventListener('click', () => {
-        if (state.damagedRaw !== null) {
-          try { downloadText(state.damagedRaw, `campus-flow-storage-original-${localDateKey()}.txt`, 'text/plain'); }
-          catch { notify('저장 원본을 다운로드하지 못했어요. 브라우저 설정을 확인해 주세요.'); }
+      $('import-legacy').addEventListener('click', importLegacy);
+      $('download-legacy').addEventListener('click', () => {
+        if (state.user && state.legacyRaw !== null) {
+          try { downloadText(state.legacyRaw, `campus-flow-legacy-${localDateKey()}.txt`, 'text/plain'); }
+          catch { notify('원본 파일을 만들지 못했어요. 브라우저 다운로드 설정을 확인해 주세요.'); }
         }
       });
-      window.addEventListener('storage', event => {
-        if ((event.key === STORAGE_KEY || event.key === null) && event.newValue !== state.knownRaw) { state.storageIssue = 'conflict'; storageFeedback(); }
-      });
+      window.addEventListener('storage', event => { if (state.user && (event.key === STORAGE_KEY || event.key === null)) inspectLegacy(); });
+      window.addEventListener('offline', cloudFeedback);
+      window.addEventListener('online', () => { if (state.user && !state.busy) subscribeTasks(); else cloudFeedback(); });
       window.addEventListener('beforeunload', event => {
-        if (state.storageIssue || hasFormDraft()) { event.preventDefault(); event.returnValue = ''; }
+        if (state.busy || (state.user && hasFormDraft())) { event.preventDefault(); event.returnValue = ''; }
       });
-      // 열린 채로 자정을 넘기거나 절전에서 돌아와도 마감일과 통계를 갱신합니다.
+      // 자정/탭 복귀 시 기존 날짜 계산과 포커스 보존 로직을 그대로 사용합니다.
       function refreshDay() {
         if (lastLocalDay === localDateKey()) return;
         lastLocalDay = localDateKey();
         const focused = document.activeElement;
         const taskId = focused.closest?.('[data-id]')?.dataset.id;
         const action = focused.dataset?.action;
-        render();
-        if (taskId && action) focusTaskControl(taskId, action);
+        render(); if (taskId && action) focusTaskControl(taskId, action);
       }
       setInterval(refreshDay, 30000);
       document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshDay(); });
       window.addEventListener('focus', refreshDay);
-
-      loadTasks(); render();
+      render(); initializeFirebase();
     })();
   </script>
 </body>
