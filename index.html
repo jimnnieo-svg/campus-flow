@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#7560cf">
+  <meta name="description" content="과제부터 마감일까지, 나만의 속도로 정리하는 대학생 학습 대시보드 Campus Flow.">
+  <title>Campus Flow · 나의 학습 대시보드</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2048%2048%22%3E%3Crect%20width%3D%2248%22%20height%3D%2248%22%20rx%3D%2214%22%20fill%3D%22%237157c7%22%2F%3E%3Cpath%20d%3D%22M10%2013c5-1%209%200%2014%203%205-3%209-4%2014-3v23c-5-1-9%200-14%203-5-3-9-4-14-3zM24%2016v23%22%20fill%3D%22none%22%20stroke%3D%22white%22%20stroke-width%3D%222.5%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E">
+  <style>
+    /* 디자인 토큰: 외부 폰트나 이미지 없이 시스템 글꼴과 SVG만 사용합니다. */
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb; --surface: #fff; --ink: #253047; --muted: #606c82;
+      --line: #e7e9f1; --purple: #7157c7; --purple-dark: #5d43af; --lavender: #f0ecfb;
+      --green: #227654; --green-bg: #ecf7f0; --orange: #a85b16; --orange-bg: #fff4e5;
+      --red: #bd3e4b; --red-bg: #fff0f1; --radius: 18px;
+      --shadow: 0 4px 20px rgb(38 43 70 / 3%);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size: 14px; line-height: 1.6; }
+    button, input, select, textarea { font: inherit; }
+    button, select, input[type="date"], input[type="checkbox"] { cursor: pointer; }
+    button { color: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--purple-dark); }
+    button, input, select, textarea, a { outline-offset: 4px; }
+    :focus-visible { outline: 3px solid #957adb; }
+    button { transition: background .16s, border-color .16s, box-shadow .16s; }
+    button:disabled { opacity: .6; cursor: wait; }
+    h1, h2, h3, p { margin: 0; }
+    svg { display: block; flex-shrink: 0; }
+    .icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .skip-link { position: absolute; top: -100px; left: 16px; z-index: 10; padding: 12px 20px; background: white; border-radius: 8px; }
+    .skip-link:focus { top: 8px; }
+    .wrap { width: min(1200px, calc(100% - 64px)); margin-inline: auto; }
+    .topbar { background: var(--surface); border-bottom: 1px solid var(--line); }
+    .topbar-inner { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { width: 41px; height: 41px; background: var(--purple); color: white; border-radius: 13px; display: grid; place-items: center; box-shadow: 0 4px 10px #7157c726; }
+    .brand-mark .icon { width: 25px; height: 25px; }
+    .brand-name { font-size: 21px; line-height: 1.3; font-weight: 760; letter-spacing: -.7px; }
+    .brand-caption { font-size: 11px; color: var(--muted); margin-top: 2px; letter-spacing: .2px; }
+    .header-meta { display: flex; align-items: center; gap: 22px; color: var(--muted); font-size: 13px; }
+    .date-label, .storage-chip { display: inline-flex; align-items: center; gap: 8px; }
+    .date-label .icon { width: 17px; height: 17px; }
+    .storage-chip { border: 1px solid var(--line); border-radius: 24px; padding: 7px 12px; font-size: 12px; color: var(--green); background: #fcfefc; }
+    .storage-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .storage-chip.warning { color: var(--red); background: var(--red-bg); border-color: #f2cdd2; }
+    main { padding-bottom: 36px; }
+    .welcome { position: relative; min-height: 182px; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 30px; }
+    .eyebrow { color: var(--purple); font-size: 12px; font-weight: 700; letter-spacing: .4px; margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
+    .eyebrow .icon { width: 16px; height: 16px; }
+    h1 { font-size: clamp(24px, 2.5vw, 32px); font-weight: 750; line-height: 1.4; letter-spacing: -1.25px; }
+    .welcome-description { margin-top: 9px; color: var(--muted); font-size: 14px; }
+    .welcome-art { width: 227px; height: 138px; margin-right: 22px; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+    .stat { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .stat-label { font-size: 13px; color: var(--muted); }
+    .stat-value { display: inline-block; font-size: 30px; font-weight: 740; letter-spacing: -1px; line-height: 1.3; margin-top: 5px; font-variant-numeric: tabular-nums; }
+    .stat-unit { font-size: 12px; color: var(--muted); margin-left: 5px; }
+    .stat-icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--lavender); color: var(--purple); }
+    .stat-icon.green { background: var(--green-bg); color: var(--green); }
+    .stat-icon.blue { background: #edf2fc; color: #4874b6; }
+    .stat-icon.orange { background: var(--orange-bg); color: var(--orange); }
+    .stat-icon .icon { width: 23px; height: 23px; }
+    .progress-panel { display: flex; align-items: center; gap: 28px; margin-top: 16px; padding: 23px 26px; border-radius: var(--radius); border: 1px solid #e6e0f7; background: linear-gradient(110deg, #f0ebfc, #faf8ff); }
+    .progress-heading { min-width: 185px; }
+    .progress-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; }
+    .progress-title .icon { color: var(--purple); width: 18px; height: 18px; }
+    .progress-caption { margin-top: 4px; font-size: 12px; color: var(--muted); }
+    .progress-detail { flex: 1; min-width: 0; }
+    .progress-label { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; margin-bottom: 9px; color: var(--muted); }
+    .progress-number { font-size: 18px; font-weight: 750; color: var(--purple-dark); line-height: 1.2; }
+    .progress-track { height: 8px; background: #e4def3; border-radius: 8px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #9982e0, #7157c7); border-radius: 8px; transition: width .4s ease; }
+    .notice { display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; padding: 13px 17px; border-radius: 12px; font-size: 13px; }
+    .notice .icon { width: 18px; height: 18px; margin-top: 2px; }
+    .deadline-notice { background: var(--orange-bg); color: #885016; border: 1px solid #f4dfbf; }
+    .storage-notice { background: var(--red-bg); color: #983542; border: 1px solid #efcbd0; }
+    .notice-content { flex: 1; min-width: 0; }
+    .notice-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .notice-actions button { border: 1px solid #d8a7af; border-radius: 8px; padding: 8px 12px; background: white; color: #983542; min-height: 40px; }
+    .workspace { display: grid; grid-template-columns: 336px minmax(0, 1fr); align-items: start; gap: 28px; margin-top: 32px; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .form-panel { padding: 24px; position: sticky; top: 24px; }
+    .section-heading { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 730; letter-spacing: -.5px; }
+    .section-heading > .icon { width: 21px; height: 21px; color: var(--purple); }
+    .section-description { color: var(--muted); font-size: 12px; margin-top: 5px; }
+    .form-divider { margin: 20px 0; border: 0; border-top: 1px solid var(--line); }
+    .field { margin-bottom: 17px; min-width: 0; }
+    label, .field-label { display: block; font-size: 12px; font-weight: 650; margin-bottom: 7px; }
+    .required { color: var(--purple); margin-left: 3px; }
+    .optional { color: var(--muted); font-weight: 400; margin-left: 4px; font-size: 11px; }
+    input:not([type="checkbox"]), textarea, select { width: 100%; min-width: 0; border: 1px solid #dfe3ec; background: #fff; color: var(--ink); border-radius: 9px; padding: 11px 12px; line-height: 1.5; transition: border-color .15s, box-shadow .15s; }
+    input:not([type="checkbox"]):focus, textarea:focus, select:focus { border-color: #9d86da; box-shadow: 0 0 0 3px #7157c70c; }
+    input::placeholder, textarea::placeholder { color: #69758a; font-size: 12px; }
+    textarea { resize: vertical; min-height: 92px; max-height: 320px; display: block; }
+    input[aria-invalid="true"] { border-color: var(--red); }
+    .field-error { color: var(--red); font-size: 12px; margin-top: 5px; }
+    .field-help { margin-top: 5px; color: var(--muted); font-size: 11px; text-align: right; }
+    fieldset { border: 0; margin: 0 0 17px; padding: 0; min-width: 0; }
+    legend { padding: 0; }
+    .priority-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .priority-option { position: relative; margin: 0; }
+    .priority-option input { position: absolute; width: 1px; height: 1px; padding: 0; border: 0; opacity: 0; }
+    .priority-option span { cursor: pointer; border: 1px solid var(--line); border-radius: 9px; min-height: 42px; display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 12px; font-weight: 500; }
+    .priority-option span::before { content: ""; width: 6px; height: 6px; background: #7f8ca2; border-radius: 50%; }
+    .priority-option.high span::before { background: var(--red); }
+    .priority-option.normal span::before { background: var(--purple); }
+    .priority-option input:checked + span { border-color: #b9a8e6; background: var(--lavender); color: var(--purple-dark); font-weight: 700; }
+    .priority-option input:focus-visible + span { outline: 3px solid #957adb; outline-offset: 3px; }
+    .button { min-height: 44px; border: 1px solid var(--line); border-radius: 9px; background: white; padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; text-decoration: none; }
+    .button:hover { background: #f5f4fa; border-color: #cfc6e4; }
+    .button.primary { background: var(--purple); border-color: var(--purple); color: white; box-shadow: 0 4px 10px #7157c71a; }
+    .button.primary:hover { background: var(--purple-dark); border-color: var(--purple-dark); }
+    .button.danger { background: var(--red); border-color: var(--red); color: white; }
+    .button.danger:hover { background: #a42d3a; }
+    .button .icon { width: 17px; height: 17px; }
+    .form-actions { display: flex; gap: 8px; }
+    .form-actions .primary { flex: 1; }
+    .form-footnote { text-align: center; font-size: 11px; color: var(--muted); margin-top: 13px; }
+    .list-section { min-width: 0; }
+    .list-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 31px; margin: 0 0 18px; }
+    .count-pill { color: var(--purple); background: #eae4f8; border-radius: 7px; padding: 2px 8px; font-size: 12px; font-weight: 700; }
+    .list-total { font-size: 12px; color: var(--muted); }
+    .search-box { position: relative; }
+    .search-box > .icon { position: absolute; top: 14px; left: 14px; width: 18px; height: 18px; color: #7c879a; pointer-events: none; }
+    .search-box input { padding: 12px 46px 12px 42px; background: white; }
+    .search-clear { position: absolute; top: 3px; right: 3px; width: 40px; height: 40px; border: 0; background: transparent; display: grid; place-items: center; border-radius: 8px; color: var(--muted); }
+    .search-clear:hover { background: var(--lavender); }
+    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 16px 0; }
+    .filters { display: flex; align-items: center; gap: 4px; }
+    .filter { border: 0; border-radius: 8px; min-height: 40px; padding: 9px 12px; background: transparent; font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .filter:hover { background: #eeebf5; }
+    .filter[aria-pressed="true"] { background: #eae3f8; color: var(--purple-dark); font-weight: 700; }
+    .sort-control select { border: 0; font-size: 12px; background-color: transparent; padding: 10px 4px; min-height: 40px; }
+    .task-list { display: grid; gap: 12px; padding: 0; margin: 0; list-style: none; }
+    .task-card { position: relative; padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
+    .task-card:hover { border-color: #d4cbe9; }
+    .task-card.is-overdue { border-left: 3px solid #d97983; padding-left: 18px; }
+    .task-card.is-urgent { border-left: 3px solid #e5ad64; padding-left: 18px; }
+    .task-card.is-complete { background: #fcfdfc; }
+    .task-top { display: flex; align-items: center; gap: 12px; padding-left: 34px; }
+    .subject-tag { color: var(--purple-dark); background: #f1edfa; border-radius: 5px; padding: 2px 7px; font-size: 11px; font-weight: 650; overflow-wrap: anywhere; }
+    .priority-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); flex-shrink: 0; }
+    .priority-tag::before { content: ""; border-radius: 50%; width: 5px; height: 5px; background: currentColor; }
+    .priority-tag.high { color: var(--red); }
+    .priority-tag.normal { color: var(--purple); }
+    .task-title-row { display: flex; align-items: flex-start; gap: 13px; margin-top: 11px; }
+    .complete-label { margin: -9px -10px 0 -10px; padding: 10px; flex-shrink: 0; display: flex; cursor: pointer; }
+    .task-checkbox { appearance: none; width: 21px; height: 21px; margin: 0; border: 1.5px solid #c5cbda; border-radius: 6px; background: white; display: grid; place-content: center; }
+    .task-checkbox:checked { background: var(--green); border-color: var(--green); }
+    .task-checkbox:checked::before { content: ""; width: 9px; height: 5px; border-bottom: 2px solid white; border-left: 2px solid white; transform: rotate(-45deg) translate(1px, -1px); }
+    .task-title { font-size: 15px; font-weight: 650; letter-spacing: -.3px; line-height: 1.65; overflow-wrap: anywhere; min-width: 0; }
+    .is-complete .task-title { text-decoration: line-through; text-decoration-color: #a8b5ac; color: #66746c; }
+    .task-note { color: var(--muted); font-size: 12px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; margin: 7px 0 0 34px; max-height: 180px; overflow-y: auto; }
+    .task-bottom { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 12px 0 -6px 34px; }
+    .task-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 7px 10px; min-width: 0; }
+    .task-date { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); font-size: 11px; }
+    .task-date .icon { width: 13px; height: 13px; }
+    .badge { border-radius: 5px; padding: 3px 7px; font-size: 10px; font-weight: 650; white-space: nowrap; background: #f0f2f6; color: #626d83; }
+    .badge.urgent { color: var(--orange); background: var(--orange-bg); }
+    .badge.overdue { color: var(--red); background: var(--red-bg); }
+    .badge.complete { color: var(--green); background: var(--green-bg); }
+    .task-actions { display: flex; gap: 2px; margin-right: -7px; flex-shrink: 0; }
+    .icon-button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; background: transparent; color: #737f94; border-radius: 8px; }
+    .icon-button .icon { width: 17px; height: 17px; }
+    .icon-button:hover { color: var(--purple); background: var(--lavender); }
+    .icon-button.delete:hover { color: var(--red); background: var(--red-bg); }
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 350px; padding: 40px 24px; border: 1px dashed #d9d4e8; border-radius: var(--radius); background: #fdfcfe; }
+    .empty-art { width: 125px; height: 110px; margin-bottom: 18px; }
+    .empty-state h3 { font-size: 16px; letter-spacing: -.4px; font-weight: 700; }
+    .empty-state p { margin-top: 8px; color: var(--muted); font-size: 12px; max-width: 280px; line-height: 1.9; }
+    .empty-state .button { margin-top: 21px; }
+    .list-footnote { display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--muted); font-size: 11px; margin-top: 18px; }
+    .list-footnote .icon { width: 13px; height: 13px; }
+    .backup-panel { margin-top: 32px; padding: 22px 25px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .backup-intro { display: flex; align-items: center; gap: 15px; }
+    .backup-icon { color: var(--purple); background: var(--lavender); padding: 11px; border-radius: 12px; }
+    .backup-title { font-weight: 700; font-size: 14px; }
+    .backup-description { color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .backup-actions { display: flex; gap: 9px; flex-shrink: 0; }
+    .footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 26px 0 30px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .footer-brand { color: #5d687d; font-weight: 650; }
+    .footer-dot { margin: 0 8px; color: #b1b6c4; }
+    .toast { position: fixed; z-index: 20; bottom: 24px; left: 50%; transform: translateX(-50%); background: #28334b; color: white; border-radius: 12px; padding: 13px 20px; box-shadow: 0 6px 24px #25304724; max-width: min(520px, calc(100% - 32px)); width: max-content; font-size: 13px; pointer-events: none; }
+    .toast:empty { display: none; }
+    dialog { width: min(440px, calc(100% - 32px)); max-height: calc(100dvh - 48px); overflow-y: auto; padding: 28px; border: 1px solid var(--line); border-radius: 20px; color: var(--ink); box-shadow: 0 24px 80px #25304729; }
+    dialog::backdrop { background: #20243d66; backdrop-filter: blur(3px); }
+    .dialog-icon { width: 45px; height: 45px; display: grid; place-items: center; border-radius: 14px; background: var(--lavender); color: var(--purple); margin-bottom: 18px; }
+    .dialog-icon.danger { background: var(--red-bg); color: var(--red); }
+    dialog h2 { font-size: 19px; letter-spacing: -.5px; }
+    dialog p { margin-top: 12px; color: var(--muted); overflow-wrap: anywhere; font-size: 13px; white-space: pre-line; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 25px; }
+    @media (min-width: 1400px) { .wrap { width: 1220px; } .welcome { min-height: 196px; } }
+    @media (max-width: 1050px) {
+      .wrap { width: calc(100% - 40px); }
+      .workspace { grid-template-columns: 300px minmax(0, 1fr); gap: 20px; }
+      .stat { padding: 20px 18px; }
+      .stat-icon { width: 39px; height: 39px; }
+      .form-panel { padding: 21px; }
+      .list-toolbar { flex-wrap: wrap; }
+      .sort-control { margin-left: auto; }
+      .backup-description { max-width: 350px; }
+    }
+    @media (max-width: 800px) {
+      .workspace { grid-template-columns: 1fr; gap: 30px; }
+      .form-panel { position: static; }
+      .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+      .form-grid .full-width { grid-column: 1 / -1; }
+      .form-actions .primary { flex: 0 1 260px; }
+      .form-footnote { text-align: left; }
+      .stat { padding: 16px; gap: 4px; }
+      .stat-icon { width: 32px; height: 32px; border-radius: 10px; }
+      .stat-icon .icon { width: 19px; height: 19px; }
+      .stat-value { font-size: 27px; }
+      .backup-panel { align-items: flex-start; }
+      .backup-actions { flex-direction: column; }
+      .welcome-art { width: 185px; margin-right: 0; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 32px); }
+      .topbar-inner { min-height: 74px; gap: 12px; }
+      .brand { gap: 9px; }
+      .brand-mark { width: 35px; height: 35px; border-radius: 10px; }
+      .brand-mark .icon { width: 22px; height: 22px; }
+      .brand-name { font-size: 18px; }
+      .brand-caption { font-size: 10px; }
+      .header-meta { gap: 0; }
+      .date-label { display: none; }
+      .storage-chip { padding: 6px 8px; gap: 5px; font-size: 10px; }
+      .welcome { min-height: auto; padding-block: 27px; }
+      .welcome-art { display: none; }
+      h1 { font-size: 25px; letter-spacing: -1px; }
+      .welcome-description { font-size: 12px; line-height: 1.9; }
+      .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat { padding: 16px; }
+      .stat-label { font-size: 12px; }
+      .stat-icon { width: 36px; height: 36px; }
+      .progress-panel { display: block; padding: 19px; margin-top: 12px; }
+      .progress-heading { min-width: 0; }
+      .progress-detail { margin-top: 14px; }
+      .progress-label { font-size: 11px; }
+      .workspace { margin-top: 24px; }
+      .form-panel { padding: 21px 19px; }
+      .form-grid { display: block; }
+      .form-actions .primary { flex: 1; }
+      .form-footnote { text-align: center; }
+      .section-heading { font-size: 17px; }
+      input:not([type="checkbox"]), textarea, select { font-size: 16px; }
+      .filter { padding: 9px 12px; min-height: 44px; }
+      .list-toolbar { gap: 4px; margin-block: 12px; }
+      .sort-control { width: 100%; display: flex; justify-content: flex-end; }
+      .sort-control select { width: auto; min-height: 44px; }
+      .task-card { padding: 17px 15px; }
+      .task-card.is-overdue, .task-card.is-urgent { padding-left: 13px; }
+      .task-top { gap: 8px; }
+      .task-bottom { align-items: flex-end; margin-left: 34px; gap: 4px; }
+      .task-date { font-size: 10px; }
+      .task-actions { gap: 0; }
+      .icon-button { width: 44px; height: 44px; }
+      .complete-label { padding: 12px; margin: -11px -12px 0 -12px; }
+      .task-meta { gap: 6px; }
+      .empty-state { min-height: 310px; }
+      .backup-panel { display: block; padding: 20px; }
+      .backup-intro { align-items: flex-start; gap: 12px; }
+      .backup-icon { padding: 9px; }
+      .backup-description { line-height: 1.8; }
+      .backup-actions { flex-direction: row; margin-top: 18px; }
+      .backup-actions .button { flex: 1; padding-inline: 8px; font-size: 12px; }
+      .footer { flex-direction: column; align-items: flex-start; gap: 4px; padding-block: 20px; }
+      .notice { font-size: 12px; padding: 13px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">본문으로 바로 가기</a>
+  <!-- 재사용 아이콘: 모든 경로는 문서 안에 있어 오프라인에서도 표시됩니다. -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="sr-only" aria-hidden="true">
+    <defs>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M3 4.5c3-1 6-.6 9 1.2 3-1.8 6-2.2 9-1.2v15c-3-1-6-.6-9 1.2-3-1.8-6-2.2-9-1.2zM12 5.7v15M6.5 8l2 .5M6.5 12l2 .5M15.5 8.5l2-.5M15.5 12.5l2-.5"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18M8 14h2M14 14h2M8 17h2"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4z"/></symbol>
+      <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17 9 11l4 3 8-10M15 4h6v6M3 21h18"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="m15 4 5 5M4 15 16 3a2 2 0 0 1 3 0l2 2a2 2 0 0 1 0 3L9 20l-6 1z"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><path d="m10 4-8 14a2 2 0 0 0 2 3h16a2 2 0 0 0 2-3L14 4a2.3 2.3 0 0 0-4 0zM12 9v5M12 17h.01"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6zM8 12l3 3 5-6"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 15v6h16v-6"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3m-5 5 5-5 5 5M4 15v6h16v-6"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7V4h6l3 3h9v13H3zM3 10h18"/></symbol>
+    </defs>
+  </svg>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">
+        <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+        <div><div class="brand-name">Campus Flow</div><div class="brand-caption">대학 생활에, 나만의 흐름을.</div></div>
+      </div>
+      <div class="header-meta">
+        <span class="date-label"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><time id="today-label"></time></span>
+        <span id="storage-chip" class="storage-chip" title="이 브라우저에 저장됩니다. 다른 기기와 자동 동기화되지 않습니다."><span class="storage-dot"></span><span id="storage-label">브라우저 저장</span></span>
+      </div>
+    </div>
+  </header>
+  <main id="main" class="wrap">
+    <section class="welcome" aria-labelledby="welcome-title">
+      <div>
+        <p class="eyebrow"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>나의 학습 공간</p>
+        <h1 id="welcome-title">차근차근, 나만의 속도로.</h1>
+        <p id="smart-message" class="welcome-description">아직 등록된 과제가 없어요. 첫 과제를 추가해 보세요!</p>
+      </div>
+      <svg class="welcome-art" viewBox="0 0 250 150" fill="none" aria-hidden="true">
+        <path d="M39 127V72a67 67 0 0 1 134 0v55" fill="#eae4f7"/>
+        <ellipse cx="126" cy="136" rx="98" ry="7" fill="#e8e5f0"/>
+        <g transform="rotate(-12 100 80)"><rect x="52" y="35" width="86" height="97" rx="10" fill="#d6caf3"/><rect x="58" y="29" width="86" height="97" rx="10" fill="#8c74d0"/><path d="M75 49h48M75 59h32M75 95h43M75 105h27" stroke="#cfc2ef" stroke-width="4" stroke-linecap="round"/><path d="m76 77 5 5 9-11" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>
+        <g transform="rotate(9 164 94)"><rect x="127" y="56" width="80" height="78" rx="10" fill="#dfd8ed"/><rect x="124" y="51" width="80" height="78" rx="10" fill="white"/><path d="M125 73h78" stroke="#ece7f6" stroke-width="2"/><path d="M143 45v13M185 45v13" stroke="#a38ccf" stroke-width="4" stroke-linecap="round"/><rect x="137" y="84" width="12" height="10" rx="3" fill="#eee9f8"/><rect x="158" y="84" width="12" height="10" rx="3" fill="#eee9f8"/><rect x="179" y="84" width="12" height="10" rx="3" fill="#eee9f8"/><rect x="137" y="103" width="12" height="10" rx="3" fill="#eee9f8"/><rect x="158" y="103" width="12" height="10" rx="3" fill="#8c74d0"/><path d="m161 108 2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round"/><rect x="179" y="103" width="12" height="10" rx="3" fill="#eee9f8"/></g>
+        <path d="m206 23 3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#b39ade"/><circle cx="33" cy="60" r="4" fill="#c7b4e9"/><path d="m31 106 2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#bda7df"/>
+      </svg>
+    </section>
+    <section aria-label="학습 현황">
+      <div class="stats">
+        <article class="stat"><div><h2 class="stat-label">전체 과제</h2><span class="stat-value" id="stat-total">0</span><span class="stat-unit">개</span></div><span class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span></article>
+        <article class="stat"><div><h2 class="stat-label">완료한 과제</h2><span class="stat-value" id="stat-completed">0</span><span class="stat-unit">개</span></div><span class="stat-icon green"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></article>
+        <article class="stat"><div><h2 class="stat-label">남은 과제</h2><span class="stat-value" id="stat-remaining">0</span><span class="stat-unit">개</span></div><span class="stat-icon blue"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span></article>
+        <article class="stat" title="오늘부터 3일 이내에 마감되는 미완료 과제"><div><h2 class="stat-label">마감 임박 과제</h2><span class="stat-value" id="stat-urgent">0</span><span class="stat-unit">개</span></div><span class="stat-icon orange"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span></article>
+      </div>
+      <div class="progress-panel">
+        <div class="progress-heading"><h2 class="progress-title"><svg class="icon" aria-hidden="true"><use href="#i-trend"/></svg>차곡차곡, 학습 진행률</h2><p class="progress-caption" id="progress-caption">작은 시작이 큰 변화를 만들어요.</p></div>
+        <div class="progress-detail"><div class="progress-label"><span id="progress-summary">전체 0개 중 0개 완료</span><strong class="progress-number" id="progress-number">0%</strong></div><div class="progress-track" id="progress" role="progressbar" aria-label="과제 완료율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div></div>
+      </div>
+      <div class="notice deadline-notice" id="deadline-notice" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><p id="deadline-message"></p></div>
+    </section>
+    <section class="notice storage-notice" id="storage-notice" role="alert" hidden aria-label="데이터 저장 안내">
+      <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><div class="notice-content"><p id="storage-message"></p><div class="notice-actions"><button type="button" id="download-raw" hidden>저장 원본 내려받기</button><button type="button" id="retry-storage">저장 다시 시도</button><button type="button" id="backup-unsaved">현재 과제 백업</button></div></div>
+    </section>
+    <div class="workspace">
+      <section class="panel form-panel" aria-labelledby="form-title">
+        <h2 class="section-heading" id="form-title"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span id="form-title-text">새 과제 추가</span></h2>
+        <p class="section-description" id="form-description">해야 할 일을 적고, 머릿속은 가볍게.</p>
+        <hr class="form-divider">
+        <form id="task-form" novalidate>
+          <div class="form-grid">
+            <div class="field"><label for="subject">과목명<span class="required" aria-hidden="true">*</span></label><input id="subject" name="subject" maxlength="40" required autocomplete="off" placeholder="예: 사용자 경험 디자인" aria-describedby="subject-error"><p class="field-error" id="subject-error" hidden></p></div>
+            <div class="field"><label for="title">과제 제목<span class="required" aria-hidden="true">*</span></label><input id="title" name="title" maxlength="120" required placeholder="어떤 과제를 해야 하나요?" autocomplete="off" aria-describedby="title-error"><p class="field-error" id="title-error" hidden></p></div>
+            <div class="field"><label for="due-date">마감일<span class="required" aria-hidden="true">*</span></label><input id="due-date" name="dueDate" type="date" required min="1900-01-01" max="9999-12-31" aria-describedby="due-date-error"><p class="field-error" id="due-date-error" hidden></p></div>
+            <fieldset><legend class="field-label">중요도</legend><div class="priority-options"><label class="priority-option high"><input type="radio" name="priority" value="high"><span>높음</span></label><label class="priority-option normal"><input type="radio" name="priority" value="normal" checked><span>보통</span></label><label class="priority-option"><input type="radio" name="priority" value="low"><span>낮음</span></label></div></fieldset>
+            <div class="field full-width"><label for="note">상세 메모<span class="optional">선택</span></label><textarea id="note" name="note" maxlength="2000" rows="3" placeholder="준비할 자료나 기억할 내용을 남겨 보세요." aria-describedby="note-counter note-error"></textarea><p class="field-help" id="note-counter">0 / 2,000</p><p class="field-error" id="note-error" hidden></p></div>
+          </div>
+          <div class="form-actions"><button class="button primary" type="submit" id="submit-task"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span id="submit-label">과제 추가</span></button><button class="button" id="cancel-edit" type="button" hidden>취소</button></div>
+          <p class="form-footnote">필수 항목: 과목명 · 과제 제목 · 마감일</p>
+        </form>
+      </section>
+      <section class="list-section" aria-labelledby="list-title">
+        <div class="list-heading"><h2 class="section-heading" id="list-title">나의 과제<span class="count-pill" id="list-count">0</span></h2><span class="list-total" id="list-total">전체 0개</span></div>
+        <div class="search-box"><label for="search" class="sr-only">과제 제목 또는 과목명 검색</label><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="과제 제목이나 과목명으로 검색" autocomplete="off" maxlength="200"><button class="search-clear" id="clear-search" type="button" aria-label="검색어 지우기" hidden><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+        <div class="list-toolbar"><div class="filters" role="group" aria-label="과제 상태 필터"><button class="filter" data-filter="all" type="button" aria-pressed="true">전체</button><button class="filter" data-filter="active" type="button" aria-pressed="false">진행 중</button><button class="filter" data-filter="completed" type="button" aria-pressed="false">완료</button><button class="filter" data-filter="urgent" type="button" aria-pressed="false">마감 임박</button></div><div class="sort-control"><label for="sort" class="sr-only">과제 정렬</label><select id="sort"><option value="due">마감일 가까운 순</option><option value="priority">중요도 높은 순</option><option value="recent">최근 등록 순</option></select></div></div>
+        <ul id="task-list" class="task-list" aria-label="과제 목록"></ul>
+        <div class="empty-state" id="empty-state">
+          <svg class="empty-art" viewBox="0 0 140 120" fill="none" aria-hidden="true"><circle cx="70" cy="60" r="52" fill="#f0ebfa"/><rect x="44" y="20" width="60" height="79" rx="8" transform="rotate(10 44 20)" fill="#d9cdee"/><rect x="36" y="19" width="60" height="79" rx="8" fill="white" stroke="#d8cdeb" stroke-width="1.5"/><rect x="52" y="14" width="28" height="11" rx="4" fill="#aa93d6"/><path d="M62 43h22M62 61h22M62 79h14" stroke="#dcd5e9" stroke-width="3" stroke-linecap="round"/><path d="m46 43 3 3 5-6M46 61l3 3 5-6" stroke="#a189ce" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="46" y="76" width="7" height="7" rx="2" stroke="#d0c5e3" stroke-width="1.5"/><circle cx="101" cy="91" r="15" fill="#8a71c9"/><path d="M101 85v12M95 91h12" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="m23 36 2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#c6b4e3"/></svg>
+          <h3 id="empty-title">가벼운 시작, 첫 번째 과제</h3><p id="empty-description">머릿속에 담아 둔 과제를 적어 보세요.<br>마감일까지 함께 챙겨 드릴게요.</p><button class="button" id="empty-action" type="button"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span id="empty-action-label">첫 과제 작성하기</span></button>
+        </div>
+        <p class="list-footnote"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>하나씩 체크하며, 나만의 흐름을 만들어 보세요.</p>
+        <p id="result-announcement" class="sr-only" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+    <section class="panel backup-panel" aria-labelledby="backup-title"><div class="backup-intro"><span class="backup-icon"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></span><div><h2 class="backup-title" id="backup-title">소중한 기록, 안전하게 보관하세요</h2><p class="backup-description">이 브라우저에만 저장돼요. 다른 기기로 옮길 때는 JSON 백업을 이용하세요.</p></div></div><div class="backup-actions"><button class="button" id="export-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>백업 내보내기</button><button class="button" id="import-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>백업 가져오기</button><input id="import-file" type="file" accept=".json,application/json" hidden aria-label="JSON 백업 파일 선택"></div></section>
+  </main>
+  <footer class="wrap footer"><p><span class="footer-brand">Campus Flow</span><span class="footer-dot">·</span>대학 생활을 조금 더 가볍게.</p><p>바이브코딩 특강 · 서연경 교수님</p></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+  <dialog id="confirm-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description"><div class="dialog-icon" id="dialog-icon"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg></div><h2 id="dialog-title"></h2><p id="dialog-description"></p><form method="dialog" class="dialog-actions"><button class="button" value="cancel" autofocus>취소</button><button class="button primary" id="dialog-confirm" value="confirm">확인</button></form></dialog>
+  <noscript><p style="padding:24px;text-align:center">Campus Flow를 사용하려면 브라우저에서 JavaScript를 허용해 주세요.</p></noscript>
+  <script>
+    (() => {
+      'use strict';
+
+      // 1. 데이터 모델과 화면 상태. 사용자 데이터는 항상 안전한 DOM API로 표시합니다.
+      const STORAGE_KEY = 'campus-flow.tasks.v1';
+      const MAX_TASKS = 1000;
+      const MAX_FILE_BYTES = 16 * 1024 * 1024;
+      const PRIORITIES = { high: { label: '높음', rank: 0 }, normal: { label: '보통', rank: 1 }, low: { label: '낮음', rank: 2 } };
+      const $ = (id) => document.getElementById(id);
+      const form = $('task-form');
+      const state = { tasks: [], filter: 'all', query: '', sort: 'due', editingId: null, storageIssue: null, knownRaw: null, damagedRaw: null };
+      let toastTimer;
+      let announcementTimer;
+      let lastLocalDay = localDateKey();
+
+      // 2. 로컬 달력 날짜를 UTC 일련번호로 비교합니다. 문자열을 UTC 날짜로 파싱하지 않아
+      // 시간대에 따른 하루 오차가 없고, 일광 절약 시간의 23/25시간짜리 날도 정확합니다.
+      function localDateKey(date = new Date()) {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      }
+
+      function validDate(value) {
+        if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+        const [year, month, day] = value.split('-').map(Number);
+        if (year < 1900 || month < 1 || month > 12 || day < 1 || day > 31) return false;
+        const date = new Date(Date.UTC(year, month - 1, day));
+        return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+      }
+
+      function dayNumber(key) {
+        const [year, month, day] = key.split('-').map(Number);
+        return Date.UTC(year, month - 1, day) / 86400000;
+      }
+
+      function daysUntil(dueDate) { return dayNumber(dueDate) - dayNumber(localDateKey()); }
+      function isUrgent(task) { const days = daysUntil(task.dueDate); return !task.completed && days >= 0 && days <= 3; }
+      function dateLabel(key) { const [y, m, d] = key.split('-'); return `${y}.${m}.${d}`; }
+
+      function deadlineState(task) {
+        if (task.completed) return { text: '완료', kind: 'complete' };
+        const days = daysUntil(task.dueDate);
+        if (days < 0) return { text: `마감 초과 D+${Math.abs(days)}`, kind: 'overdue' };
+        if (days === 0) return { text: 'D-DAY', kind: 'urgent' };
+        return { text: `D-${days}`, kind: days <= 3 ? 'urgent' : '' };
+      }
+
+      function calculateStats(tasks) {
+        const total = tasks.length;
+        const completed = tasks.filter(task => task.completed).length;
+        return { total, completed, remaining: total - completed, urgent: tasks.filter(isUrgent).length,
+          overdue: tasks.filter(task => !task.completed && daysUntil(task.dueDate) < 0).length,
+          percent: total ? Math.round(completed / total * 1000) / 10 : 0 };
+      }
+
+      // 3. 저장소와 백업은 같은 스키마로 검증합니다. 일부만 가져오거나 ID를 묵시적으로
+      // 바꾸지 않고, 하나라도 잘못되면 전체를 거부하여 원래 데이터가 유지되도록 합니다.
+      function validateData(data) {
+        if (!data || typeof data !== 'object' || Array.isArray(data) || data.version !== 1 || !Array.isArray(data.tasks)) throw new Error('Campus Flow 버전 1 백업 형식이 아니에요.');
+        if (data.app !== undefined && data.app !== 'CampusFlow') throw new Error('Campus Flow 백업 파일을 선택해 주세요.');
+        if (data.tasks.length > MAX_TASKS) throw new Error(`과제는 최대 ${MAX_TASKS.toLocaleString('ko-KR')}개까지 가져올 수 있어요.`);
+        const ids = new Set();
+        return data.tasks.map((task, index) => {
+          const invalid = () => { throw new Error(`${index + 1}번째 과제의 데이터 형식이 올바르지 않아요.`); };
+          if (!task || typeof task !== 'object' || Array.isArray(task)) invalid();
+          if (typeof task.id !== 'string' || !/^[a-zA-Z0-9_-]{1,100}$/.test(task.id) || ids.has(task.id)) invalid();
+          if (typeof task.subject !== 'string' || !task.subject.trim() || task.subject.length > 40) invalid();
+          if (typeof task.title !== 'string' || !task.title.trim() || task.title.length > 120) invalid();
+          if (typeof task.note !== 'string' || task.note.length > 2000) invalid();
+          if (!validDate(task.dueDate) || typeof task.priority !== 'string' || !Object.hasOwn(PRIORITIES, task.priority) || typeof task.completed !== 'boolean') invalid();
+          if (!Number.isSafeInteger(task.createdAt) || task.createdAt < 0 || task.createdAt > 8640000000000000 || !Number.isSafeInteger(task.updatedAt) || task.updatedAt < task.createdAt || task.updatedAt > 8640000000000000) invalid();
+          ids.add(task.id);
+          return { id: task.id, subject: task.subject.trim(), title: task.title.trim(), dueDate: task.dueDate,
+            priority: task.priority, note: task.note.trim(), completed: task.completed, createdAt: task.createdAt, updatedAt: task.updatedAt };
+        });
+      }
+
+      function loadTasks() {
+        try { state.knownRaw = localStorage.getItem(STORAGE_KEY); }
+        catch { state.storageIssue = 'unavailable'; return; }
+        if (state.knownRaw === null) return;
+        try { state.tasks = validateData(JSON.parse(state.knownRaw)); }
+        catch { state.damagedRaw = state.knownRaw; state.storageIssue = 'damaged'; }
+      }
+
+      function storageFeedback() {
+        const issue = state.storageIssue;
+        $('storage-chip').classList.toggle('warning', Boolean(issue));
+        $('storage-label').textContent = issue ? '저장 확인 필요' : '브라우저 저장';
+        $('storage-notice').hidden = !issue;
+        $('download-raw').hidden = state.damagedRaw === null;
+        const messages = {
+          unavailable: '브라우저에 저장하지 못했어요. 변경 내용은 현재 화면에만 남아 있어요. 새로고침하거나 닫기 전에 현재 과제를 백업해 주세요. 저장 공간과 브라우저 설정도 확인해 주세요.',
+          damaged: '저장된 데이터를 읽을 수 없어 원본을 보존했어요. 새로 입력한 과제는 현재 화면에만 남아요. 저장 원본과 현재 과제를 백업한 뒤 저장을 복구하거나, 정상 백업 파일을 가져와 주세요.',
+          conflict: '다른 탭에서 저장 데이터가 변경됐어요. 덮어쓰기를 막기 위해 이 화면의 저장을 멈췄어요. 현재 과제를 백업한 뒤 새로고침하거나, 이 화면의 과제로 다시 저장해 주세요.'
+        };
+        $('storage-message').textContent = messages[issue] || '';
+      }
+
+      function saveTasks(tasks, force = false) {
+        if (!force && ['damaged', 'conflict'].includes(state.storageIssue)) { storageFeedback(); return false; }
+        try {
+          const currentRaw = localStorage.getItem(STORAGE_KEY);
+          if (!force && currentRaw !== state.knownRaw) { state.storageIssue = 'conflict'; storageFeedback(); return false; }
+          const raw = JSON.stringify({ version: 1, tasks });
+          localStorage.setItem(STORAGE_KEY, raw);
+          state.knownRaw = raw;
+          state.storageIssue = null;
+          state.damagedRaw = null;
+          storageFeedback();
+          return true;
+        } catch { state.storageIssue = 'unavailable'; storageFeedback(); return false; }
+      }
+
+      function updateTasks(tasks, message) {
+        state.tasks = tasks;
+        const saved = saveTasks(tasks);
+        render();
+        notify(saved ? message : '변경 내용을 현재 화면에 반영했어요. 브라우저에 저장하지 못했으니 현재 과제를 백업해 주세요.');
+      }
+
+      // 4. DOM 렌더링. innerHTML에 사용자 문자열을 넣지 않습니다.
+      function element(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+
+      function icon(name) {
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.classList.add('icon'); svg.setAttribute('aria-hidden', 'true');
+        const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+        use.setAttribute('href', `#i-${name}`); svg.append(use); return svg;
+      }
+
+      function renderDashboard() {
+        const stats = calculateStats(state.tasks);
+        for (const key of ['total', 'completed', 'remaining', 'urgent']) $(`stat-${key}`).textContent = stats[key].toLocaleString('ko-KR');
+        $('progress-number').textContent = `${stats.percent}%`;
+        $('progress-fill').style.width = `${stats.percent}%`;
+        $('progress').setAttribute('aria-valuenow', stats.percent);
+        $('progress-summary').textContent = `전체 ${stats.total}개 중 ${stats.completed}개 완료`;
+        $('progress-caption').textContent = stats.total && stats.completed === stats.total ? '오늘의 노력이 차곡차곡 쌓였어요.' : '작은 시작이 큰 변화를 만들어요.';
+        let message = '오늘도 한 걸음씩! 남은 과제를 완료해 보세요.';
+        if (!stats.total) message = '아직 등록된 과제가 없어요. 첫 과제를 추가해 보세요!';
+        else if (!stats.remaining) message = '모든 과제를 완료했어요! 정말 수고했어요 🎉';
+        else if (stats.overdue) message = '마감이 지난 과제가 있어요. 일정을 다시 확인해 보세요.';
+        else if (stats.urgent) message = '마감이 가까운 과제가 있어요. 우선순위를 확인해 보세요.';
+        $('smart-message').textContent = message;
+        const notices = [];
+        if (stats.urgent) notices.push(`마감이 가까운 과제가 ${stats.urgent}개 있어요. 먼저 확인해 보세요!`);
+        if (stats.overdue) notices.push(`마감이 지난 과제도 ${stats.overdue}개 있어요.`);
+        $('deadline-message').textContent = notices.join(' ');
+        $('deadline-notice').hidden = !notices.length;
+        $('today-label').textContent = new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' }).format(new Date());
+        $('today-label').dateTime = localDateKey();
+      }
+
+      function visibleTasks() {
+        const query = state.query.trim().normalize('NFC').toLocaleLowerCase('ko-KR');
+        return state.tasks.filter(task => {
+          if (state.filter === 'active' && task.completed) return false;
+          if (state.filter === 'completed' && !task.completed) return false;
+          if (state.filter === 'urgent' && !isUrgent(task)) return false;
+          return !query || `${task.subject}\n${task.title}`.normalize('NFC').toLocaleLowerCase('ko-KR').includes(query);
+        }).sort((a, b) => {
+          if (state.sort === 'recent') return b.createdAt - a.createdAt || b.id.localeCompare(a.id);
+          if (state.sort === 'priority') return PRIORITIES[a.priority].rank - PRIORITIES[b.priority].rank || a.dueDate.localeCompare(b.dueDate) || b.createdAt - a.createdAt;
+          return Number(a.completed) - Number(b.completed) || a.dueDate.localeCompare(b.dueDate) || PRIORITIES[a.priority].rank - PRIORITIES[b.priority].rank || b.createdAt - a.createdAt;
+        });
+      }
+
+      function taskCard(task) {
+        const deadline = deadlineState(task);
+        const card = element('li', `task-card${task.completed ? ' is-complete' : deadline.kind ? ` is-${deadline.kind}` : ''}`);
+        card.dataset.id = task.id;
+        const top = element('div', 'task-top');
+        top.append(element('span', 'subject-tag', task.subject), element('span', `priority-tag ${task.priority}`, `중요도 ${PRIORITIES[task.priority].label}`));
+        const titleRow = element('div', 'task-title-row');
+        const completeLabel = element('label', 'complete-label');
+        const checkbox = element('input', 'task-checkbox');
+        checkbox.type = 'checkbox'; checkbox.checked = task.completed; checkbox.dataset.action = 'toggle';
+        checkbox.setAttribute('aria-label', `${task.title} ${task.completed ? '완료 취소' : '완료하기'}`);
+        completeLabel.append(checkbox);
+        titleRow.append(completeLabel, element('h3', 'task-title', task.title));
+        const bottom = element('div', 'task-bottom');
+        const meta = element('div', 'task-meta');
+        const time = element('time', 'task-date'); time.dateTime = task.dueDate;
+        time.append(icon('calendar'), document.createTextNode(dateLabel(task.dueDate)));
+        meta.append(time);
+        if (!task.completed) meta.append(element('span', 'badge', '진행 중'));
+        meta.append(element('span', `badge ${deadline.kind}`, deadline.text));
+        const actions = element('div', 'task-actions');
+        for (const [action, glyph, label] of [['edit', 'edit', '수정'], ['delete', 'trash', '삭제']]) {
+          const button = element('button', `icon-button ${action}`);
+          button.type = 'button'; button.dataset.action = action; button.setAttribute('aria-label', `${task.title} ${label}`); button.title = label; button.append(icon(glyph)); actions.append(button);
+        }
+        bottom.append(meta, actions); card.append(top, titleRow);
+        if (task.note) card.append(element('p', 'task-note', task.note));
+        card.append(bottom); return card;
+      }
+
+      function renderList() {
+        const tasks = visibleTasks();
+        $('task-list').replaceChildren(...tasks.map(taskCard));
+        $('list-count').textContent = tasks.length;
+        $('list-total').textContent = `전체 ${state.tasks.length}개`;
+        $('clear-search').hidden = !state.query;
+        document.querySelectorAll('[data-filter]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === state.filter)));
+        $('empty-state').hidden = tasks.length > 0;
+        const empty = state.tasks.length === 0;
+        $('empty-title').textContent = empty ? '가벼운 시작, 첫 번째 과제' : '조건에 맞는 과제가 없어요';
+        $('empty-description').textContent = empty ? '머릿속에 담아 둔 과제를 적어 보세요. 마감일까지 함께 챙겨 드릴게요.' : '검색어를 바꾸거나 필터를 해제해 보세요. 등록한 과제는 그대로 보관되어 있어요.';
+        $('empty-action-label').textContent = empty ? '첫 과제 작성하기' : '전체 과제 보기';
+        clearTimeout(announcementTimer);
+        announcementTimer = setTimeout(() => { $('result-announcement').textContent = `${tasks.length}개의 과제가 표시되어 있어요.`; }, 250);
+      }
+
+      function render() { renderDashboard(); renderList(); storageFeedback(); }
+
+      // 5. 입력과 수정. 실패하면 입력을 그대로 두고 첫 오류 위치로 포커스를 옮깁니다.
+      function clearErrors() {
+        for (const id of ['subject', 'title', 'due-date', 'note']) { $(id).removeAttribute('aria-invalid'); $(`${id}-error`).hidden = true; $(`${id}-error`).textContent = ''; }
+      }
+
+      function formValues() {
+        clearErrors();
+        const values = { subject: $('subject').value.trim(), title: $('title').value.trim(), dueDate: $('due-date').value,
+          priority: form.elements.priority.value, note: $('note').value.trim() };
+        const errors = [];
+        if (!values.subject || values.subject.length > 40) errors.push(['subject', '과목명을 공백 없이 1~40자로 입력해 주세요.']);
+        if (!values.title || values.title.length > 120) errors.push(['title', '과제 제목을 공백 없이 1~120자로 입력해 주세요.']);
+        if (!validDate(values.dueDate)) errors.push(['due-date', '마감일을 1900년~9999년 사이의 올바른 날짜로 선택해 주세요.']);
+        if (values.note.length > 2000) errors.push(['note', '상세 메모는 2,000자 이내로 입력해 주세요.']);
+        for (const [id, text] of errors) { $(id).setAttribute('aria-invalid', 'true'); $(`${id}-error`).textContent = text; $(`${id}-error`).hidden = false; }
+        if (errors.length) { $(errors[0][0]).focus(); notify('입력 내용을 확인해 주세요. 작성 중인 내용은 유지돼요.'); return null; }
+        return values;
+      }
+
+      function resetForm(focus = false) {
+        form.reset(); state.editingId = null; clearErrors();
+        $('form-title-text').textContent = '새 과제 추가'; $('submit-label').textContent = '과제 추가';
+        $('form-description').textContent = '해야 할 일을 적고, 머릿속은 가볍게.';
+        $('cancel-edit').hidden = true; $('note-counter').textContent = '0 / 2,000';
+        if (focus) $('subject').focus();
+      }
+
+      function newId() {
+        let id;
+        do { id = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : `${Date.now().toString(36)}-${Array.from(crypto.getRandomValues(new Uint32Array(3)), n => n.toString(36)).join('-')}`; }
+        while (state.tasks.some(task => task.id === id));
+        return id;
+      }
+
+      function submitTask(event) {
+        event.preventDefault();
+        const values = formValues(); if (!values) return;
+        if (state.editingId) {
+          const current = state.tasks.find(task => task.id === state.editingId);
+          if (!current) { notify('수정할 과제를 찾지 못했어요. 목록을 다시 확인해 주세요.'); return; }
+          updateTasks(state.tasks.map(task => task.id === current.id ? { ...task, ...values, updatedAt: Math.max(Date.now(), task.createdAt) } : task), '과제 수정을 저장했어요.');
+        } else {
+          if (state.tasks.length >= MAX_TASKS) { notify('과제는 최대 1,000개까지 등록할 수 있어요. 백업 후 필요 없는 과제를 정리해 주세요.'); return; }
+          const now = Date.now();
+          state.filter = 'all'; state.query = ''; $('search').value = '';
+          updateTasks([...state.tasks, { ...values, id: newId(), completed: false, createdAt: now, updatedAt: now }], '새 과제를 추가했어요.');
+        }
+        resetForm(true);
+      }
+
+      function hasFormDraft() {
+        if (!state.editingId) return Boolean($('subject').value || $('title').value || $('due-date').value || $('note').value || form.elements.priority.value !== 'normal');
+        const task = state.tasks.find(item => item.id === state.editingId);
+        return task && ($('subject').value !== task.subject || $('title').value !== task.title || $('due-date').value !== task.dueDate || $('note').value !== task.note || form.elements.priority.value !== task.priority);
+      }
+
+      async function editTask(task) {
+        if (state.editingId === task.id) { $('subject').focus(); return; }
+        if (hasFormDraft() && !await confirmAction('작성 중인 내용을 바꿀까요?', '아직 저장하지 않은 입력 내용이 사라지고 선택한 과제를 수정하게 돼요.', '수정하기')) return;
+        state.editingId = task.id; clearErrors();
+        $('subject').value = task.subject; $('title').value = task.title; $('due-date').value = task.dueDate;
+        form.elements.priority.value = task.priority; $('note').value = task.note;
+        $('note-counter').textContent = `${task.note.length.toLocaleString('ko-KR')} / 2,000`;
+        $('form-title-text').textContent = '과제 수정'; $('submit-label').textContent = '수정 저장';
+        $('form-description').textContent = '변경한 내용은 수정 저장을 눌러 반영하세요.'; $('cancel-edit').hidden = false;
+        $('subject').focus();
+      }
+
+      // 6. 확인 대화상자: 기본 포커스는 취소, Escape도 취소로 처리합니다.
+      function confirmAction(title, description, confirmLabel = '확인', danger = false) {
+        const dialog = $('confirm-dialog');
+        if (dialog.open) return Promise.resolve(false);
+        $('dialog-title').textContent = title; $('dialog-description').textContent = description;
+        $('dialog-confirm').textContent = confirmLabel; $('dialog-confirm').className = `button ${danger ? 'danger' : 'primary'}`;
+        $('dialog-icon').classList.toggle('danger', danger);
+        dialog.returnValue = 'cancel';
+        return new Promise(resolve => {
+          dialog.addEventListener('close', () => resolve(dialog.returnValue === 'confirm'), { once: true });
+          dialog.showModal();
+        });
+      }
+
+      function notify(message) {
+        clearTimeout(toastTimer); $('toast').textContent = message;
+        toastTimer = setTimeout(() => { $('toast').textContent = ''; }, 5500);
+      }
+
+      function focusTaskControl(id, action, fallbackIndex = 0) {
+        const cards = [...$('task-list').children];
+        const card = cards.find(item => item.dataset.id === id) || cards[Math.min(fallbackIndex, cards.length - 1)];
+        if (card) card.querySelector(`[data-action="${action}"]`).focus();
+        else if (!$('empty-state').hidden) $('empty-action').focus();
+        else $('search').focus();
+      }
+
+      async function handleListClick(event) {
+        const control = event.target.closest('button[data-action]'); if (!control) return;
+        const card = control.closest('[data-id]');
+        const task = state.tasks.find(item => item.id === card.dataset.id); if (!task) return;
+        if (control.dataset.action === 'edit') { await editTask(task); return; }
+        const index = [...$('task-list').children].indexOf(card);
+        if (!await confirmAction('이 과제를 삭제할까요?', `“${task.title}” 과제가 삭제돼요. 삭제 후에는 되돌릴 수 없어요.`, '삭제하기', true)) return;
+        if (state.editingId === task.id) resetForm();
+        updateTasks(state.tasks.filter(item => item.id !== task.id), '과제를 삭제했어요.');
+        focusTaskControl(null, 'delete', index);
+      }
+
+      // 7. JSON 백업/복원. 파일 검증과 교체 확인, 저장 성공까지 마친 후에만
+      // 메모리의 기존 목록을 교체하므로 읽기/파싱/저장 실패에도 기존 과제가 남습니다.
+      function downloadText(contents, filename, type = 'application/json') {
+        const blob = new Blob([contents], { type });
+        const url = URL.createObjectURL(blob);
+        const link = element('a'); link.href = url; link.download = filename;
+        document.body.append(link); link.click(); link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      }
+
+      function exportBackup() {
+        try {
+          downloadText(JSON.stringify({ app: 'CampusFlow', version: 1, exportedAt: new Date().toISOString(), tasks: state.tasks }, null, 2), `campus-flow-backup-${localDateKey()}.json`);
+          notify('백업 파일 다운로드를 요청했어요. 브라우저의 다운로드 목록을 확인해 주세요.');
+        } catch { notify('백업 파일을 만들지 못했어요. 브라우저의 다운로드 설정을 확인해 주세요.'); }
+      }
+
+      async function importBackup(event) {
+        const file = event.target.files[0]; event.target.value = ''; if (!file) return;
+        $('import-data').disabled = true;
+        try {
+          if (file.size > MAX_FILE_BYTES) throw new Error('백업 파일은 16MB 이하여야 해요.');
+          let data;
+          try { data = JSON.parse((await file.text()).replace(/^\uFEFF/, '')); }
+          catch { throw new Error('JSON 파일을 읽을 수 없어요. 올바른 백업 파일인지 확인해 주세요.'); }
+          const tasks = validateData(data);
+          const extra = hasFormDraft() ? '\n작성 중인 입력 내용도 초기화돼요.' : '';
+          if (!await confirmAction('백업으로 과제를 교체할까요?', `현재 과제 ${state.tasks.length}개를 백업의 과제 ${tasks.length}개로 교체해요. 필요한 기록은 먼저 내보내 주세요.${extra}`, '교체하기', true)) return;
+          // 확인 창을 연 이후 다른 탭이 바뀌면 덮어쓰지 않습니다.
+          let currentRaw;
+          try { currentRaw = localStorage.getItem(STORAGE_KEY); }
+          catch { state.storageIssue = 'unavailable'; storageFeedback(); notify('저장소에 접근할 수 없어 복원하지 않았어요. 기존 과제는 유지돼요.'); return; }
+          if (currentRaw !== state.knownRaw) { state.storageIssue = 'conflict'; storageFeedback(); notify('다른 탭의 변경을 확인해 주세요. 기존 과제는 유지돼요.'); return; }
+          if (!saveTasks(tasks, true)) { notify('백업을 저장하지 못해 복원하지 않았어요. 기존 과제는 유지돼요.'); return; }
+          state.tasks = tasks; state.query = ''; state.filter = 'all'; $('search').value = ''; resetForm(); render();
+          notify(`${tasks.length}개의 과제를 복원했어요.`);
+        } catch (error) { notify(`${error.message} 기존 과제는 유지돼요.`); }
+        finally { $('import-data').disabled = false; $('import-data').focus(); }
+      }
+
+      async function retryStorage() {
+        if (state.storageIssue) {
+          if (!await confirmAction('현재 과제를 브라우저에 저장할까요?', '현재 화면의 과제로 브라우저 저장 내용을 교체해요. 기존 원본이나 다른 탭의 기록이 필요하면 먼저 백업해 주세요.', '현재 과제 저장', true)) return;
+        }
+        if (saveTasks(state.tasks, true)) notify('현재 과제를 브라우저에 저장했어요.');
+        else notify('아직 저장할 수 없어요. 현재 과제를 백업해 주세요.');
+      }
+
+      // 8. 이벤트 연결. 목록을 다시 그린 뒤에도 키보드 포커스를 이어 줍니다.
+      form.addEventListener('submit', submitTask);
+      $('cancel-edit').addEventListener('click', () => { resetForm(true); notify('수정을 취소했어요. 원래 과제는 유지돼요.'); });
+      $('note').addEventListener('input', () => { $('note-counter').textContent = `${$('note').value.length.toLocaleString('ko-KR')} / 2,000`; });
+      for (const id of ['subject', 'title', 'due-date', 'note']) $(id).addEventListener('input', () => { $(id).removeAttribute('aria-invalid'); $(`${id}-error`).hidden = true; });
+      $('task-list').addEventListener('click', handleListClick);
+      $('task-list').addEventListener('change', event => {
+        if (!event.target.matches('[data-action="toggle"]')) return;
+        const card = event.target.closest('[data-id]'); const id = card.dataset.id;
+        const index = [...$('task-list').children].indexOf(card); const completed = event.target.checked;
+        updateTasks(state.tasks.map(task => task.id === id ? { ...task, completed, updatedAt: Math.max(Date.now(), task.createdAt) } : task), completed ? '과제를 완료했어요. 한 걸음 더 나아갔네요!' : '다시 진행 중인 과제로 변경했어요.');
+        focusTaskControl(id, 'toggle', index);
+      });
+      $('search').addEventListener('input', () => { state.query = $('search').value; renderList(); });
+      $('clear-search').addEventListener('click', () => { state.query = ''; $('search').value = ''; renderList(); $('search').focus(); });
+      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; renderList(); }));
+      $('sort').addEventListener('change', () => { state.sort = $('sort').value; renderList(); });
+      $('empty-action').addEventListener('click', () => {
+        if (!state.tasks.length) $('subject').focus();
+        else { state.query = ''; state.filter = 'all'; $('search').value = ''; renderList(); $('search').focus(); }
+      });
+      $('export-data').addEventListener('click', exportBackup);
+      $('backup-unsaved').addEventListener('click', exportBackup);
+      $('import-data').addEventListener('click', () => $('import-file').click());
+      $('import-file').addEventListener('change', importBackup);
+      $('retry-storage').addEventListener('click', retryStorage);
+      $('download-raw').addEventListener('click', () => {
+        if (state.damagedRaw !== null) {
+          try { downloadText(state.damagedRaw, `campus-flow-storage-original-${localDateKey()}.txt`, 'text/plain'); }
+          catch { notify('저장 원본을 다운로드하지 못했어요. 브라우저 설정을 확인해 주세요.'); }
+        }
+      });
+      window.addEventListener('storage', event => {
+        if ((event.key === STORAGE_KEY || event.key === null) && event.newValue !== state.knownRaw) { state.storageIssue = 'conflict'; storageFeedback(); }
+      });
+      window.addEventListener('beforeunload', event => {
+        if (state.storageIssue || hasFormDraft()) { event.preventDefault(); event.returnValue = ''; }
+      });
+      // 열린 채로 자정을 넘기거나 절전에서 돌아와도 마감일과 통계를 갱신합니다.
+      function refreshDay() {
+        if (lastLocalDay === localDateKey()) return;
+        lastLocalDay = localDateKey();
+        const focused = document.activeElement;
+        const taskId = focused.closest?.('[data-id]')?.dataset.id;
+        const action = focused.dataset?.action;
+        render();
+        if (taskId && action) focusTaskControl(taskId, action);
+      }
+      setInterval(refreshDay, 30000);
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshDay(); });
+      window.addEventListener('focus', refreshDay);
+
+      loadTasks(); render();
+    })();
+  </script>
+</body>
+</html>
