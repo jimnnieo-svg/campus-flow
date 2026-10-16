@@ -34,7 +34,7 @@
 - 커밋 `664cd35`, GitHub 푸시 성공. CP01 `6e26233`도 원격에 보존.
 - 남은 작업: 360/390/768/1280/1440 반응형, 키보드/대비, 인증/백업/레거시/계정 전환 회귀, 최종 캡처/보고. 실제 Firebase 서버는 미검증.
 
-## 현재 체크포인트: 03 — 반응형 및 최종 검증
+## 현재 체크포인트: 03 — 반응형 및 최종 검증 (완료)
 
 - 360/390/768/1280/1440px에서 가로 넘침 없음. 긴 제목/메모와 등록 모달도 확인했다. 560px 이하에서는 작은 요약 → 과제 목록 → 차트 → 완료율 → 다음 마감 순으로 재배치한다.
 - 모바일의 메모 펼침, 체크박스 레이블, 입력/로그아웃 버튼에 충분한 클릭 높이를 확보했다. 명확한 focus, 네이티브 dialog 포커스 제한/Escape, 닫기 후 포커스 복원, 모션 감소, DOM ID 중복 없음을 확인했다.
@@ -46,9 +46,22 @@
 - 시각 검수: Taskly 첨부와 최종 desktop/mobile/login/empty 화면을 직접 비교했다. V2의 큰 환영 배너와 상시 폼/큰 통계를 해체했고 1440×900에서 5개 과제, 7일 차트, 완료율, 다음 마감이 모두 보인다. 목록은 약 673px, 마감 차트는 약 330px 너비이며 높이도 서로 다르다. 밝은 배경과 넓은 카드 간격을 유지한다.
 - Firebase 설정/SDK/보안 규칙, 문서 경로/형식과 트랜잭션·UID 경계는 보존했다. 모의 구독 갱신, 계정 전환 시 구독 해제 및 폼/목록 초기화, 실패 시 입력 보존, JSON과 이전 브라우저 원본 보존을 검증했다. 차트 때문에 추가 요청을 보내지 않는다.
 - 변경 파일 전체: `index.html`, `BENTO_V3_HANDOFF.md`, `tests/bento-v3.test.cjs`, `tests/BENTO_V3_TESTING.md`, `screenshots/bento-v3-desktop-1440.jpg`, `screenshots/bento-v3-dashboard-data.jpg`, `screenshots/bento-v3-mobile-390.jpg`, `screenshots/bento-v3-login.jpg`, `screenshots/bento-v3-empty-state.jpg`, `screenshots/bento-v3-test-results.json`.
-- 최신 개발 커밋: 이 CP03 문서를 포함하는 커밋. 해시/푸시 증거는 저장 후 문서에 확정 기록한다. 최종 문서 자체의 HEAD는 `git rev-parse HEAD`로 확인한다.
+- 검증된 최종 개발 커밋: `b4f0306838067ddc8423b8184e00d9c341c0708e`. GitHub 푸시 성공 및 `git ls-remote`의 원격 HEAD 일치 확인. 이후 문서 확정 커밋에는 제품 코드 변경이 없다. 문서 확정 후 최종 HEAD는 `git rev-parse HEAD`로 확인한다.
 - 미완료 개발: 없음. 미검증 환경: 실제 Firebase Authentication/Firestore, 배포된 규칙, 실제 인증 지속/다중 기기, Safari/Firefox 및 스크린리더 실기. Hosting 배포/보안 규칙 게시는 하지 않았다.
 - 다음 작업: 전용 테스트 계정 및 접근이 허용되는 환경에서 실서비스 검증. PR 기준은 `feat/campus-flow-bento-v2`; 자동 병합하지 않는다.
+
+## 최종 GitHub 저장
+
+| 체크포인트 | 커밋 | 검증 | GitHub |
+| --- | --- | --- | --- |
+| 01 핵심 레이아웃 | `6e26233` | 모의 로그인/생성/수정/차트/백업 | 푸시 성공 |
+| 02 프리미엄 UI/UX | `664cd35` | 목록/메모/완료/오류 보존 등 15개 | 푸시 성공 |
+| 03 최종 검증 | `b4f0306` | 42/42 + 5개 실제 브라우저 캡처 | 푸시 성공, 원격 SHA 일치 |
+
+- Draft PR: https://github.com/jimnnieo-svg/campus-flow/pull/1
+- PR base: `feat/campus-flow-bento-v2`, head: `feat/campus-flow-bento-v3`.
+- 실서비스 Firebase 검증 대기로 Draft를 유지한다. 병합/Hosting 배포는 하지 않았다.
+- 이 문서의 최종 저장 커밋은 추가 메타데이터 기록이며 위 세 개발 체크포인트를 모두 보존한다.
 
 ## 이어서 진행할 때
 
