@@ -342,6 +342,118 @@
       .task-card { padding: 16px 13px; }
       .task-card.is-overdue, .task-card.is-urgent { padding-left: 10px; }
     }
+    /* Bento V2: 실제 과제·현황을 먼저 보여 주는 밝은 작업 공간. */
+    :root { --bg: #f3f4f8; --surface: #fff; --line: #e8eaf0; --shadow: 0 10px 30px rgb(26 39 68 / 4%); --radius: 21px; }
+    html { scroll-behavior: smooth; }
+    .wrap { width: min(1392px, calc(100% - 48px)); }
+    .topbar { background: rgb(255 255 255 / 88%); color: var(--ink); border-color: var(--line); backdrop-filter: blur(16px); }
+    .topbar-inner { min-height: 78px; }
+    .brand-mark { background: var(--deep-navy); border-color: var(--deep-navy); border-radius: 14px; }
+    .brand-name { color: var(--deep-navy); font-size: 23px; }
+    .brand-caption { color: #79839a; }
+    .header-meta { color: #626d82; }
+    .account-email { color: var(--ink); }
+    .account .button { border-radius: 100px; min-height: 36px; padding: 6px 13px; }
+    .storage-chip { background: #edf6ef; border-color: #d8ebdd; color: #276849; }
+    .storage-chip.warning { background: var(--red-bg); border-color: #efcbd0; color: var(--red); }
+    .dashboard-shell { display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 22px; align-items: start; }
+    .dashboard-content { min-width: 0; }
+    .side-rail { position: sticky; top: 20px; margin-top: 26px; padding: 12px 7px; display: flex; flex-direction: column; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 21px; background: #fff; box-shadow: var(--shadow); }
+    .rail-link { width: 52px; min-height: 55px; padding: 7px 3px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 14px; text-decoration: none; color: #7d8899; font-size: 9px; font-weight: 700; }
+    .rail-link .icon { width: 20px; height: 20px; }
+    .rail-link:hover, .rail-link:focus-visible { color: var(--deep-navy); background: #f4f5f8; }
+    .rail-link.is-current { color: #fff; background: var(--deep-navy); box-shadow: 0 5px 14px rgb(11 22 41 / 14%); }
+    #overview, #tasks, #task-form, #backup { scroll-margin-top: 24px; }
+    .welcome { min-height: 138px; margin: 26px 0 14px; padding: 23px 33px; border: 1px solid #dfe3ef; border-radius: 23px; background: radial-gradient(circle at 76% -10%, #e4e7f4 0, transparent 35%), linear-gradient(105deg, #fbfaf8, #f1f2fa 72%, #e8eaf3); color: var(--ink); box-shadow: var(--shadow); }
+    .welcome::before { content: ''; position: absolute; width: 4px; height: 58px; left: 0; top: calc(50% - 29px); border-radius: 0 5px 5px 0; background: var(--gold); }
+    .welcome .eyebrow { color: #8b6934; margin-bottom: 3px; }
+    .welcome h1 { font-size: clamp(25px, 2.8vw, 35px); letter-spacing: -1.5px; }
+    .welcome-description { margin-top: 3px; color: #6f798c; font-size: 13px; }
+    .welcome-art { width: 142px; height: 90px; opacity: .8; filter: none; }
+    .overview-section { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 14px; }
+    .stats { grid-column: span 8; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .stat { min-height: 108px; padding: 20px 24px; border-radius: var(--radius); }
+    .stat:first-child { background: var(--deep-navy); border-color: var(--deep-navy); }
+    .stat:first-child .stat-label, .stat:first-child .stat-unit { color: #b9c5d5; }
+    .stat:first-child .stat-value { color: #fff; }
+    .stat:first-child .stat-icon { background: #293a57; color: #d7bc85; }
+    .stat-label { font-size: 12px; }
+    .stat-value { font-size: 32px; margin-top: 3px; }
+    .stat-icon { border-radius: 14px; }
+    .progress-panel { grid-column: span 4; margin: 0; padding: 24px; display: flex; flex-direction: column; align-items: stretch; justify-content: space-between; gap: 14px; border-radius: var(--radius); background: linear-gradient(150deg, #fff 40%, #f7f3eb); }
+    .progress-heading { min-width: 0; }
+    .progress-title { font-size: 16px; line-height: 1.4; }
+    .progress-caption { margin-top: 7px; }
+    .progress-detail { width: 100%; flex: none; }
+    .progress-number { display: block; font-size: 39px; color: var(--deep-navy); letter-spacing: -2px; }
+    .progress-label { align-items: end; }
+    .progress-track { height: 11px; }
+    .deadline-notice { grid-column: 1 / -1; margin: 0; }
+    .workspace { grid-template-columns: minmax(290px, 35%) minmax(0, 1fr); gap: 14px; margin-top: 14px; }
+    .form-panel { padding: 26px; top: 16px; border-top: 0; }
+    .section-heading { font-size: 20px; }
+    .list-section { padding: 25px 27px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .list-heading { margin-bottom: 14px; }
+    .search-box input { background: #f9fafc; }
+    .list-toolbar { margin: 12px 0 17px; }
+    .task-list { gap: 0; border-top: 1px solid var(--line); }
+    .task-card, .task-card.is-complete { border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 17px 1px; background: transparent; box-shadow: none; }
+    .task-card:hover { transform: none; border-color: var(--line); box-shadow: none; background: #fafbfe; }
+    .task-card.is-overdue, .task-card.is-urgent { border-left: 3px solid var(--red); padding-left: 11px; }
+    .task-card.is-urgent { border-left-color: #bb7829; }
+    .subject-tag { border-radius: 100px; padding: 3px 10px; }
+    .task-title { font-size: 15px; }
+    .task-actions .icon-button { border-radius: 50%; }
+    .empty-state { min-height: 290px; border: 0; background: transparent; }
+    .backup-panel { margin-top: 14px; border-top: 0; }
+    .auth-shell { background: radial-gradient(circle at 12% 28%, #edf0f8 0, transparent 34%); }
+    .auth-card { border-top: 0; border-radius: 23px; }
+    .auth-card::before { content: ''; display: block; width: 46px; height: 4px; border-radius: 8px; background: var(--gold); margin-bottom: 22px; }
+    .footer { margin-top: 6px; }
+    @media (max-width: 1100px) {
+      .wrap { width: calc(100% - 36px); }
+      .dashboard-shell { gap: 16px; }
+      .workspace { grid-template-columns: 320px minmax(0, 1fr); }
+      .list-section { padding: 21px; }
+      .stat { padding: 17px; }
+    }
+    @media (max-width: 850px) {
+      .dashboard-shell { grid-template-columns: 1fr; gap: 0; }
+      .side-rail { position: static; margin: 16px 0 0; width: max-content; max-width: 100%; padding: 5px; flex-direction: row; gap: 2px; }
+      .rail-link { width: 63px; min-height: 48px; }
+      .welcome { margin-top: 14px; }
+      .stats { grid-column: 1 / -1; }
+      .progress-panel { grid-column: 1 / -1; min-height: 150px; }
+      .workspace { grid-template-columns: 1fr; }
+      .form-panel { position: static; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 24px); }
+      .topbar-inner { min-height: auto; }
+      .brand-name { font-size: 19px; }
+      .side-rail { width: 100%; justify-content: space-around; }
+      .rail-link { flex: 1; }
+      .welcome { min-height: 120px; padding: 22px 20px; }
+      .welcome h1 { font-size: 24px; }
+      .stats { gap: 9px; }
+      .stat { min-height: 105px; padding: 15px; }
+      .stat-value { font-size: 29px; }
+      .stat-icon { width: 34px; height: 34px; }
+      .progress-panel { min-height: 155px; padding: 20px; }
+      .list-section { padding: 19px 15px; }
+      .list-toolbar { gap: 6px; }
+      .filters { gap: 2px; }
+      .filter { padding: 7px 9px; font-size: 11px; }
+      .sort-control { width: auto; margin-left: auto; }
+      .backup-panel { padding: 19px; }
+    }
+    @media (max-width: 390px) {
+      .stat { padding: 13px; }
+      .stat-icon { display: none; }
+      .list-section { padding-inline: 12px; }
+      .filter { padding-inline: 7px; }
+      .backup-actions .button { font-size: 11px; }
+    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
@@ -407,7 +519,14 @@
       </div>
     </div>
   </section>
-  <main id="main" class="wrap" hidden>
+  <main id="main" class="wrap dashboard-shell" hidden>
+    <nav class="side-rail" aria-label="대시보드 메뉴">
+      <a class="rail-link is-current" href="#overview" aria-label="대시보드 현황" title="대시보드 현황"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span>현황</span></a>
+      <a class="rail-link" href="#tasks" aria-label="과제 목록" title="과제 목록"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>과제</span></a>
+      <a class="rail-link" href="#task-form" aria-label="새 과제 작성" title="새 과제 작성"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span>추가</span></a>
+      <a class="rail-link" href="#backup" aria-label="백업과 복원" title="백업과 복원"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><span>백업</span></a>
+    </nav>
+    <div class="dashboard-content">
     <section class="welcome" aria-labelledby="welcome-title">
       <div>
         <p class="eyebrow"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>나의 학습 공간</p>
@@ -421,7 +540,7 @@
         <path d="M105 50v46M78 58c8-1 14 0 19 3M113 61c5-3 11-4 19-3M78 70c8-1 14 0 19 3M113 73c5-3 11-4 19-3" stroke="#DCC391" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </section>
-    <section aria-label="학습 현황">
+    <section id="overview" class="overview-section" aria-label="학습 현황">
       <div class="stats">
         <article class="stat"><div><h2 class="stat-label">전체 과제</h2><span class="stat-value" id="stat-total">0</span><span class="stat-unit">개</span></div><span class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span></article>
         <article class="stat"><div><h2 class="stat-label">완료한 과제</h2><span class="stat-value" id="stat-completed">0</span><span class="stat-unit">개</span></div><span class="stat-icon green"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></article>
@@ -453,7 +572,7 @@
           <p class="form-footnote">필수 항목: 과목명 · 과제 제목 · 마감일</p>
         </form>
       </section>
-      <section class="list-section" aria-labelledby="list-title">
+      <section class="list-section" id="tasks" aria-labelledby="list-title">
         <div class="list-heading"><h2 class="section-heading" id="list-title">나의 과제<span class="count-pill" id="list-count">0</span></h2><span class="list-total" id="list-total">전체 0개</span></div>
         <div class="search-box"><label for="search" class="sr-only">과제 제목 또는 과목명 검색</label><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="과제 제목이나 과목명으로 검색" autocomplete="off" maxlength="200"><button class="search-clear" id="clear-search" type="button" aria-label="검색어 지우기" hidden><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
         <div class="list-toolbar"><div class="filters" role="group" aria-label="과제 상태 필터"><button class="filter" data-filter="all" type="button" aria-pressed="true">전체</button><button class="filter" data-filter="active" type="button" aria-pressed="false">진행 중</button><button class="filter" data-filter="completed" type="button" aria-pressed="false">완료</button><button class="filter" data-filter="urgent" type="button" aria-pressed="false">마감 임박</button></div><div class="sort-control"><label for="sort" class="sr-only">과제 정렬</label><select id="sort"><option value="due">마감일 가까운 순</option><option value="priority">중요도 높은 순</option><option value="recent">최근 등록 순</option></select></div></div>
@@ -466,7 +585,8 @@
         <p id="result-announcement" class="sr-only" role="status" aria-live="polite"></p>
       </section>
     </div>
-    <section class="panel backup-panel" aria-labelledby="backup-title"><div class="backup-intro"><span class="backup-icon"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></span><div><h2 class="backup-title" id="backup-title">소중한 기록, 안전하게 보관하세요</h2><p class="backup-description">로그인한 계정에 클라우드로 저장돼요. 기존 앱의 JSON 백업도 가져올 수 있어요.</p><div class="backup-mode"><label for="import-mode">백업 가져오기 방식</label><select id="import-mode"><option value="replace">전체 교체 · 최대 500개 문서 변경</option><option value="merge">누락된 과제 추가 · 기존 과제 유지</option></select></div></div></div><div class="backup-actions"><button class="button" id="export-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>백업 내보내기</button><button class="button" id="import-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>백업 가져오기</button><input id="import-file" type="file" accept=".json,application/json" hidden aria-label="JSON 백업 파일 선택"></div></section>
+    <section class="panel backup-panel" id="backup" aria-labelledby="backup-title"><div class="backup-intro"><span class="backup-icon"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></span><div><h2 class="backup-title" id="backup-title">소중한 기록, 안전하게 보관하세요</h2><p class="backup-description">로그인한 계정에 클라우드로 저장돼요. 기존 앱의 JSON 백업도 가져올 수 있어요.</p><div class="backup-mode"><label for="import-mode">백업 가져오기 방식</label><select id="import-mode"><option value="replace">전체 교체 · 최대 500개 문서 변경</option><option value="merge">누락된 과제 추가 · 기존 과제 유지</option></select></div></div></div><div class="backup-actions"><button class="button" id="export-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>백업 내보내기</button><button class="button" id="import-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>백업 가져오기</button><input id="import-file" type="file" accept=".json,application/json" hidden aria-label="JSON 백업 파일 선택"></div></section>
+    </div>
   </main>
   <footer class="wrap footer"><p><span class="footer-brand">Campus Flow</span><span class="footer-dot">·</span>대학 생활을 조금 더 가볍게.</p><p>바이브코딩 특강 · 서연경 교수님</p></footer>
   <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
