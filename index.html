@@ -1337,6 +1337,18 @@
       $('export-data').addEventListener('click', exportBackup);
       $('import-data').addEventListener('click', () => { if (canWrite()) $('import-file').click(); });
       $('import-file').addEventListener('change', importBackup);
+      // 앵커 이동 후 현재 메뉴를 키보드·스크린리더 사용자에게 함께 알려 줍니다.
+      function syncRail() {
+        const target = ['#overview', '#tasks', '#task-form', '#backup'].includes(location.hash) ? location.hash : '#overview';
+        document.querySelectorAll('.rail-link').forEach(link => {
+          const current = link.getAttribute('href') === target;
+          link.classList.toggle('is-current', current);
+          if (current) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        });
+      }
+      window.addEventListener('hashchange', syncRail);
+      syncRail();
       $('import-legacy').addEventListener('click', importLegacy);
       $('download-legacy').addEventListener('click', () => {
         if (state.user && state.legacyRaw !== null) {
