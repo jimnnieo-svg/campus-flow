@@ -388,12 +388,26 @@
     .progress-number { display: block; font-size: 39px; color: var(--deep-navy); letter-spacing: -2px; }
     .progress-label { align-items: end; }
     .progress-track { height: 11px; }
+    .priority-chart { border-top: 1px solid #e8e4dd; padding-top: 10px; }
+    .chart-title { font-size: 11px; font-weight: 720; color: #626c7f; margin-bottom: 6px; }
+    .priority-row { display: grid; grid-template-columns: 30px minmax(0, 1fr) 20px; align-items: center; gap: 7px; min-height: 18px; color: #747d8d; font-size: 10px; }
+    .priority-row strong { text-align: right; color: var(--deep-navy); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .priority-track { height: 5px; overflow: hidden; background: #e8eaf0; border-radius: 10px; }
+    .priority-fill { display: block; width: 0; height: 100%; border-radius: inherit; background: #a9b5c8; transition: width .4s ease; }
+    .priority-fill.high { background: #bb6670; }
+    .priority-fill.normal { background: #b79555; }
+    .priority-fill.low { background: #8caf9d; }
     .deadline-notice { grid-column: 1 / -1; margin: 0; }
     .workspace { grid-template-columns: minmax(290px, 35%) minmax(0, 1fr); gap: 14px; margin-top: 14px; }
     .form-panel { padding: 26px; top: 16px; border-top: 0; }
     .section-heading { font-size: 20px; }
+    .form-panel .section-heading > .icon { width: 30px; height: 30px; padding: 6px; border-radius: 9px; background: #f5efe3; }
+    .form-panel .section-description { margin-top: 9px; }
+    .form-divider { margin: 18px 0; }
+    .form-panel .button.primary { border-radius: 11px; }
     .list-section { padding: 25px 27px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
     .list-heading { margin-bottom: 14px; }
+    .count-pill { padding: 3px 9px; border-radius: 100px; color: #745821; background: #f3ebdb; }
     .search-box input { background: #f9fafc; }
     .list-toolbar { margin: 12px 0 17px; }
     .task-list { gap: 0; border-top: 1px solid var(--line); }
@@ -403,6 +417,8 @@
     .task-card.is-urgent { border-left-color: #bb7829; }
     .subject-tag { border-radius: 100px; padding: 3px 10px; }
     .task-title { font-size: 15px; }
+    .task-note { max-height: 80px; }
+    .task-bottom { margin-top: 8px; }
     .task-actions .icon-button { border-radius: 50%; }
     .empty-state { min-height: 290px; border: 0; background: transparent; }
     .backup-panel { margin-top: 14px; border-top: 0; }
@@ -550,6 +566,12 @@
       <div class="progress-panel">
         <div class="progress-heading"><h2 class="progress-title"><svg class="icon" aria-hidden="true"><use href="#i-trend"/></svg>차곡차곡, 학습 진행률</h2><p class="progress-caption" id="progress-caption">작은 시작이 큰 변화를 만들어요.</p></div>
         <div class="progress-detail"><div class="progress-label"><span id="progress-summary">전체 0개 중 0개 완료</span><strong class="progress-number" id="progress-number">0%</strong></div><div class="progress-track" id="progress" role="progressbar" aria-label="과제 완료율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div></div>
+        <div class="priority-chart" aria-label="남은 과제의 중요도 분포">
+          <p class="chart-title">남은 과제의 중요도</p>
+          <div class="priority-row"><span>높음</span><div class="priority-track"><span class="priority-fill high" id="priority-fill-high"></span></div><strong id="priority-count-high">0</strong></div>
+          <div class="priority-row"><span>보통</span><div class="priority-track"><span class="priority-fill normal" id="priority-fill-normal"></span></div><strong id="priority-count-normal">0</strong></div>
+          <div class="priority-row"><span>낮음</span><div class="priority-track"><span class="priority-fill low" id="priority-fill-low"></span></div><strong id="priority-count-low">0</strong></div>
+        </div>
       </div>
       <div class="notice deadline-notice" id="deadline-notice" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><p id="deadline-message"></p></div>
     </section>
@@ -1011,6 +1033,12 @@
         $('progress').setAttribute('aria-valuenow', stats.percent);
         $('progress-summary').textContent = `전체 ${stats.total}개 중 ${stats.completed}개 완료`;
         $('progress-caption').textContent = stats.total && stats.completed === stats.total ? '오늘의 노력이 차곡차곡 쌓였어요.' : '작은 시작이 큰 변화를 만들어요.';
+        const active = state.tasks.filter(task => !task.completed);
+        for (const priority of ['high', 'normal', 'low']) {
+          const count = active.filter(task => task.priority === priority).length;
+          $(`priority-count-${priority}`).textContent = count.toLocaleString('ko-KR');
+          $(`priority-fill-${priority}`).style.width = `${active.length ? count / active.length * 100 : 0}%`;
+        }
         let message = '오늘도 한 걸음씩! 남은 과제를 완료해 보세요.';
         if (!stats.total) message = '아직 등록된 과제가 없어요. 첫 과제를 추가해 보세요!';
         else if (!stats.remaining) message = '모든 과제를 완료했어요! 정말 수고했어요 🎉';
