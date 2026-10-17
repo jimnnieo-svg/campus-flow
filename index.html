@@ -685,6 +685,167 @@
       .backup-actions .button { font-size: 11px; }
       .footer { gap: 4px; }
     }
+    /* Taskly structure: 42:58 main cards, matching lower pair, no viewer matte. */
+    :root { --ink: #30323c; --muted: #686b7c; --surface: #f9f9fde8; --line: #e0e2ec; --radius: 20px; --shadow: 0 5px 22px rgb(71 77 110 / 3%); }
+    body { background: radial-gradient(ellipse at 40% 24%, #dfe2f1, transparent 65%), linear-gradient(115deg, #f4f5f8, #e8e8f2 62%, #f6f7f9); color: var(--ink); }
+    .wrap { width: min(1536px, calc(100% - 80px)); }
+    .topbar-inner { min-height: 104px; position: relative; gap: 20px; }
+    .brand-name { color: var(--ink); font-size: 24px; font-weight: 700; }
+    .brand-caption { font-size: 11px; }
+    .brand-mark { width: 36px; height: 36px; border-radius: 12px; }
+    .header-completion { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 9px; border-radius: 100px; background: #f1f1fbd9; padding: 6px 19px; color: var(--ink); text-decoration: none; font-size: 13px; min-height: 44px; }
+    .header-completion strong { color: #607cda; font-size: 25px; font-weight: 750; letter-spacing: -1px; }
+    .header-meta { font-size: 11px; gap: 12px; }
+    .account-email { max-width: 165px; }
+    .storage-chip { background: #f5fbf7; }
+    .dashboard-shell { grid-template-columns: 56px minmax(0, 1fr); gap: 40px; }
+    .side-rail { margin-top: 30px; padding: 0; background: none; gap: 12px; border-radius: 0; }
+    .rail-link { width: 48px; min-height: 48px; border-radius: 50%; background: #ffffff5c; gap: 1px; color: #686b7c; }
+    .rail-link.is-current { color: var(--ink); background: #fff; box-shadow: 0 3px 10px #42496b08; }
+    .rail-link span { display: none; font-size: 9px; }
+    .welcome { display: grid; grid-template-columns: minmax(0, 42.5fr) minmax(0, 57.5fr); gap: 12px; min-height: 126px; padding: 20px 0 26px; margin: 0 0 20px; background: none; border-radius: 0; }
+    .welcome h1 { font-size: clamp(30px, 2.9vw, 42px); font-weight: 550; line-height: 1.25; letter-spacing: -1.9px; }
+    .welcome-description { font-size: 13px; line-height: 1.7; margin-top: 12px; max-width: 95%; }
+    .quick-actions { display: flex; align-items: stretch; gap: 9px; min-width: 0; }
+    .add-task-button { width: 52px; padding: 0; min-height: 80px; border-radius: 11px; background: #393b43 !important; border-color: #393b43 !important; box-shadow: none !important; }
+    .add-task-button .icon { width: 25px; height: 25px; }
+    .quick-card { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 1; min-width: 0; min-height: 80px; padding: 13px 15px; border: 0; background: #ffffffdf; border-radius: 11px; text-align: left; font-size: 14px; color: var(--ink); }
+    .quick-card strong { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 4px; }
+    .quick-card > span:last-child { font-size: 26px; font-weight: 300; }
+    .quick-card:hover { background: #fff; box-shadow: var(--shadow); }
+    .bento-board { grid-template-columns: minmax(0, 42.5fr) minmax(0, 57.5fr); grid-template-rows: minmax(410px, auto) minmax(270px, auto) auto; gap: 12px; }
+    .deadline-panel, .list-section, .focus-panel, .progress-panel { border: 0; border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); position: relative; }
+    .deadline-panel { grid-column: 1; grid-row: 1; padding: 28px 30px; }
+    .list-section { grid-column: 2; grid-row: 1; padding: 28px 30px; height: 410px; }
+    .focus-panel { grid-column: 1; grid-row: 2; padding: 27px 30px; overflow: visible; background: linear-gradient(135deg, #faf9fde8, #f3f5fce8); }
+    .progress-panel { grid-column: 2; grid-row: 2; padding: 27px 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 25px; min-height: 270px; }
+    .progress-heading { grid-column: 1 / -1; }
+    .progress-title, .card-heading h2, .focus-panel .card-heading h2, .section-heading { font-size: 23px; font-weight: 550; letter-spacing: -.8px; }
+    .card-kicker { display: none; }
+    .progress-caption, .focus-caption { font-size: 12px; color: var(--muted); }
+    .progress-number { background: radial-gradient(closest-side, #f9f9fd 83%, transparent 85%), conic-gradient(#7f98e8 calc(var(--completion) * 1%), #e5e7f2 0); }
+    .progress-detail { align-self: center; }
+    .progress-fill { background: #8fa5e9; }
+    .priority-chart { border-top: 0; padding: 0; align-self: center; }
+    .priority-row { min-height: 28px; font-size: 11px; }
+    .chart-title { font-size: 12px; }
+    .chart-summary { margin-top: 22px; }
+    .chart-summary strong { font-size: 39px; }
+    .chart-summary span { font-size: 13px; }
+    .deadline-chart { height: 200px; margin-top: 20px; }
+    .day-column { font-size: 12px; }
+    .day-column b { font-size: 12px; }
+    .chart-footnote { font-size: 11px; }
+    .stats { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .stat, .stat:first-child { min-height: 76px; padding: 14px 18px; border-radius: 15px; background: #f9f9fd8c; box-shadow: none; display: block; }
+    .stat-label { font-size: 11px; }
+    .stat-value { font-size: 24px; margin: 3px 0 0; }
+    .stat-icon { display: none; }
+    .list-search-row { gap: 12px; }
+    .list-search-row .search-box { width: 42%; }
+    .search-box input { min-height: 38px; padding-top: 8px; padding-bottom: 8px; background: #eeeff780; border-color: transparent; }
+    .search-box > .icon { top: 11px; }
+    .list-toolbar { margin: 12px 0 15px; gap: 6px; flex-wrap: nowrap; }
+    .filter { font-size: 12px; padding: 8px 10px; }
+    .filter[aria-pressed="true"] { color: #4564bb; background: #e1e7fa; }
+    .sort-control select { font-size: 11px; padding-right: 24px; background-color: transparent; }
+    .list-columns { font-size: 11px; padding-bottom: 14px; grid-template-columns: minmax(0, 1fr) 110px 88px; }
+    .task-list { border-top-color: var(--line); max-height: none; grid-auto-rows: max-content; align-content: start; scroll-padding-block: 12px; }
+    .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { padding: 15px 0; min-height: 84px; align-content: start; grid-template-columns: minmax(0, 1fr) 110px 88px; border-bottom: 1px dotted #bfc4d4; }
+    .task-title { font-size: 16px; font-weight: 500; }
+    .subject-tag, .priority-tag, .task-date, .badge { font-size: 11px; }
+    .task-checkbox { width: 20px; height: 20px; margin-top: 3px; }
+    .task-checkbox:checked { background: #536caa; border-color: #536caa; }
+    .complete-label { padding: 12px; margin: -12px; }
+    .task-top { padding-left: 29px; }
+    details.task-note { margin-left: 29px; font-size: 10px; }
+    .task-actions .icon-button { background: #ececf480; }
+    .task-actions .icon-button + .icon-button { margin-left: 2px; }
+    .task-actions { gap: 0; }
+    .list-columns, .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { grid-template-columns: minmax(0, 1fr) 104px 90px; }
+    .empty-state { min-height: 210px; padding: 18px; flex: 1; }
+    .empty-art { width: 70px; height: 65px; margin-bottom: 10px; }
+    .empty-state .button { margin-top: 13px; }
+    .next-subject { font-size: 12px; margin-top: 20px; }
+    .next-title { font-size: 23px; max-width: 90%; letter-spacing: -.6px; }
+    .next-date { font-size: 13px; margin-top: 12px; }
+    .text-button { width: max-content; max-width: 100%; border: 0; border-radius: 100px; color: #fff; background: #3b3d46; padding: 10px 20px; font-size: 12px; margin-top: 18px; }
+    .text-button span { margin-left: 14px; }
+    .text-button:hover { color: #fff; background: #252833; }
+    .date-filter-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px; margin-bottom: 8px; border-radius: 10px; background: #e8edfc; font-size: 12px; }
+    .date-filter-line button { border: 0; background: transparent; padding: 5px; color: #3556a6; min-height: 32px; }
+    .backup-disclosure { background: #f9f9fda6; }
+    .footer { font-size: 11px; }
+    @media (max-width: 1190px) {
+      .wrap { width: calc(100% - 40px); }
+      .dashboard-shell { gap: 20px; }
+      .header-meta .date-label { display: none; }
+      .header-completion { font-size: 12px; padding-inline: 14px; }
+      .welcome h1 { font-size: 33px; }
+      .quick-card { font-size: 12px; padding: 12px; }
+      .quick-card strong { font-size: 11px; }
+      .deadline-panel, .list-section, .progress-panel, .focus-panel { padding: 25px 22px; }
+      .list-toolbar { flex-wrap: wrap; }
+      .list-section { height: 430px; }
+      .bento-board { grid-template-rows: minmax(430px, auto) minmax(270px, auto) auto; }
+      .task-title { font-size: 14px; }
+    }
+    @media (max-width: 850px) {
+      .dashboard-shell { grid-template-columns: 1fr; gap: 0; }
+      .side-rail { flex-direction: row; margin: 6px 0 18px; width: max-content; gap: 10px; }
+      .rail-link { flex: none; }
+      .topbar-inner { flex-wrap: wrap; min-height: 90px; padding: 18px 0 6px; }
+      .header-completion { position: static; transform: none; order: 3; margin: 0 auto; }
+      .header-meta { margin-left: auto; }
+      .welcome { grid-template-columns: 1fr; gap: 22px; padding: 12px 0 22px; }
+      .welcome h1 { font-size: 36px; }
+      .quick-actions { min-height: 74px; }
+      .quick-card { font-size: 14px; }
+      .bento-board { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .deadline-panel { grid-column: 1; grid-row: 1; min-height: 410px; }
+      .list-section { grid-column: 1; grid-row: 2; height: auto; min-height: 410px; }
+      .focus-panel { grid-column: 1; grid-row: 3; }
+      .progress-panel { grid-column: 1; grid-row: 4; }
+      .stats { grid-column: 1; grid-row: 5; }
+      .task-list { max-height: 520px; flex: auto; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 28px); }
+      .brand { width: 100%; }
+      .brand-name { font-size: 22px; }
+      .header-meta { width: 100%; padding: 0; flex-wrap: wrap; }
+      .header-completion { margin: 0; padding: 6px 14px; }
+      .header-completion strong { font-size: 22px; }
+      .side-rail { width: 100%; justify-content: space-between; }
+      .rail-link { width: 48px; }
+      .welcome h1 { font-size: 33px; }
+      .welcome-description { font-size: 13px; max-width: 100%; }
+      .quick-actions { display: grid; grid-template-columns: 44px repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .add-task-button { width: 44px; min-height: 78px; }
+      .quick-card { padding: 10px 8px; font-size: 12px; }
+      .quick-card > span:last-child { display: none; }
+      .quick-card strong { font-size: 12px; }
+      .bento-board { display: grid; gap: 14px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .deadline-panel, .list-section, .progress-panel, .focus-panel { padding: 24px 18px; }
+      .deadline-panel { min-height: 390px; }
+      .list-search-row { align-items: stretch; }
+      .list-search-row .search-box { width: 100%; }
+      .search-box input { min-height: 44px; }
+      .search-box > .icon { top: 14px; }
+      .list-columns { display: none; }
+      .list-toolbar { flex-wrap: wrap; }
+      .filter { font-size: 12px; padding-inline: 9px; }
+      .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { grid-template-columns: minmax(0, 1fr) 90px; }
+      .task-title { font-size: 15px; }
+      .task-meta { grid-column: 1 / -1; }
+      .task-top { padding-left: 29px; }
+      .progress-panel { display: flex; flex-direction: column; }
+      .progress-detail { width: 100%; }
+      .priority-chart { width: 100%; }
+      .next-title { font-size: 22px; max-width: 100%; }
+      .chart-summary strong { font-size: 32px; }
+    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
@@ -718,6 +879,7 @@
         <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
         <div><div class="brand-name">Campus Flow</div><div class="brand-caption">대학 생활에, 나만의 흐름을.</div></div>
       </div>
+      <a class="header-completion" id="header-completion" href="#completion" hidden><strong id="header-rate">0%</strong><span>나의 과제 완료율</span></a>
       <div class="header-meta">
         <div class="account" id="account" hidden><span class="account-email" id="account-email"></span><button type="button" class="button" id="logout">로그아웃</button></div>
         <span class="date-label"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><time id="today-label"></time></span>
@@ -760,23 +922,21 @@
     <div class="dashboard-content">
     <section class="welcome" aria-labelledby="welcome-title">
       <div>
-        <p class="eyebrow"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>나의 학습 공간</p>
-        <h1 id="welcome-title">차근차근, 나만의 속도로.</h1>
+        <h1 id="welcome-title">오늘도, 나만의 흐름.</h1>
         <p id="smart-message" class="welcome-description">아직 등록된 과제가 없어요. 첫 과제를 추가해 보세요!</p>
       </div>
-      <button type="button" class="button primary add-task-button" data-open-task><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg>새 과제 추가</button>
-      <svg class="welcome-art" viewBox="0 0 210 130" fill="none" aria-hidden="true" hidden>
-        <circle cx="105" cy="65" r="58" stroke="#B79555" stroke-opacity=".35"/>
-        <circle cx="105" cy="65" r="43" stroke="#B79555" stroke-opacity=".55"/>
-        <path d="M68 44c14-3 26-1 37 6 11-7 23-9 37-6v46c-14-3-26-1-37 6-11-7-23-9-37-6V44Z" stroke="#DCC391" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M105 50v46M78 58c8-1 14 0 19 3M113 61c5-3 11-4 19-3M78 70c8-1 14 0 19 3M113 73c5-3 11-4 19-3" stroke="#DCC391" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+      <div class="quick-actions" aria-label="과제 바로가기">
+        <button type="button" class="button primary add-task-button" data-open-task aria-label="새 과제 추가"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+        <button class="quick-card" type="button" data-quick="today"><span>오늘 마감<strong id="quick-today">0개</strong></span><span aria-hidden="true">›</span></button>
+        <button class="quick-card" type="button" data-quick="urgent"><span>마감 임박<strong id="quick-urgent">0개</strong></span><span aria-hidden="true">›</span></button>
+        <button class="quick-card" type="button" data-quick="active"><span>진행 중<strong id="quick-active">0개</strong></span><span aria-hidden="true">›</span></button>
+      </div>
     </section>
     <section class="notice cloud-notice" id="cloud-notice" role="status" aria-live="polite" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><div class="notice-content"><p id="cloud-message"></p><div class="notice-actions"><button type="button" id="retry-cloud" hidden>연결 다시 확인</button></div></div></section>
     <div class="bento-board" id="overview">
     <section class="overview-section" aria-label="학습 현황">
       <article class="panel deadline-panel" aria-labelledby="deadline-chart-title">
-        <div class="card-heading"><div><p class="card-kicker">YOUR WEEK, AT A GLANCE</p><h2 id="deadline-chart-title">다가오는 마감</h2></div><span class="subtle-chip">7일</span></div>
+        <div class="card-heading"><div><p class="card-kicker">이번 주의 일정</p><h2 id="deadline-chart-title">마감 일정</h2></div><span class="subtle-chip">7일</span></div>
         <div class="chart-summary"><strong id="week-total">0</strong><span>개의 과제가 기다려요</span></div>
         <div id="deadline-chart" class="deadline-chart" role="img" aria-label="앞으로 7일간의 미완료 과제 마감 분포"></div>
         <p class="chart-footnote" id="week-caption">등록한 과제의 마감일을 기준으로 표시해요.</p>
@@ -787,8 +947,8 @@
         <article class="stat"><div><h2 class="stat-label">남은 과제</h2><span class="stat-value" id="stat-remaining">0</span><span class="stat-unit">개</span></div><span class="stat-icon blue"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span></article>
         <article class="stat" title="오늘부터 3일 이내에 마감되는 미완료 과제"><div><h2 class="stat-label">마감 임박 과제</h2><span class="stat-value" id="stat-urgent">0</span><span class="stat-unit">개</span></div><span class="stat-icon orange"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span></article>
       </div>
-      <div class="progress-panel">
-        <div class="progress-heading"><p class="card-kicker">LITTLE BY LITTLE</p><h2 class="progress-title">나의 완료율</h2><p class="progress-caption" id="progress-caption">작은 시작이 큰 변화를 만들어요.</p></div>
+      <div class="progress-panel" id="completion">
+        <div class="progress-heading"><p class="card-kicker">나의 과제 기록</p><h2 class="progress-title">완료 현황</h2><p class="progress-caption" id="progress-caption">작은 시작이 큰 변화를 만들어요.</p></div>
         <div class="progress-detail"><div class="progress-label"><span id="progress-summary">전체 0개 중 0개 완료</span><strong class="progress-number" id="progress-number">0%</strong></div><div class="progress-track" id="progress" role="progressbar" aria-label="과제 완료율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div></div>
         <div class="priority-chart" aria-label="남은 과제의 중요도 분포">
           <p class="chart-title">남은 과제의 중요도</p>
@@ -797,7 +957,7 @@
           <div class="priority-row"><span>낮음</span><div class="priority-track"><span class="priority-fill low" id="priority-fill-low"></span></div><strong id="priority-count-low">0</strong></div>
         </div>
       </div>
-      <article class="panel focus-panel" aria-labelledby="focus-title"><div class="card-heading"><h2 id="focus-title">먼저 챙겨요</h2><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></div><p class="focus-caption">가장 가까운 미완료 과제</p><div id="next-task"></div><button class="text-button" id="view-urgent" type="button">마감 임박 과제 보기 <span aria-hidden="true">↗</span></button></article>
+      <article class="panel focus-panel" aria-labelledby="focus-title"><div class="card-heading"><h2 id="focus-title">다가오는 마감</h2><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></div><p class="focus-caption">가까운 마감부터, 하나씩 가볍게.</p><div id="next-task"></div><button class="text-button" id="view-urgent" type="button">마감 임박 과제 보기 <span aria-hidden="true">↗</span></button></article>
     </section>
     <div class="workspace">
       <dialog id="task-dialog" class="panel form-panel" aria-labelledby="form-title" aria-describedby="form-description">
@@ -823,6 +983,7 @@
         <div class="search-box"><label for="search" class="sr-only">과제 제목 또는 과목명 검색</label><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="과제 또는 과목 검색" autocomplete="off" maxlength="200"><button class="search-clear" id="clear-search" type="button" aria-label="검색어 지우기" hidden><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div></div>
         <div class="list-toolbar"><div class="filters" role="group" aria-label="과제 상태 필터"><button class="filter" data-filter="all" type="button" aria-pressed="true">전체</button><button class="filter" data-filter="active" type="button" aria-pressed="false">진행 중</button><button class="filter" data-filter="completed" type="button" aria-pressed="false">완료</button><button class="filter" data-filter="urgent" type="button" aria-pressed="false">마감 임박</button></div><div class="sort-control"><label for="sort" class="sr-only">과제 정렬</label><select id="sort"><option value="due">마감일 가까운 순</option><option value="priority">중요도 높은 순</option><option value="recent">최근 등록 순</option></select></div></div>
         <div class="list-columns" aria-hidden="true"><span>과제 / 과목</span><span>마감 / 상태</span><span>관리</span></div>
+        <div class="date-filter-line" id="date-filter-line" hidden><span id="date-filter-label"></span><button type="button" id="clear-date-filter">날짜 필터 해제</button></div>
         <ul id="task-list" class="task-list" aria-label="과제 목록"></ul>
         <div class="empty-state" id="empty-state">
           <svg class="empty-art" viewBox="0 0 140 120" fill="none" aria-hidden="true"><circle cx="70" cy="60" r="52" fill="#EEF2F7"/><rect x="37" y="22" width="66" height="78" rx="9" fill="white" stroke="#C8D4E2" stroke-width="2"/><path d="M52 45h36M52 59h36M52 73h24" stroke="#9BACBF" stroke-width="3" stroke-linecap="round"/><circle cx="101" cy="91" r="16" fill="#14233D"/><path d="M101 84v14M94 91h14" stroke="#DCC391" stroke-width="2.5" stroke-linecap="round"/></svg>
@@ -861,7 +1022,7 @@
       const PRIORITIES = { high: { label: '높음', rank: 0 }, normal: { label: '보통', rank: 1 }, low: { label: '낮음', rank: 2 } };
       const $ = id => document.getElementById(id);
       const form = $('task-form');
-      const state = { tasks: [], filter: 'all', query: '', sort: 'due', editingId: null, editingRevision: null,
+      const state = { tasks: [], filter: 'all', query: '', sort: 'due', dateFilter: null, editingId: null, editingRevision: null,
         user: null, authReady: false, authMode: 'login', authBusy: false, loggingOut: false,
         ready: false, loaded: false, busy: false, preparing: false, progress: '', error: '', epoch: 0, watch: 0, snapshotVersion: 0,
         legacyRaw: null, legacyTasks: [], legacyError: '' };
@@ -941,7 +1102,7 @@
         state.epoch++; state.watch++; if (unsubscribe) unsubscribe(); unsubscribe = null; clearTimeout(readTimer);
         if ($('confirm-dialog').open) $('confirm-dialog').close('cancel');
         state.user = null; state.tasks = []; state.ready = false; state.loaded = false; state.busy = false; state.preparing = false;
-        state.progress = ''; state.error = ''; state.query = ''; state.filter = 'all'; state.sort = 'due';
+        state.progress = ''; state.error = ''; state.query = ''; state.filter = 'all'; state.sort = 'due'; state.dateFilter = null;
         state.legacyRaw = null; state.legacyTasks = []; state.legacyError = '';
         $('search').value = ''; $('sort').value = 'due'; $('auth-email').value = ''; $('auth-password').value = ''; $('auth-password-confirm').value = '';
         $('account').hidden = true; $('account-email').textContent = ''; $('account-email').title = '';
@@ -961,6 +1122,7 @@
         $('auth-loading').hidden = state.authReady && !state.loggingOut;
         $('auth-layout').hidden = !state.authReady || state.loggingOut;
         $('account').hidden = !signedIn;
+        $('header-completion').hidden = !signedIn;
         $('account-email').textContent = signedIn ? state.user.email || '로그인한 계정' : '';
         $('account-email').title = signedIn ? state.user.email || '' : '';
         cloudFeedback();
@@ -1196,7 +1358,7 @@
           }
         }, { maxAttempts: 3 }), editing ? '과제 수정을 클라우드에 저장했어요.' : '새 과제를 클라우드에 저장했어요.');
         if (succeeded && isCurrent(ticket)) {
-          if (!editing) { state.filter = 'all'; state.query = ''; $('search').value = ''; }
+          if (!editing) { state.filter = 'all'; state.query = ''; state.dateFilter = null; $('search').value = ''; }
           resetForm(); closeTaskForm(); renderList(); cloudFeedback();
         }
       }
@@ -1260,6 +1422,10 @@
         const stats = calculateStats(state.tasks);
         for (const key of ['total', 'completed', 'remaining', 'urgent']) $(`stat-${key}`).textContent = stats[key].toLocaleString('ko-KR');
         $('progress-number').textContent = `${stats.percent}%`;
+        $('header-rate').textContent = `${stats.percent}%`;
+        $('quick-today').textContent = `${state.tasks.filter(task => !task.completed && task.dueDate === localDateKey()).length}개`;
+        $('quick-urgent').textContent = `${stats.urgent}개`;
+        $('quick-active').textContent = `${stats.remaining}개`;
         $('progress-number').style.setProperty('--completion', stats.percent);
         $('progress-fill').style.width = `${stats.percent}%`;
         $('progress').setAttribute('aria-valuenow', stats.percent);
@@ -1318,6 +1484,7 @@
       function visibleTasks() {
         const query = state.query.trim().normalize('NFC').toLocaleLowerCase('ko-KR');
         return state.tasks.filter(task => {
+          if (state.dateFilter && task.dueDate !== state.dateFilter) return false;
           if (state.filter === 'active' && task.completed) return false;
           if (state.filter === 'completed' && !task.completed) return false;
           if (state.filter === 'urgent' && !isUrgent(task)) return false;
@@ -1372,6 +1539,8 @@
         for (const note of $('task-list').querySelectorAll('.task-note')) note.open = openNotes.has(note.closest('[data-id]').dataset.id);
         $('list-count').textContent = tasks.length;
         $('list-total').textContent = `전체 ${state.tasks.length}개`;
+        $('date-filter-line').hidden = !state.dateFilter;
+        $('date-filter-label').textContent = state.dateFilter ? `${dateLabel(state.dateFilter)} 마감 과제` : '';
         $('clear-search').hidden = !state.query;
         document.querySelectorAll('[data-filter]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === state.filter)));
         $('empty-state').hidden = tasks.length > 0;
@@ -1608,7 +1777,7 @@
         if (location.hash === '#task-form') { history.replaceState(null, '', '#tasks'); syncRail(); }
         syncRail();
       });
-      $('view-urgent').addEventListener('click', () => { state.filter = 'urgent'; renderList(); cloudFeedback(); location.hash = '#tasks'; $('search').focus({ preventScroll: true }); });
+      $('view-urgent').addEventListener('click', () => { state.filter = 'urgent'; state.dateFilter = null; renderList(); cloudFeedback(); location.hash = '#tasks'; $('search').focus({ preventScroll: true }); });
       form.addEventListener('submit', submitTask);
       $('cancel-edit').addEventListener('click', () => { resetForm(true); notify('수정을 취소했어요. 원래 과제는 유지돼요.'); });
       $('note').addEventListener('input', () => { $('note-counter').textContent = `${$('note').value.length.toLocaleString('ko-KR')} / 2,000`; });
@@ -1617,11 +1786,18 @@
       $('task-list').addEventListener('change', toggleTask);
       $('search').addEventListener('input', () => { state.query = $('search').value; renderList(); cloudFeedback(); });
       $('clear-search').addEventListener('click', () => { state.query = ''; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); });
-      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; renderList(); cloudFeedback(); }));
+      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; state.dateFilter = null; renderList(); cloudFeedback(); }));
+      document.querySelectorAll('[data-quick]').forEach(button => button.addEventListener('click', () => {
+        state.query = ''; $('search').value = '';
+        state.dateFilter = button.dataset.quick === 'today' ? localDateKey() : null;
+        state.filter = button.dataset.quick === 'urgent' ? 'urgent' : 'active';
+        renderList(); cloudFeedback(); $('search').focus({ preventScroll: true });
+      }));
       $('sort').addEventListener('change', () => { state.sort = $('sort').value; renderList(); cloudFeedback(); });
+      $('clear-date-filter').addEventListener('click', () => { state.dateFilter = null; renderList(); cloudFeedback(); $('search').focus(); });
       $('empty-action').addEventListener('click', () => {
         if (!state.tasks.length) openTaskForm();
-        else { state.query = ''; state.filter = 'all'; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); }
+        else { state.query = ''; state.filter = 'all'; state.dateFilter = null; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); }
       });
       $('export-data').addEventListener('click', exportBackup);
       $('import-data').addEventListener('click', () => { if (canWrite()) $('import-file').click(); });

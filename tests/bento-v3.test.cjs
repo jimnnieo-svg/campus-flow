@@ -120,6 +120,14 @@ async function main() {
   });
   const created = page.locator('#task-list > li').filter({has:page.getByRole('heading',{name:'V3 회귀 과제',exact:true})});
   let id=await created.getAttribute('data-id');
+  await check('상단 완료율과 오늘/임박/진행 중 실제 바로가기',async()=>{
+    assert.equal(await page.locator('#header-rate').textContent(),'25%');
+    await page.locator('[data-quick="today"]').click();assert.equal(await page.locator('#task-list > li').count(),1);
+    assert.equal(await page.locator('#date-filter-line').isVisible(),true);
+    await page.locator('[data-quick="urgent"]').click();assert.equal(await page.locator('#task-list > li').count(),2);
+    await page.locator('[data-quick="active"]').click();assert.equal(await page.locator('#task-list > li').count(),3);
+    await page.locator('[data-filter="all"]').click();assert.equal(await page.locator('#task-list > li').count(),4);
+  });
   await check('메모 펼치기 / 실제 내용',async()=>{
     await created.locator('summary').click();
     assert.match(await created.locator('.task-note p').textContent(),/<img src=x/);
@@ -268,7 +276,8 @@ async function main() {
     assert.notEqual(styles.outline,'none');assert.equal(styles.smooth,'auto');assert.equal(styles.ids.length,new Set(styles.ids).size);
   });
   await check('내비게이션 현재 위치 / 마감 바로 보기',async()=>{
-    await page.getByRole('link',{name:'과제 목록',exact:true}).click();assert.equal(await page.getByRole('link',{name:'과제 목록',exact:true}).getAttribute('aria-current'),'location');
+    await page.getByRole('link',{name:'과제 목록',exact:true}).click();
+    await page.waitForFunction(()=>document.querySelector('a[href="#tasks"]').getAttribute('aria-current')==='location');
     await page.locator('#view-urgent').click();assert.equal(await page.locator('[data-filter="urgent"]').getAttribute('aria-pressed'),'true');
     await page.locator('[data-filter="all"]').click();
   });
@@ -278,10 +287,15 @@ async function main() {
   visual.on('pageerror',e=>pageErrors.push(e.message));
   await visual.goto(base);await login(visual,'v3-visual@example.com');
   await createTask(visual,'서비스 기획안 다듬기',2);await createTask(visual,'중간 리서치 제출',3);
-  await check('1440×900 첫 화면 목록 / 차트 / 비대칭 카드',async()=>{
+  await check('1440×900 Taskly 42:58 배치 / 상하 카드 정렬',async()=>{
     const boxes=await visual.evaluate(()=>Object.fromEntries(['.deadline-panel','#tasks','.progress-panel','.stats','.focus-panel'].map(key=>[key,document.querySelector(key).getBoundingClientRect().toJSON()])));
-    assert(boxes['#tasks'].width>boxes['.deadline-panel'].width*1.8);
-    assert(boxes['#tasks'].bottom<=850);assert(boxes['.deadline-panel'].bottom<boxes['#tasks'].bottom);
+    const ratio=boxes['.deadline-panel'].width/(boxes['.deadline-panel'].width+boxes['#tasks'].width);
+    assert(ratio>0.41&&ratio<0.44);
+    assert(Math.abs(boxes['#tasks'].top-boxes['.deadline-panel'].top)<1);
+    assert(Math.abs(boxes['#tasks'].bottom-boxes['.deadline-panel'].bottom)<1);
+    assert(Math.abs(boxes['.progress-panel'].left-boxes['#tasks'].left)<1);
+    assert(Math.abs(boxes['.focus-panel'].left-boxes['.deadline-panel'].left)<1);
+    assert(boxes['.progress-panel'].top>boxes['#tasks'].bottom);
     assert(boxes['.progress-panel'].right<=1440);
     await screenshot(visual,'bento-v3-desktop-1440.jpg',false);
     await screenshot(visual,'bento-v3-dashboard-data.jpg',true);
