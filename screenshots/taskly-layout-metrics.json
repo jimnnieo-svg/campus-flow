@@ -1,0 +1,114 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "boxes": {
+    "header": {
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 104,
+      "top": 0,
+      "right": 1440,
+      "bottom": 104,
+      "left": 0
+    },
+    "brand": {
+      "x": 40,
+      "y": 27.203125,
+      "width": 198.765625,
+      "height": 49.59375,
+      "top": 27.203125,
+      "right": 238.765625,
+      "bottom": 76.796875,
+      "left": 40
+    },
+    "completionBadge": {
+      "x": 615.25,
+      "y": 26,
+      "width": 209.5,
+      "height": 52,
+      "top": 26,
+      "right": 824.75,
+      "bottom": 78,
+      "left": 615.25
+    },
+    "welcome": {
+      "x": 136,
+      "y": 104,
+      "width": 1264,
+      "height": 132.296875,
+      "top": 104,
+      "right": 1400,
+      "bottom": 236.296875,
+      "left": 136
+    },
+    "shortcuts": {
+      "x": 680.09375,
+      "y": 127.140625,
+      "width": 719.90625,
+      "height": 80,
+      "top": 127.140625,
+      "right": 1400,
+      "bottom": 207.140625,
+      "left": 680.09375
+    },
+    "calendar": {
+      "x": 136,
+      "y": 256.296875,
+      "width": 532.09375,
+      "height": 450,
+      "top": 256.296875,
+      "right": 668.09375,
+      "bottom": 706.296875,
+      "left": 136
+    },
+    "tasks": {
+      "x": 680.09375,
+      "y": 256.296875,
+      "width": 719.90625,
+      "height": 450,
+      "top": 256.296875,
+      "right": 1400,
+      "bottom": 706.296875,
+      "left": 680.09375
+    },
+    "upcoming": {
+      "x": 136,
+      "y": 718.296875,
+      "width": 532.09375,
+      "height": 330.46875,
+      "top": 718.296875,
+      "right": 668.09375,
+      "bottom": 1048.765625,
+      "left": 136
+    },
+    "completion": {
+      "x": 680.09375,
+      "y": 718.296875,
+      "width": 719.90625,
+      "height": 330.46875,
+      "top": 718.296875,
+      "right": 1400,
+      "bottom": 1048.765625,
+      "left": 680.09375
+    }
+  },
+  "typography": {
+    "headline": "41.76px",
+    "headlineWeight": "500",
+    "cardTitle": "23px",
+    "taskTitle": "17px",
+    "calendarDay": "14px"
+  },
+  "surfaces": {
+    "background": "radial-gradient(at 40% 24%, rgb(223, 226, 241), rgba(0, 0, 0, 0) 65%), linear-gradient(115deg, rgb(244, 245, 248), rgb(232, 232, 242) 62%, rgb(246, 247, 249))",
+    "text": "rgb(48, 50, 60)",
+    "card": "rgba(249, 249, 253, 0.91)",
+    "radius": "20px",
+    "gap": "12px"
+  },
+  "scrollWidth": 1440,
+  "measuredColumnRatio": 0.42499500798722045
+}

@@ -303,6 +303,7 @@ async function main() {
   await check('390px 모바일 캡처 / 전체 과제 기능',async()=>{
     await visual.setViewportSize({width:390,height:900});await screenshot(visual,'bento-v3-mobile-390.jpg');
     assert.equal(await visual.locator('#task-list > li').count(),5);
+    assert.equal(await visual.locator('#task-list').evaluate(el=>getComputedStyle(el).maxHeight),'none');
   });
   await check('빈 대시보드 / 차트 0 / 첫 과제 폼',async()=>{
     await visual.evaluate(async()=>{const m=await import('/mock/state.js');m.store.set('v3-visual@example.com',new Map());m.publish('v3-visual@example.com');});

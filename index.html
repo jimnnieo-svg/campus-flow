@@ -704,7 +704,7 @@
     .rail-link.is-current { color: var(--ink); background: #fff; box-shadow: 0 3px 10px #42496b08; }
     .rail-link span { display: none; font-size: 9px; }
     .welcome { display: grid; grid-template-columns: minmax(0, 42.5fr) minmax(0, 57.5fr); gap: 12px; min-height: 126px; padding: 20px 0 26px; margin: 0 0 20px; background: none; border-radius: 0; }
-    .welcome h1 { font-size: clamp(30px, 2.9vw, 42px); font-weight: 550; line-height: 1.25; letter-spacing: -1.9px; }
+    .welcome h1 { font-size: clamp(30px, 2.9vw, 42px); font-weight: 500; line-height: 1.25; letter-spacing: -1.9px; }
     .welcome-description { font-size: 13px; line-height: 1.7; margin-top: 12px; max-width: 95%; }
     .quick-actions { display: flex; align-items: stretch; gap: 9px; min-width: 0; }
     .add-task-button { width: 52px; padding: 0; min-height: 80px; border-radius: 11px; background: #393b43 !important; border-color: #393b43 !important; box-shadow: none !important; }
@@ -720,7 +720,7 @@
     .focus-panel { grid-column: 1; grid-row: 2; padding: 27px 30px; overflow: visible; background: linear-gradient(135deg, #faf9fde8, #f3f5fce8); }
     .progress-panel { grid-column: 2; grid-row: 2; padding: 27px 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 25px; min-height: 270px; }
     .progress-heading { grid-column: 1 / -1; }
-    .progress-title, .card-heading h2, .focus-panel .card-heading h2, .section-heading { font-size: 23px; font-weight: 550; letter-spacing: -.8px; }
+    .progress-title, .card-heading h2, .focus-panel .card-heading h2, .section-heading { font-size: 23px; font-weight: 500; letter-spacing: -.8px; }
     .card-kicker { display: none; }
     .progress-caption, .focus-caption { font-size: 12px; color: var(--muted); }
     .progress-number { background: radial-gradient(closest-side, #f9f9fd 83%, transparent 85%), conic-gradient(#7f98e8 calc(var(--completion) * 1%), #e5e7f2 0); }
@@ -745,15 +745,15 @@
     .list-search-row .search-box { width: 42%; }
     .search-box input { min-height: 38px; padding-top: 8px; padding-bottom: 8px; background: #eeeff780; border-color: transparent; }
     .search-box > .icon { top: 11px; }
-    .list-toolbar { margin: 12px 0 15px; gap: 6px; flex-wrap: nowrap; }
+    .list-toolbar { margin: 8px 0 10px; gap: 6px; flex-wrap: nowrap; }
     .filter { font-size: 12px; padding: 8px 10px; }
     .filter[aria-pressed="true"] { color: #4564bb; background: #e1e7fa; }
     .sort-control select { font-size: 11px; padding-right: 24px; background-color: transparent; }
-    .list-columns { font-size: 11px; padding-bottom: 14px; grid-template-columns: minmax(0, 1fr) 110px 88px; }
+    .list-columns { font-size: 12px; padding-bottom: 14px; grid-template-columns: minmax(0, 1fr) 110px 88px; }
     .task-list { border-top-color: var(--line); max-height: none; grid-auto-rows: max-content; align-content: start; scroll-padding-block: 12px; }
-    .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { padding: 15px 0; min-height: 84px; align-content: start; grid-template-columns: minmax(0, 1fr) 110px 88px; border-bottom: 1px dotted #bfc4d4; }
-    .task-title { font-size: 16px; font-weight: 500; }
-    .subject-tag, .priority-tag, .task-date, .badge { font-size: 11px; }
+    .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { padding: 12px 0; min-height: 82px; align-content: start; grid-template-columns: minmax(0, 1fr) 110px 88px; border-bottom: 1px dotted #bfc4d4; }
+    .task-title { font-size: 17px; font-weight: 500; }
+    .subject-tag, .priority-tag, .task-date, .badge { font-size: 12px; }
     .task-checkbox { width: 20px; height: 20px; margin-top: 3px; }
     .task-checkbox:checked { background: #536caa; border-color: #536caa; }
     .complete-label { padding: 12px; margin: -12px; }
@@ -849,30 +849,30 @@
     .calendar-nav { display: flex; gap: 4px; }
     .calendar-nav .icon-button { border: 0; border-radius: 50%; background: #fff9; font-size: 25px; width: 44px; height: 44px; }
     .calendar-month-row { display: flex; justify-content: space-between; align-items: center; min-height: 32px; margin: 3px 0 7px; }
-    .calendar-month-row h3 { font-size: 16px; font-weight: 550; }
+    .calendar-month-row h3 { font-size: 17px; font-weight: 500; }
     .calendar-today { border: 0; border-radius: 100px; background: #e9ecf7; min-height: 32px; padding: 5px 13px; font-size: 12px; color: #455781; }
-    .calendar-weekdays { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; min-height: 22px; color: var(--muted); font-size: 11px; }
+    .calendar-weekdays { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; min-height: 22px; color: var(--muted); font-size: 12px; }
     .calendar-weekdays > :first-child { color: #9a5e72; }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: repeat(6, 32px); gap: 1px; }
-    .calendar-day { border: 0; border-radius: 10px; padding: 2px; background: transparent; color: var(--ink); min-width: 0; min-height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; font-size: 13px; line-height: 1; }
+    .calendar-day { border: 0; border-radius: 10px; padding: 2px; background: transparent; color: var(--ink); min-width: 0; min-height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; font-size: 14px; line-height: 1; }
     .calendar-day:hover { background: #e7ebf8; }
-    .calendar-day.outside-month { color: #8b8e9d; background: transparent; }
+    .calendar-day.outside-month { color: #71768a; background: transparent; }
     .calendar-day.is-today { color: #3f5caa; background: #e1e7fb; }
     .calendar-day.is-selected { box-shadow: inset 0 0 0 1.5px #7892de; background: #e8edfc; }
     .calendar-day:focus-visible { outline: 2px solid #4868bf; outline-offset: -2px; }
     .calendar-day.has-tasks .calendar-day-number { font-weight: 650; }
-    .calendar-marks { display: flex; justify-content: center; align-items: center; gap: 3px; min-height: 8px; font-size: 9px; color: #586b9d; }
+    .calendar-marks { display: flex; justify-content: center; align-items: center; gap: 3px; min-height: 8px; font-size: 10px; color: #586b9d; }
     .calendar-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: #7e97df; }
     .calendar-dot.done { background: #65a48c; }
     .calendar-selection { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 8px; display: flex; flex-direction: column; gap: 2px; }
     .calendar-selection strong { font-size: 12px; font-weight: 550; }
-    .calendar-selection > span { font-size: 11px; color: var(--muted); }
-    .calendar-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 10px; color: var(--muted); }
+    .calendar-selection > span { font-size: 12px; color: var(--muted); }
+    .calendar-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 11px; color: var(--muted); }
     .calendar-legend { display: flex; gap: 10px; }
     .calendar-legend > span { display: flex; align-items: center; gap: 4px; }
     @media (min-width: 851px) {
       .bento-board { grid-template-rows: 450px minmax(270px, auto) auto; }
-      .list-section { height: 450px; }
+      .list-section { height: 450px; padding-bottom: 24px; }
     }
     @media (max-width: 850px) {
       .calendar-grid { grid-template-rows: repeat(6, 40px); }
@@ -885,6 +885,60 @@
       .calendar-selection > span { font-size: 12px; }
       .calendar-footer { font-size: 10px; flex-wrap: wrap; }
       .date-filter-line button { min-height: 44px; }
+    }
+    .deadline-panel::before, .list-section::before { content: ''; position: absolute; top: -10px; width: 35%; height: 23px; background: #f9f9fd; border-radius: 22px 30px 0 0; pointer-events: none; }
+    .deadline-panel::before { left: 0; }
+    .list-section::before { right: 0; border-radius: 30px 22px 0 0; }
+    .progress-panel { display: block; min-height: 310px; }
+    .progress-detail.sr-only { left: 0; top: 0; width: 1px; height: 1px; }
+    .completion-title-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .completion-title-row .subtle-chip { font-size: 12px; }
+    .completion-chart { margin-top: 14px; min-height: 165px; }
+    .completion-plot { position: relative; height: 145px; }
+    .completion-plot svg { display: block; width: 100%; height: 145px; }
+    .completion-y-axis { position: absolute; top: 5px; bottom: 5px; left: 0; display: flex; flex-direction: column; justify-content: space-between; color: var(--muted); font-size: 11px; line-height: 1; }
+    .completion-x-axis { display: flex; justify-content: space-between; margin-left: 30px; padding-right: 2px; margin-top: 4px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .completion-x-axis span { min-width: 0; text-align: center; }
+    .completion-note { color: var(--muted); font-size: 11px; line-height: 1.7; margin-top: 8px; }
+    .completion-details { margin-top: 5px; }
+    .completion-details > summary { width: max-content; max-width: 100%; min-height: 32px; cursor: pointer; font-size: 11px; color: var(--muted); line-height: 32px; }
+    .completion-details .priority-chart { padding-top: 10px; }
+    .completion-status { display: flex; flex-direction: column; justify-content: center; gap: 24px; min-height: 165px; padding: 4px 0; }
+    .completion-status-heading { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+    .completion-status-heading strong { color: var(--ink); font-size: 17px; font-weight: 550; }
+    .completion-status-track { height: 12px; border-radius: 20px; background: #e7eaf5; overflow: hidden; }
+    .completion-status-track > span { height: 100%; border-radius: inherit; display: block; background: linear-gradient(90deg, #bdc8f1, #8ba2e2); }
+    .completion-status-row.done .completion-status-track > span { background: linear-gradient(90deg, #b7dbcc, #78ae98); }
+    .focus-panel { display: flex; flex-direction: column; }
+    .focus-layout { display: grid; grid-template-columns: minmax(0, 1fr) 108px; gap: 20px; align-items: center; margin-top: 18px; flex: 1; }
+    .focus-layout:has(.deadline-tile[hidden]) { grid-template-columns: 1fr; }
+    .next-subject { margin: 0; font-size: 13px; }
+    .next-title { font-size: 23px; max-width: 100%; font-weight: 500; margin-top: 8px; }
+    .next-date { font-size: 13px; color: var(--muted); }
+    #next-task > .priority-tag { margin-top: 9px; }
+    .deadline-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 126px; border-radius: 16px; border: 1px solid #dfe5f5; border-top: 5px solid #c6d2f2; background: linear-gradient(140deg, #f9fbff, #e6ecfc); color: #5f74b0; box-shadow: 0 6px 20px #8191c50b; }
+    .deadline-tile > span { font-size: 13px; }
+    .deadline-tile strong { color: var(--ink); font-size: 43px; line-height: 1.15; font-weight: 500; letter-spacing: -2px; }
+    .focus-important { margin-top: 14px; font-size: 12px; background: #ffffff8c; border-radius: 10px; padding: 8px 11px; color: #795861; overflow-wrap: anywhere; }
+    .focus-panel .text-button { margin-top: 16px; align-self: flex-start; }
+    .summary-stats { grid-column: 1 / -1; grid-row: 3; border-radius: 15px; background: #f9f9fd80; }
+    .summary-stats > summary { min-height: 48px; padding: 13px 20px; cursor: pointer; font-size: 13px; color: var(--muted); }
+    .summary-stats .stats { padding: 0 12px 12px; }
+    @media (min-width: 851px) { .bento-board { grid-template-rows: 450px minmax(310px, auto) auto; } }
+    @media (max-width: 850px) {
+      .deadline-panel::before, .list-section::before { display: none; }
+      .summary-stats { grid-column: 1; grid-row: 5; }
+    }
+    @media (max-width: 560px) {
+      .focus-layout { grid-template-columns: minmax(0, 1fr) 84px; gap: 12px; }
+      .deadline-tile { min-height: 112px; }
+      .deadline-tile strong { font-size: 36px; }
+      .next-title { font-size: 20px; }
+      .completion-title-row { flex-wrap: wrap; gap: 8px; }
+      .completion-title-row .subtle-chip, .completion-note { font-size: 11px; }
+      .completion-x-axis { font-size: 10px; }
+      .completion-details > summary { min-height: 44px; line-height: 44px; }
+      .task-list { max-height: none; }
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
   </style>
@@ -985,23 +1039,28 @@
         <div class="calendar-selection" aria-live="polite"><strong id="calendar-selection-title">날짜를 선택해 보세요.</strong><span id="calendar-selection-description">과제가 있는 날짜에 작은 표시가 나타나요.</span></div>
         <div class="calendar-footer"><span class="calendar-legend"><span><i class="calendar-dot"></i>진행 중</span><span><i class="calendar-dot done"></i>완료</span></span><span>7일 내 미완료 <strong id="week-total">0</strong>개</span></div>
       </article>
-      <div class="stats">
+      <details class="summary-stats" id="summary-stats"><summary>전체 과제 요약</summary><div class="stats">
         <article class="stat"><div><h2 class="stat-label">전체 과제</h2><span class="stat-value" id="stat-total">0</span><span class="stat-unit">개</span></div><span class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span></article>
         <article class="stat"><div><h2 class="stat-label">완료한 과제</h2><span class="stat-value" id="stat-completed">0</span><span class="stat-unit">개</span></div><span class="stat-icon green"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></article>
         <article class="stat"><div><h2 class="stat-label">남은 과제</h2><span class="stat-value" id="stat-remaining">0</span><span class="stat-unit">개</span></div><span class="stat-icon blue"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span></article>
         <article class="stat" title="오늘부터 3일 이내에 마감되는 미완료 과제"><div><h2 class="stat-label">마감 임박 과제</h2><span class="stat-value" id="stat-urgent">0</span><span class="stat-unit">개</span></div><span class="stat-icon orange"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span></article>
-      </div>
+      </div></details>
       <div class="progress-panel" id="completion">
-        <div class="progress-heading"><p class="card-kicker">나의 과제 기록</p><h2 class="progress-title">완료 현황</h2><p class="progress-caption" id="progress-caption">작은 시작이 큰 변화를 만들어요.</p></div>
-        <div class="progress-detail"><div class="progress-label"><span id="progress-summary">전체 0개 중 0개 완료</span><strong class="progress-number" id="progress-number">0%</strong></div><div class="progress-track" id="progress" role="progressbar" aria-label="과제 완료율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div></div>
+        <div class="progress-heading"><div class="completion-title-row"><h2 class="progress-title" id="completion-title">과제 완료 현황</h2><span class="subtle-chip" id="completion-range">현재</span></div><p class="progress-caption sr-only" id="progress-caption">작은 시작이 큰 변화를 만들어요.</p></div>
+        <div id="completion-chart" class="completion-chart" role="img" aria-label="과제 완료 현황"></div>
+        <ol class="sr-only" id="completion-data" aria-label="완료 차트 데이터"></ol>
+        <p class="completion-note" id="completion-note"></p>
+        <div class="progress-detail sr-only"><div class="progress-label"><span id="progress-summary">전체 0개 중 0개 완료</span><strong class="progress-number" id="progress-number">0%</strong></div><div class="progress-track" id="progress" role="progressbar" aria-label="과제 완료율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div></div>
+        <details class="completion-details"><summary>남은 과제의 중요도 보기</summary>
         <div class="priority-chart" aria-label="남은 과제의 중요도 분포">
           <p class="chart-title">남은 과제의 중요도</p>
           <div class="priority-row"><span>높음</span><div class="priority-track"><span class="priority-fill high" id="priority-fill-high"></span></div><strong id="priority-count-high">0</strong></div>
           <div class="priority-row"><span>보통</span><div class="priority-track"><span class="priority-fill normal" id="priority-fill-normal"></span></div><strong id="priority-count-normal">0</strong></div>
           <div class="priority-row"><span>낮음</span><div class="priority-track"><span class="priority-fill low" id="priority-fill-low"></span></div><strong id="priority-count-low">0</strong></div>
         </div>
+        </details>
       </div>
-      <article class="panel focus-panel" aria-labelledby="focus-title"><div class="card-heading"><h2 id="focus-title">다가오는 마감</h2><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></div><p class="focus-caption">가까운 마감부터, 하나씩 가볍게.</p><div id="next-task"></div><button class="text-button" id="view-urgent" type="button">마감 임박 과제 보기 <span aria-hidden="true">↗</span></button></article>
+      <article class="panel focus-panel" aria-labelledby="focus-title"><div class="card-heading"><h2 id="focus-title">다가오는 마감</h2><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></div><p class="focus-caption">가까운 마감부터, 하나씩 가볍게.</p><div class="focus-layout"><div id="next-task"></div><div class="deadline-tile" id="next-deadline-tile" aria-hidden="true"><span id="next-deadline-month"></span><strong id="next-deadline-day"></strong><span id="next-deadline-dday"></span></div></div><p id="important-task" class="focus-important" hidden></p><button class="text-button" id="view-urgent" type="button">마감 임박 과제 보기 <span aria-hidden="true">↗</span></button></article>
     </section>
     <div class="workspace">
       <dialog id="task-dialog" class="panel form-panel" aria-labelledby="form-title" aria-describedby="form-description">
@@ -1144,6 +1203,7 @@
       function clearSession() {
         closeTaskForm();
         $('backup').open = false;
+        $('summary-stats').open = false;
         state.epoch++; state.watch++; if (unsubscribe) unsubscribe(); unsubscribe = null; clearTimeout(readTimer);
         if ($('confirm-dialog').open) $('confirm-dialog').close('cancel');
         state.user = null; state.tasks = []; state.ready = false; state.loaded = false; state.busy = false; state.preparing = false;
@@ -1479,13 +1539,22 @@
         $('progress-caption').textContent = stats.total && stats.completed === stats.total ? '오늘의 노력이 차곡차곡 쌓였어요.' : '작은 시작이 큰 변화를 만들어요.';
         const active = state.tasks.filter(task => !task.completed);
         renderCalendar();
+        renderCompletionChart();
         const next = [...active].sort((a, b) => a.dueDate.localeCompare(b.dueDate) || PRIORITIES[a.priority].rank - PRIORITIES[b.priority].rank)[0];
         $('next-task').replaceChildren();
         if (next) {
           $('next-task').append(element('p', 'next-subject', next.subject), element('h3', 'next-title', next.title), element('p', 'next-date', `${dateLabel(next.dueDate)} · ${deadlineState(next).text}`));
+          $('next-task').append(element('span', `priority-tag ${next.priority}`, `중요도 ${PRIORITIES[next.priority].label}`));
+          $('next-deadline-month').textContent = `${Number(next.dueDate.slice(5, 7))}월`;
+          $('next-deadline-day').textContent = Number(next.dueDate.slice(8));
+          $('next-deadline-dday').textContent = deadlineState(next).text;
         } else {
           $('next-task').append(element('p', 'next-subject', '여유로운 나의 흐름'), element('h3', 'next-title', stats.total ? '모두 마쳤어요.' : '첫 과제를 기다려요.'), element('p', 'next-date', stats.total ? '완료한 만큼, 잠깐 쉬어가요.' : '새 과제를 추가해 일정을 시작하세요.'));
         }
+        $('next-deadline-tile').hidden = !next;
+        const important = [...active].filter(task => task.priority === 'high' && task.id !== next?.id).sort((a, b) => a.dueDate.localeCompare(b.dueDate))[0];
+        $('important-task').hidden = !important;
+        $('important-task').textContent = important ? `중요도 높음 · ${important.title} (${deadlineState(important).text})` : '';
         for (const priority of ['high', 'normal', 'low']) {
           const count = active.filter(task => task.priority === priority).length;
           $(`priority-count-${priority}`).textContent = count.toLocaleString('ko-KR');
@@ -1562,6 +1631,76 @@
         state.calendarFocus = `${state.calendarMonth}-01`; state.calendarSelection = null; state.dateFilter = null;
         renderCalendar(); renderList(); cloudFeedback();
         if (focus) $('calendar-grid').querySelector(`[data-calendar-date="${state.calendarFocus}"]`)?.focus({ preventScroll: true });
+      }
+
+      function chartSVG(tag, attributes = {}) {
+        const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for (const [name, value] of Object.entries(attributes)) node.setAttribute(name, String(value));
+        return node;
+      }
+      // Daily counts describe currently completed tasks, not an immutable activity log.
+      // Interpolation stays between real observations; no decorative/fabricated points.
+      function renderCompletionChart() {
+        const completed = state.tasks.filter(task => task.completed);
+        const records = completed.filter(task => Number.isSafeInteger(task.completedAt));
+        const chart = $('completion-chart'); chart.replaceChildren();
+        $('completion-data').replaceChildren();
+        if (!records.length) {
+          chart.dataset.mode = 'status';
+          $('completion-title').textContent = '과제 완료 현황'; $('completion-range').textContent = `전체 ${state.tasks.length}개`;
+          const counts = [['완료', completed.length, 'done'], ['미완료', state.tasks.length - completed.length, 'active']];
+          chart.setAttribute('aria-label', counts.map(([label, count]) => `${label} ${count}개`).join(', '));
+          const bars = element('div', 'completion-status');
+          for (const [label, count, kind] of counts) {
+            const row = element('div', `completion-status-row ${kind}`);
+            const heading = element('div', 'completion-status-heading'); heading.append(element('span', '', label), element('strong', '', `${count}개`));
+            const track = element('div', 'completion-status-track'), fill = element('span');
+            fill.style.width = `${state.tasks.length ? count / state.tasks.length * 100 : 0}%`; track.append(fill);
+            row.append(heading, track); bars.append(row);
+            $('completion-data').append(element('li', '', `${label} ${count}개`));
+          }
+          chart.append(bars);
+          $('completion-note').textContent = state.tasks.length ? '완료 날짜 기록이 없어 현재 상태를 표시해요. 첫 완료를 체크해 보세요.' : '아직 과제가 없어요. 과제를 추가하고 첫 완료를 기록해 보세요.';
+          return;
+        }
+        chart.dataset.mode = 'trend';
+        const today = dayNumber(localDateKey());
+        const days = Array.from({ length: 7 }, (_, i) => {
+          const key = new Date((today - 6 + i) * 86400000).toISOString().slice(0, 10);
+          return { key, label: `${Number(key.slice(5, 7))}/${Number(key.slice(8))}`, count: records.filter(task => localDateKey(new Date(task.completedAt)) === key).length };
+        });
+        const total = days.reduce((sum, day) => sum + day.count, 0);
+        $('completion-title').textContent = '과제 완료 추이'; $('completion-range').textContent = `7일 · ${total}개 완료`;
+        chart.setAttribute('aria-label', `최근 7일의 현재 완료 과제. ${days.map(day => `${day.label} ${day.count}개`).join(', ')}`);
+        $('completion-data').append(...days.map(day => element('li', '', `${day.key}: ${day.count}개`)));
+        const top = Math.max(2, Math.ceil(Math.max(...days.map(day => day.count)) / 2) * 2);
+        const svg = chartSVG('svg', { viewBox: '0 0 640 150', preserveAspectRatio: 'none', 'aria-hidden': 'true' });
+        const defs = chartSVG('defs'), gradient = chartSVG('linearGradient', { id: 'completion-area-gradient', x1: '0', x2: '0', y1: '0', y2: '1' });
+        gradient.append(chartSVG('stop', { offset: '0%', 'stop-color': '#8ea5f1', 'stop-opacity': '.48' }), chartSVG('stop', { offset: '100%', 'stop-color': '#bfcaf4', 'stop-opacity': '.05' }));
+        defs.append(gradient); svg.append(defs);
+        const left = 30, right = 626, bottom = 140, height = 128;
+        for (const count of [0, top / 2, top]) {
+          const y = bottom - count / top * height;
+          svg.append(chartSVG('line', { x1: left, x2: right, y1: y, y2: y, stroke: '#cfd3e2', 'stroke-width': 1, 'stroke-dasharray': count ? '1 7' : 'none' }));
+        }
+        const points = days.map((day, index) => ({ x: left + index / 6 * (right - left), y: bottom - day.count / top * height, ...day }));
+        let line = `M ${points[0].x} ${points[0].y}`;
+        for (let i = 1; i < points.length; i++) {
+          const previous = points[i - 1], point = points[i], mid = (previous.x + point.x) / 2;
+          line += ` C ${mid} ${previous.y}, ${mid} ${point.y}, ${point.x} ${point.y}`;
+        }
+        svg.append(chartSVG('path', { d: `${line} L ${right} ${bottom} L ${left} ${bottom} Z`, fill: 'url(#completion-area-gradient)' }));
+        svg.append(chartSVG('path', { d: line, fill: 'none', stroke: '#7c96e3', 'stroke-width': 2.3, 'vector-effect': 'non-scaling-stroke' }));
+        for (const point of points) {
+          const circle = chartSVG('circle', { cx: point.x, cy: point.y, r: 3.2, fill: '#859de8' });
+          const title = chartSVG('title'); title.textContent = `${point.key}: ${point.count}개 완료`; circle.append(title); svg.append(circle);
+        }
+        const plot = element('div', 'completion-plot'), axis = element('div', 'completion-y-axis'); axis.setAttribute('aria-hidden', 'true');
+        axis.append(...[top, top / 2, 0].map(count => element('span', '', count)));
+        plot.append(svg, axis);
+        const labels = element('div', 'completion-x-axis'); labels.setAttribute('aria-hidden', 'true'); labels.append(...days.map(day => element('span', '', day.label)));
+        chart.append(plot, labels);
+        $('completion-note').textContent = total ? '현재 완료된 과제의 완료일 기준 · 삭제·완료 취소 시 집계가 바뀌어요.' : '최근 7일 안에 완료된 과제가 없어요. 이전 완료 과제는 그대로 보관돼요.';
       }
 
       function visibleTasks() {

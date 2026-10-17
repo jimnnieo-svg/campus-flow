@@ -1,0 +1,72 @@
+{
+  "environment": "Local mock Firebase + Chromium; fixed test dates, Asia/Seoul",
+  "passed": 16,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "완료 날짜가 있으면 7일 추이 / 실제 초기 1개 집계",
+      "status": "passed"
+    },
+    {
+      "name": "여러 완료 날짜의 실제 집계와 총합",
+      "status": "passed"
+    },
+    {
+      "name": "곡선·그라데이션 / 실제 관측치 외 점 없음",
+      "status": "passed"
+    },
+    {
+      "name": "완료 취소 시 해당 날짜의 실제 집계 감소",
+      "status": "passed"
+    },
+    {
+      "name": "과제 삭제 시 날짜 집계 감소",
+      "status": "passed"
+    },
+    {
+      "name": "완료 시 오늘 집계와 헤더 완료율 자동 갱신",
+      "status": "passed"
+    },
+    {
+      "name": "자정 시간대: UTC→한국 날짜 기준 집계",
+      "status": "passed"
+    },
+    {
+      "name": "이전 완료 기록만 있을 때 최근 7일은 0 / 기록 유지",
+      "status": "passed"
+    },
+    {
+      "name": "날짜 기록 없음 → 실제 완료·미완료 현황으로 대체",
+      "status": "passed"
+    },
+    {
+      "name": "완전 빈 데이터: 허구 수치나 양수 막대 없음",
+      "status": "passed"
+    },
+    {
+      "name": "가장 가까운 마감과 별도의 높은 중요도 과제",
+      "status": "passed"
+    },
+    {
+      "name": "완료 차트 갱신은 기존 단일 구독만 사용",
+      "status": "passed"
+    },
+    {
+      "name": "1440/1280/768/390/360px 차트·달력·헤더 넘침 없음",
+      "status": "passed"
+    },
+    {
+      "name": "전체 통계와 중요도 접이식 기능 보존",
+      "status": "passed"
+    },
+    {
+      "name": "실제 다중 날짜 차트 브라우저 캡처",
+      "status": "passed"
+    },
+    {
+      "name": "차트 검증 브라우저 실행 오류 없음",
+      "status": "passed"
+    }
+  ],
+  "errors": []
+}

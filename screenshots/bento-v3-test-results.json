@@ -1,6 +1,6 @@
 {
   "environment": "Local mock Firebase + real Chromium, Asia/Seoul",
-  "passed": 42,
+  "passed": 43,
   "failed": 0,
   "results": [
     {
@@ -33,6 +33,10 @@
     },
     {
       "name": "과제 생성 / XSS 문자열을 텍스트로 표시",
+      "status": "passed"
+    },
+    {
+      "name": "상단 완료율과 오늘/임박/진행 중 실제 바로가기",
       "status": "passed"
     },
     {
@@ -156,7 +160,7 @@
       "status": "passed"
     },
     {
-      "name": "1440×900 첫 화면 목록 / 차트 / 비대칭 카드",
+      "name": "1440×900 Taskly 42:58 배치 / 상하 카드 정렬",
       "status": "passed"
     },
     {
