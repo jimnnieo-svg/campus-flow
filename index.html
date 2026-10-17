@@ -470,6 +470,476 @@
       .filter { padding-inline: 7px; }
       .backup-actions .button { font-size: 11px; }
     }
+    /* Bento V3: 목록이 중심인 비대칭 작업 공간. Firebase DOM 계약은 유지합니다. */
+    :root {
+      --bg: #f8f9fc; --surface: #fcfcfe; --line: #e9ebf2; --radius: 24px;
+      --gold: #b3a184; --gold-hover: #8c7859; --gold-ink: #7e6c51;
+      --shadow: 0 6px 24px rgb(62 72 112 / 3%);
+    }
+    body { background: radial-gradient(ellipse at 42% 2%, #eceefa 0, transparent 48%), radial-gradient(ellipse at 96% 40%, #eff3fa 0, transparent 52%), var(--bg); }
+    .wrap { width: min(1512px, calc(100% - 64px)); }
+    .topbar { background: transparent; border: 0; backdrop-filter: none; }
+    .topbar-inner { min-height: 96px; }
+    .brand-mark { width: 39px; height: 39px; border-radius: 13px; }
+    .brand-name { font-size: 21px; letter-spacing: -.8px; }
+    .brand-caption { font-size: 10px; color: var(--muted); }
+    .header-meta { gap: 16px; font-size: 11px; }
+    .account-email { max-width: 190px; font-size: 11px; }
+    .storage-chip { border: 0; min-height: 32px; font-size: 10px; }
+    .dashboard-shell { grid-template-columns: 56px minmax(0, 1fr); gap: 26px; }
+    .side-rail { top: 24px; margin-top: 17px; padding: 7px 4px; gap: 10px; border: 0; border-radius: 20px; background: #fcfcfdd9; box-shadow: none; }
+    .rail-link { width: 48px; min-height: 54px; border-radius: 15px; color: #667085; font-size: 9px; font-weight: 500; }
+    .rail-link.is-current { background: var(--navy); box-shadow: 0 3px 8px rgb(38 51 79 / 7%); }
+    .welcome { min-height: 120px; margin: 0 0 22px; padding: 10px 0 12px; border: 0; border-radius: 24px; background: radial-gradient(ellipse at 30% 55%, #e6ebf980, transparent 70%), radial-gradient(ellipse at 80% 50%, #eae6f580, transparent 65%); box-shadow: none; overflow: visible; }
+    .welcome::before { content: none; }
+    .welcome .eyebrow { margin-bottom: 6px; color: var(--gold-ink); font-size: 10px; letter-spacing: .16em; }
+    .welcome h1 { font-size: clamp(25px, 2.45vw, 36px); letter-spacing: -1.6px; line-height: 1.3; font-weight: 650; }
+    .welcome-description { font-size: 12px; color: var(--muted); margin-top: 8px; }
+    .add-task-button { min-height: 48px; border-radius: 15px; padding-inline: 20px; flex-shrink: 0; }
+    .bento-board { display: grid; grid-template-columns: minmax(250px, 1.02fr) minmax(440px, 2.08fr) minmax(196px, .8fr); grid-template-rows: 330px 240px; gap: 16px; align-items: stretch; }
+    .overview-section, .workspace { display: contents; }
+    .panel, .list-section, .progress-panel, .stat { border-color: transparent; }
+    .button.primary { box-shadow: 0 3px 10px rgb(38 51 79 / 9%); }
+    .auth-card { box-shadow: 0 10px 32px rgb(62 72 112 / 5%); }
+    .auth-shell { background: radial-gradient(ellipse at 18% 35%, #e8edf980, transparent 50%), radial-gradient(ellipse at 82% 55%, #eee9f680, transparent 55%); }
+    .auth-intro .eyebrow, .auth-benefits .icon { color: var(--gold-ink); }
+    .deadline-panel { grid-column: 1; grid-row: 1; padding: 24px; min-width: 0; }
+    .card-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .card-heading h2 { font-size: 17px; font-weight: 650; letter-spacing: -.6px; }
+    .card-kicker { font-size: 9px; color: var(--muted); letter-spacing: .13em; font-weight: 650; margin-bottom: 7px; }
+    .subtle-chip { background: #eff0f7; color: #667085; font-size: 10px; border-radius: 20px; padding: 5px 10px; white-space: nowrap; }
+    .chart-summary { display: flex; align-items: baseline; gap: 7px; margin-top: 16px; }
+    .chart-summary strong { font-size: 32px; line-height: 1; font-weight: 600; letter-spacing: -1.5px; }
+    .chart-summary span { font-size: 10px; color: var(--muted); }
+    .deadline-chart { display: flex; height: 154px; align-items: stretch; gap: 9px; margin-top: 16px; background: repeating-linear-gradient(to top, transparent 0, transparent 35px, #edf0f4 35px, #edf0f4 36px); background-size: 100% 144px; background-repeat: no-repeat; }
+    .day-column { display: flex; flex: 1; flex-direction: column; justify-content: end; align-items: center; min-width: 0; gap: 8px; color: var(--muted); font-size: 9px; }
+    .day-bar { display: block; background: linear-gradient(0deg, #e7e9f2, #a9b5cc); border-radius: 6px 6px 2px 2px; min-height: 3px; width: 75%; }
+    .day-column.is-peak .day-bar { background: linear-gradient(0deg, #e9e3d9, var(--gold)); }
+    .day-column.is-today > span:last-child { color: var(--ink); font-weight: 700; }
+    .day-column b { font-size: 10px; font-weight: 600; color: var(--ink); }
+    .chart-footnote { color: var(--muted); font-size: 10px; margin-top: 14px; line-height: 1.6; }
+    .stats { grid-column: 1; grid-row: 2; gap: 12px; }
+    .stat { min-height: 106px; padding: 17px; border-radius: 21px; align-items: flex-start; position: relative; }
+    .stat:first-child { background: linear-gradient(135deg, #e9eef9, #efedf7); border-color: transparent; }
+    .stat:first-child .stat-label, .stat:first-child .stat-unit { color: var(--muted); }
+    .stat:first-child .stat-value { color: var(--ink); }
+    .stat:first-child .stat-icon { background: #ffffffa6; color: var(--gold-ink); }
+    .stat-label { font-size: 11px; font-weight: 500; }
+    .stat-value { font-size: 28px; font-weight: 600; margin-top: 13px; letter-spacing: -1px; }
+    .stat-unit { font-size: 10px; }
+    .stat-icon { width: 25px; height: 25px; border-radius: 9px; position: absolute; right: 13px; bottom: 17px; }
+    .stat-icon .icon { width: 15px; height: 15px; }
+    .progress-panel { grid-column: 3; grid-row: 1; padding: 22px 21px; gap: 10px; background: var(--surface); }
+    .progress-title { font-size: 17px; font-weight: 650; letter-spacing: -.6px; }
+    .progress-caption { font-size: 11px; line-height: 1.6; }
+    .progress-number { --completion: 0; width: 86px; height: 86px; flex-shrink: 0; display: grid; place-items: center; border-radius: 50%; font-size: 25px; font-weight: 600; letter-spacing: -1.2px; background: radial-gradient(closest-side, var(--surface) 83%, transparent 85%), conic-gradient(var(--gold) calc(var(--completion) * 1%), #eceef5 0); }
+    .progress-fill { background: linear-gradient(90deg, #c8bba4, var(--gold)); }
+    .priority-fill.normal { background: var(--gold); }
+    .progress-label { flex-direction: row-reverse; align-items: center; gap: 9px; font-size: 10px; }
+    #progress-summary { max-width: 90px; line-height: 1.8; word-break: keep-all; }
+    .progress-track { height: 4px; }
+    .priority-chart { border-color: var(--line); padding-top: 14px; }
+    .chart-title { font-size: 11px; font-weight: 500; margin-bottom: 9px; }
+    .priority-row { color: var(--muted); }
+    .priority-row { min-height: 22px; }
+    .focus-panel { grid-column: 3; grid-row: 2; padding: 21px; background: linear-gradient(145deg, #f5f2ed, #f7f5f3 55%, #f0f2f9); box-shadow: none; overflow: auto; }
+    .focus-panel .card-heading h2 { font-size: 15px; }
+    .focus-panel .card-heading .icon { width: 17px; color: var(--gold-ink); }
+    .focus-caption { font-size: 11px; color: #716958; margin-top: 6px; }
+    .next-subject { font-size: 11px; color: #716958; margin-top: 14px; overflow-wrap: anywhere; }
+    .next-title { font-size: 15px; line-height: 1.5; font-weight: 600; margin-top: 5px; overflow-wrap: anywhere; }
+    .next-date { font-size: 11px; color: #716958; margin-top: 8px; }
+    .text-button { background: none; border: 0; border-top: 1px solid #e2dcd2; width: 100%; min-height: 44px; margin-top: 10px; padding: 9px 0 0; display: flex; align-items: center; justify-content: space-between; text-align: left; font-size: 10px; }
+    .text-button:hover { color: #705121; }
+    .list-section { grid-column: 2; grid-row: 1 / 3; padding: 25px; min-height: 0; display: flex; flex-direction: column; border-radius: var(--radius); background: linear-gradient(145deg, #ffffffed, #fcfcfef5); }
+    .task-list { overflow-y: auto; min-height: 0; flex: 1; scrollbar-width: thin; scrollbar-color: #d9dfe7 transparent; }
+    .section-heading { font-size: 20px; font-weight: 650; }
+    .list-search-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .list-search-row .list-heading { margin: 0; flex-shrink: 0; }
+    .list-search-row .search-box { width: 48%; }
+    .list-total { font-size: 10px; }
+    .list-columns { display: grid; grid-template-columns: minmax(0, 1fr) 106px 88px; gap: 10px; color: var(--muted); font-size: 10px; padding: 0 0 10px; }
+    .list-columns > :last-child { text-align: center; }
+    .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { display: grid; grid-template-columns: minmax(0, 1fr) 106px 88px; gap: 2px 10px; padding: 10px 0; border-left: 0; min-height: 76px; align-content: center; }
+    .task-title-row { grid-column: 1; grid-row: 1; gap: 9px; margin: 0; align-items: flex-start; }
+    .task-title { font-size: 14px; line-height: 1.55; font-weight: 600; letter-spacing: -.3px; }
+    .task-checkbox { width: 17px; height: 17px; border-radius: 50%; margin-top: 2px; }
+    .complete-label { padding: 13px; margin: -13px; }
+    .task-top { grid-column: 1; grid-row: 2; padding-left: 26px; gap: 7px; align-items: center; flex-wrap: wrap; }
+    .subject-tag { background: none; padding: 0; font-size: 10px; color: var(--muted); font-weight: 400; }
+    .priority-tag { font-size: 10px; font-weight: 400; }
+    .task-meta { grid-column: 2; grid-row: 1 / 4; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 5px; }
+    .task-date { font-size: 10px; }
+    .task-date .icon { display: none; }
+    .badge { font-size: 10px; padding: 2px 6px; border-radius: 5px; }
+    .task-actions { grid-column: 3; grid-row: 1 / 4; align-items: center; gap: 0; margin: 0; }
+    .task-actions .icon-button { width: 44px; height: 44px; border: 0; color: #667085; background: none; }
+    .task-actions .icon-button.delete { color: #a45660; }
+    .task-actions .icon-button:hover { background: #eef1f6; }
+    .task-actions .icon-button.delete:hover { background: var(--red-bg); }
+    details.task-note { grid-column: 1; grid-row: 3; margin: 0 0 0 26px; font-size: 9px; line-height: 1.7; max-height: none; overflow: visible; white-space: normal; }
+    .task-note > summary { width: max-content; max-width: 100%; min-height: 16px; cursor: pointer; color: #667085; }
+    .task-note[open] { grid-column: 1 / -1; margin-top: 3px; }
+    .task-note[open] > p { white-space: pre-wrap; max-height: 180px; overflow: auto; padding: 8px 12px; background: #f5f6f8; border-radius: 9px; font-size: 11px; }
+    .task-card:has(.task-note[open]) .task-meta, .task-card:has(.task-note[open]) .task-actions { grid-row: 1 / 3; }
+    .search-box input { font-size: 12px; min-height: 42px; border-color: #ebedf4; background: #f3f5fa; border-radius: 12px; }
+    .list-toolbar { gap: 8px; flex-wrap: wrap; }
+    .filter { padding: 8px 10px; font-size: 11px; border-radius: 20px; }
+    .filter[aria-pressed="true"] { background: #eef1f6; border-color: transparent; color: var(--navy); }
+    .sort-control select { font-size: 10px; border: 0; padding-left: 0; }
+    .count-pill { font-size: 10px; color: var(--gold-ink); background: #f1eee8; }
+    .list-footnote { font-size: 9px; margin-top: 18px; }
+    dialog.form-panel { position: fixed; inset: 0; margin: auto; width: min(580px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 30px; border: 0; border-radius: 24px; }
+    .form-close { position: absolute; top: 18px; right: 18px; border: 0; border-radius: 50%; }
+    .form-panel .section-heading { padding-right: 40px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+    .form-grid .full-width { grid-column: 1 / -1; }
+    .form-actions .primary { flex: 1; }
+    .cloud-notice { margin: 0 0 16px; }
+    .deadline-notice { margin-top: 16px; font-size: 11px; padding: 10px 15px; }
+    .legacy-notice { font-size: 11px; }
+    .backup-disclosure { margin-top: 16px; border-radius: 18px; box-shadow: none; background: #ffffff80; }
+    .backup-disclosure > summary { min-height: 56px; padding: 16px 20px; cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; }
+    .backup-disclosure > summary::-webkit-details-marker { display: none; }
+    .backup-disclosure > summary > span:first-child { display: flex; align-items: center; gap: 10px; }
+    .backup-disclosure > summary .icon { width: 17px; height: 17px; color: var(--muted); }
+    .backup-disclosure[open] > summary > span:last-child { transform: rotate(45deg); }
+    .backup-summary-caption { font-size: 10px; color: var(--muted); font-weight: 400; }
+    .backup-panel { margin: 0; padding: 8px 22px 24px; }
+    .backup-actions { flex-wrap: wrap; }
+    .footer { border: 0; font-size: 10px; padding-block: 18px; }
+    @media (max-width: 1200px) {
+      .wrap { width: calc(100% - 40px); }
+      .dashboard-shell { gap: 18px; }
+      .bento-board { grid-template-columns: minmax(235px, 1fr) minmax(0, 1.8fr); grid-template-rows: 312px auto auto; }
+      .list-section { grid-column: 2; grid-row: 1 / 3; }
+      .progress-panel { grid-column: 1; grid-row: 3; }
+      .focus-panel { grid-column: 2; grid-row: 3; }
+      .progress-panel { min-height: 330px; }
+      .backup-panel { flex-wrap: wrap; }
+    }
+    @media (max-width: 850px) {
+      .dashboard-shell { grid-template-columns: 1fr; }
+      .side-rail { position: static; flex-direction: row; width: max-content; margin: 0 0 12px; padding: 4px; gap: 4px; }
+      .rail-link { width: 54px; min-height: 46px; }
+      .welcome { min-height: 102px; margin-bottom: 16px; }
+      .welcome h1 { font-size: 28px; }
+      .bento-board { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .deadline-panel { grid-column: 1; grid-row: 1; }
+      .stats { grid-column: 2; grid-row: 1; }
+      .list-section { grid-column: 1 / -1; grid-row: 2; min-height: 360px; }
+      .task-list { max-height: 560px; flex: auto; }
+      .progress-panel { grid-column: 1; grid-row: 3; }
+      .focus-panel { grid-column: 2; grid-row: 3; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 32px); }
+      .topbar-inner { padding-block: 20px 14px; min-height: auto; }
+      .brand-name { font-size: 20px; }
+      .header-meta { padding: 14px 0 0; gap: 8px; flex-wrap: wrap; flex-direction: row; }
+      .account { width: auto; flex: 1; gap: 8px; justify-content: flex-start; }
+      .account-email { max-width: 140px; font-size: 10px; }
+      .account .button { min-height: 40px; font-size: 10px; }
+      .storage-chip { font-size: 9px; padding: 5px 8px; }
+      .side-rail { width: 100%; justify-content: space-around; margin-bottom: 20px; }
+      .rail-link { flex: 1; min-height: 48px; }
+      .welcome { align-items: flex-start; flex-wrap: wrap; padding: 0; gap: 16px; margin-bottom: 20px; }
+      .welcome h1 { font-size: 27px; letter-spacing: -1.3px; }
+      .welcome-description { font-size: 11px; }
+      .add-task-button { min-height: 44px; padding: 10px 15px; font-size: 12px; border-radius: 12px; }
+      .bento-board { display: flex; flex-direction: column; gap: 14px; }
+      .overview-section, .workspace { display: contents; }
+      .stats { order: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+      .stat { padding: 13px 9px; min-height: 91px; border-radius: 15px; }
+      .stat-label { font-size: 9px; white-space: nowrap; }
+      .stat-value { font-size: 25px; margin-top: 12px; }
+      .stat-icon, .stat-unit { display: none; }
+      .list-section { order: 1; padding: 21px 16px; }
+      .deadline-panel { order: 2; padding: 23px; }
+      .progress-panel { order: 3; padding: 23px; }
+      .focus-panel { order: 4; padding: 23px; }
+      .filter { padding: 8px 10px; font-size: 10px; min-height: 44px; }
+      .sort-control { margin-left: auto; }
+      .sort-control select { min-height: 44px; font-size: 10px; }
+      .list-toolbar { gap: 0; }
+      .list-search-row { flex-direction: column; align-items: stretch; gap: 14px; }
+      .list-search-row .search-box { width: 100%; }
+      .list-columns { display: none; }
+      .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { grid-template-columns: minmax(0, 1fr) 88px; padding: 15px 0; row-gap: 5px; }
+      .task-title { font-size: 13px; }
+      .task-top { padding-left: 26px; }
+      .task-meta { grid-column: 1 / -1; grid-row: 4; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; margin-left: 26px; gap: 8px; }
+      .task-card:has(.task-note[open]) .task-meta { grid-row: 4; }
+      .task-actions { grid-column: 2; grid-row: 1 / 3; }
+      .task-note, .task-note[open] { grid-column: 1 / -1; }
+      .task-date, .subject-tag, .priority-tag { font-size: 10px; }
+      .task-list { max-height: none; }
+      .task-note > summary { min-width: 80px; min-height: 44px; line-height: 44px; }
+      .complete-label { padding: 14px; margin: -14px; }
+      .account .button, .search-box input { min-height: 44px; }
+      .form-grid { grid-template-columns: 1fr; }
+      dialog.form-panel { padding: 24px 20px; }
+      .backup-summary-caption { font-size: 9px; }
+      .backup-panel { padding: 4px 18px 20px; }
+      .backup-actions { margin-top: 16px; }
+      .backup-actions .button { font-size: 11px; }
+      .footer { gap: 4px; }
+    }
+    /* Taskly structure: 42:58 main cards, matching lower pair, no viewer matte. */
+    :root { --ink: #30323c; --muted: #686b7c; --surface: #f9f9fde8; --line: #e0e2ec; --radius: 20px; --shadow: 0 5px 22px rgb(71 77 110 / 3%); }
+    body { background: radial-gradient(ellipse at 40% 24%, #dfe2f1, transparent 65%), linear-gradient(115deg, #f4f5f8, #e8e8f2 62%, #f6f7f9); color: var(--ink); }
+    .wrap { width: min(1536px, calc(100% - 80px)); }
+    .topbar-inner { min-height: 104px; position: relative; gap: 20px; }
+    .brand-name { color: var(--ink); font-size: 24px; font-weight: 700; }
+    .brand-caption { font-size: 11px; }
+    .brand-mark { width: 36px; height: 36px; border-radius: 12px; }
+    .header-completion { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 9px; border-radius: 100px; background: #f1f1fbd9; padding: 6px 19px; color: var(--ink); text-decoration: none; font-size: 13px; min-height: 44px; }
+    .header-completion strong { color: #607cda; font-size: 25px; font-weight: 750; letter-spacing: -1px; }
+    .header-meta { font-size: 11px; gap: 12px; }
+    .account-email { max-width: 165px; }
+    .storage-chip { background: #f5fbf7; }
+    .dashboard-shell { grid-template-columns: 56px minmax(0, 1fr); gap: 40px; }
+    .side-rail { margin-top: 30px; padding: 0; background: none; gap: 12px; border-radius: 0; }
+    .rail-link { width: 48px; min-height: 48px; border-radius: 50%; background: #ffffff5c; gap: 1px; color: #686b7c; }
+    .rail-link.is-current { color: var(--ink); background: #fff; box-shadow: 0 3px 10px #42496b08; }
+    .rail-link span { display: none; font-size: 9px; }
+    .welcome { display: grid; grid-template-columns: minmax(0, 42.5fr) minmax(0, 57.5fr); gap: 12px; min-height: 126px; padding: 20px 0 26px; margin: 0 0 20px; background: none; border-radius: 0; }
+    .welcome h1 { font-size: clamp(30px, 2.9vw, 42px); font-weight: 500; line-height: 1.25; letter-spacing: -1.9px; }
+    .welcome-description { font-size: 13px; line-height: 1.7; margin-top: 12px; max-width: 95%; }
+    .quick-actions { display: flex; align-items: stretch; gap: 9px; min-width: 0; }
+    .add-task-button { width: 52px; padding: 0; min-height: 80px; border-radius: 11px; background: #393b43 !important; border-color: #393b43 !important; box-shadow: none !important; }
+    .add-task-button .icon { width: 25px; height: 25px; }
+    .quick-card { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 1; min-width: 0; min-height: 80px; padding: 13px 15px; border: 0; background: #ffffffdf; border-radius: 11px; text-align: left; font-size: 14px; color: var(--ink); }
+    .quick-card strong { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 4px; }
+    .quick-card > span:last-child { font-size: 26px; font-weight: 300; }
+    .quick-card:hover { background: #fff; box-shadow: var(--shadow); }
+    .bento-board { grid-template-columns: minmax(0, 42.5fr) minmax(0, 57.5fr); grid-template-rows: minmax(410px, auto) minmax(270px, auto) auto; gap: 12px; }
+    .deadline-panel, .list-section, .focus-panel, .progress-panel { border: 0; border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); position: relative; }
+    .deadline-panel { grid-column: 1; grid-row: 1; padding: 28px 30px; }
+    .list-section { grid-column: 2; grid-row: 1; padding: 28px 30px; height: 410px; }
+    .focus-panel { grid-column: 1; grid-row: 2; padding: 27px 30px; overflow: visible; background: linear-gradient(135deg, #faf9fde8, #f3f5fce8); }
+    .progress-panel { grid-column: 2; grid-row: 2; padding: 27px 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 25px; min-height: 270px; }
+    .progress-heading { grid-column: 1 / -1; }
+    .progress-title, .card-heading h2, .focus-panel .card-heading h2, .section-heading { font-size: 23px; font-weight: 500; letter-spacing: -.8px; }
+    .card-kicker { display: none; }
+    .progress-caption, .focus-caption { font-size: 12px; color: var(--muted); }
+    .progress-number { background: radial-gradient(closest-side, #f9f9fd 83%, transparent 85%), conic-gradient(#7f98e8 calc(var(--completion) * 1%), #e5e7f2 0); }
+    .progress-detail { align-self: center; }
+    .progress-fill { background: #8fa5e9; }
+    .priority-chart { border-top: 0; padding: 0; align-self: center; }
+    .priority-row { min-height: 28px; font-size: 11px; }
+    .chart-title { font-size: 12px; }
+    .chart-summary { margin-top: 22px; }
+    .chart-summary strong { font-size: 39px; }
+    .chart-summary span { font-size: 13px; }
+    .deadline-chart { height: 200px; margin-top: 20px; }
+    .day-column { font-size: 12px; }
+    .day-column b { font-size: 12px; }
+    .chart-footnote { font-size: 11px; }
+    .stats { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .stat, .stat:first-child { min-height: 76px; padding: 14px 18px; border-radius: 15px; background: #f9f9fd8c; box-shadow: none; display: block; }
+    .stat-label { font-size: 11px; }
+    .stat-value { font-size: 24px; margin: 3px 0 0; }
+    .stat-icon { display: none; }
+    .list-search-row { gap: 12px; }
+    .list-search-row .search-box { width: 42%; }
+    .search-box input { min-height: 38px; padding-top: 8px; padding-bottom: 8px; background: #eeeff780; border-color: transparent; }
+    .search-box > .icon { top: 11px; }
+    .list-toolbar { margin: 8px 0 10px; gap: 6px; flex-wrap: nowrap; }
+    .filter { font-size: 12px; padding: 8px 10px; }
+    .filter[aria-pressed="true"] { color: #4564bb; background: #e1e7fa; }
+    .sort-control select { font-size: 11px; padding-right: 24px; background-color: transparent; }
+    .list-columns { font-size: 12px; padding-bottom: 14px; grid-template-columns: minmax(0, 1fr) 110px 88px; }
+    .task-list { border-top-color: var(--line); max-height: none; grid-auto-rows: max-content; align-content: start; scroll-padding-block: 12px; }
+    .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { padding: 12px 0; min-height: 82px; align-content: start; grid-template-columns: minmax(0, 1fr) 110px 88px; border-bottom: 1px dotted #bfc4d4; }
+    .task-title { font-size: 17px; font-weight: 500; }
+    .subject-tag, .priority-tag, .task-date, .badge { font-size: 12px; }
+    .task-checkbox { width: 20px; height: 20px; margin-top: 3px; }
+    .task-checkbox:checked { background: #536caa; border-color: #536caa; }
+    .complete-label { padding: 12px; margin: -12px; }
+    .task-top { padding-left: 29px; }
+    details.task-note { margin-left: 29px; font-size: 10px; }
+    .task-actions .icon-button { background: #ececf480; }
+    .task-actions .icon-button + .icon-button { margin-left: 2px; }
+    .task-actions { gap: 0; }
+    .list-columns, .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { grid-template-columns: minmax(0, 1fr) 104px 90px; }
+    .empty-state { min-height: 210px; padding: 18px; flex: 1; }
+    .empty-art { width: 70px; height: 65px; margin-bottom: 10px; }
+    .empty-state .button { margin-top: 13px; }
+    .next-subject { font-size: 12px; margin-top: 20px; }
+    .next-title { font-size: 23px; max-width: 90%; letter-spacing: -.6px; }
+    .next-date { font-size: 13px; margin-top: 12px; }
+    .text-button { width: max-content; max-width: 100%; border: 0; border-radius: 100px; color: #fff; background: #3b3d46; padding: 10px 20px; font-size: 12px; margin-top: 18px; }
+    .text-button span { margin-left: 14px; }
+    .text-button:hover { color: #fff; background: #252833; }
+    .date-filter-line { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 10px; margin-bottom: 8px; border-radius: 10px; background: #e8edfc; font-size: 12px; }
+    .date-filter-line button { border: 0; background: transparent; padding: 5px; color: #3556a6; min-height: 32px; }
+    .backup-disclosure { background: #f9f9fda6; }
+    .footer { font-size: 11px; }
+    @media (max-width: 1190px) {
+      .wrap { width: calc(100% - 40px); }
+      .dashboard-shell { gap: 20px; }
+      .header-meta .date-label { display: none; }
+      .header-completion { font-size: 12px; padding-inline: 14px; }
+      .welcome h1 { font-size: 33px; }
+      .quick-card { font-size: 12px; padding: 12px; }
+      .quick-card strong { font-size: 11px; }
+      .deadline-panel, .list-section, .progress-panel, .focus-panel { padding: 25px 22px; }
+      .list-toolbar { flex-wrap: wrap; }
+      .list-section { height: 430px; }
+      .bento-board { grid-template-rows: minmax(430px, auto) minmax(270px, auto) auto; }
+      .task-title { font-size: 14px; }
+    }
+    @media (max-width: 850px) {
+      .dashboard-shell { grid-template-columns: 1fr; gap: 0; }
+      .side-rail { flex-direction: row; margin: 6px 0 18px; width: max-content; gap: 10px; }
+      .rail-link { flex: none; }
+      .topbar-inner { flex-wrap: wrap; min-height: 90px; padding: 18px 0 6px; }
+      .header-completion { position: static; transform: none; order: 3; margin: 0 auto; }
+      .header-meta { margin-left: auto; }
+      .welcome { grid-template-columns: 1fr; gap: 22px; padding: 12px 0 22px; }
+      .welcome h1 { font-size: 36px; }
+      .quick-actions { min-height: 74px; }
+      .quick-card { font-size: 14px; }
+      .bento-board { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .deadline-panel { grid-column: 1; grid-row: 1; min-height: 410px; }
+      .list-section { grid-column: 1; grid-row: 2; height: auto; min-height: 410px; }
+      .focus-panel { grid-column: 1; grid-row: 3; }
+      .progress-panel { grid-column: 1; grid-row: 4; }
+      .stats { grid-column: 1; grid-row: 5; }
+      .task-list { max-height: 520px; flex: auto; }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 28px); }
+      .brand { width: 100%; }
+      .brand-name { font-size: 22px; }
+      .header-meta { width: 100%; padding: 0; flex-wrap: wrap; }
+      .header-completion { margin: 0; padding: 6px 14px; }
+      .header-completion strong { font-size: 22px; }
+      .side-rail { width: 100%; justify-content: space-between; }
+      .rail-link { width: 48px; }
+      .welcome h1 { font-size: 33px; }
+      .welcome-description { font-size: 13px; max-width: 100%; }
+      .quick-actions { display: grid; grid-template-columns: 44px repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .add-task-button { width: 44px; min-height: 78px; }
+      .quick-card { padding: 10px 8px; font-size: 12px; }
+      .quick-card > span:last-child { display: none; }
+      .quick-card strong { font-size: 12px; }
+      .bento-board { display: grid; gap: 14px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .deadline-panel, .list-section, .progress-panel, .focus-panel { padding: 24px 18px; }
+      .deadline-panel { min-height: 390px; }
+      .list-search-row { align-items: stretch; }
+      .list-search-row .search-box { width: 100%; }
+      .search-box input { min-height: 44px; }
+      .search-box > .icon { top: 14px; }
+      .list-columns { display: none; }
+      .list-toolbar { flex-wrap: wrap; }
+      .filter { font-size: 12px; padding-inline: 9px; }
+      .task-card, .task-card.is-complete, .task-card.is-overdue, .task-card.is-urgent { grid-template-columns: minmax(0, 1fr) 90px; }
+      .task-title { font-size: 15px; }
+      .task-meta { grid-column: 1 / -1; }
+      .task-top { padding-left: 29px; }
+      .progress-panel { display: flex; flex-direction: column; }
+      .progress-detail { width: 100%; }
+      .priority-chart { width: 100%; }
+      .next-title { font-size: 22px; max-width: 100%; }
+      .chart-summary strong { font-size: 32px; }
+    }
+    .calendar-nav { display: flex; gap: 4px; }
+    .calendar-nav .icon-button { border: 0; border-radius: 50%; background: #fff9; font-size: 25px; width: 44px; height: 44px; }
+    .calendar-month-row { display: flex; justify-content: space-between; align-items: center; min-height: 32px; margin: 3px 0 7px; }
+    .calendar-month-row h3 { font-size: 17px; font-weight: 500; }
+    .calendar-today { border: 0; border-radius: 100px; background: #e9ecf7; min-height: 32px; padding: 5px 13px; font-size: 12px; color: #455781; }
+    .calendar-weekdays { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; min-height: 22px; color: var(--muted); font-size: 12px; }
+    .calendar-weekdays > :first-child { color: #9a5e72; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: repeat(6, 32px); gap: 1px; }
+    .calendar-day { border: 0; border-radius: 10px; padding: 2px; background: transparent; color: var(--ink); min-width: 0; min-height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; font-size: 14px; line-height: 1; }
+    .calendar-day:hover { background: #e7ebf8; }
+    .calendar-day.outside-month { color: #71768a; background: transparent; }
+    .calendar-day.is-today { color: #3f5caa; background: #e1e7fb; }
+    .calendar-day.is-selected { box-shadow: inset 0 0 0 1.5px #7892de; background: #e8edfc; }
+    .calendar-day:focus-visible { outline: 2px solid #4868bf; outline-offset: -2px; }
+    .calendar-day.has-tasks .calendar-day-number { font-weight: 650; }
+    .calendar-marks { display: flex; justify-content: center; align-items: center; gap: 3px; min-height: 8px; font-size: 10px; color: #586b9d; }
+    .calendar-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: #7e97df; }
+    .calendar-dot.done { background: #65a48c; }
+    .calendar-selection { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 8px; display: flex; flex-direction: column; gap: 2px; }
+    .calendar-selection strong { font-size: 12px; font-weight: 550; }
+    .calendar-selection > span { font-size: 12px; color: var(--muted); }
+    .calendar-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 11px; color: var(--muted); }
+    .calendar-legend { display: flex; gap: 10px; }
+    .calendar-legend > span { display: flex; align-items: center; gap: 4px; }
+    @media (min-width: 851px) {
+      .bento-board { grid-template-rows: 450px minmax(270px, auto) auto; }
+      .list-section { height: 450px; padding-bottom: 24px; }
+    }
+    @media (max-width: 850px) {
+      .calendar-grid { grid-template-rows: repeat(6, 40px); }
+      .calendar-day { min-height: 40px; }
+    }
+    @media (max-width: 560px) {
+      .calendar-grid { grid-template-rows: repeat(6, 44px); }
+      .calendar-day { min-height: 44px; font-size: 14px; }
+      .calendar-today { min-height: 44px; }
+      .calendar-selection > span { font-size: 12px; }
+      .calendar-footer { font-size: 10px; flex-wrap: wrap; }
+      .date-filter-line button { min-height: 44px; }
+    }
+    .deadline-panel::before, .list-section::before { content: ''; position: absolute; top: -10px; width: 35%; height: 23px; background: #f9f9fd; border-radius: 22px 30px 0 0; pointer-events: none; }
+    .deadline-panel::before { left: 0; }
+    .list-section::before { right: 0; border-radius: 30px 22px 0 0; }
+    .progress-panel { display: block; min-height: 310px; }
+    .progress-detail.sr-only { left: 0; top: 0; width: 1px; height: 1px; }
+    .completion-title-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .completion-title-row .subtle-chip { font-size: 12px; }
+    .completion-chart { margin-top: 14px; min-height: 165px; }
+    .completion-plot { position: relative; height: 145px; }
+    .completion-plot svg { display: block; width: 100%; height: 145px; }
+    .completion-y-axis { position: absolute; top: 5px; bottom: 5px; left: 0; display: flex; flex-direction: column; justify-content: space-between; color: var(--muted); font-size: 11px; line-height: 1; }
+    .completion-x-axis { display: flex; justify-content: space-between; margin-left: 30px; padding-right: 2px; margin-top: 4px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .completion-x-axis span { min-width: 0; text-align: center; }
+    .completion-note { color: var(--muted); font-size: 11px; line-height: 1.7; margin-top: 8px; }
+    .completion-details { margin-top: 5px; }
+    .completion-details > summary { width: max-content; max-width: 100%; min-height: 32px; cursor: pointer; font-size: 11px; color: var(--muted); line-height: 32px; }
+    .completion-details .priority-chart { padding-top: 10px; }
+    .completion-status { display: flex; flex-direction: column; justify-content: center; gap: 24px; min-height: 165px; padding: 4px 0; }
+    .completion-status-heading { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+    .completion-status-heading strong { color: var(--ink); font-size: 17px; font-weight: 550; }
+    .completion-status-track { height: 12px; border-radius: 20px; background: #e7eaf5; overflow: hidden; }
+    .completion-status-track > span { height: 100%; border-radius: inherit; display: block; background: linear-gradient(90deg, #bdc8f1, #8ba2e2); }
+    .completion-status-row.done .completion-status-track > span { background: linear-gradient(90deg, #b7dbcc, #78ae98); }
+    .focus-panel { display: flex; flex-direction: column; }
+    .focus-layout { display: grid; grid-template-columns: minmax(0, 1fr) 108px; gap: 20px; align-items: center; margin-top: 18px; flex: 1; }
+    .focus-layout:has(.deadline-tile[hidden]) { grid-template-columns: 1fr; }
+    .next-subject { margin: 0; font-size: 13px; }
+    .next-title { font-size: 23px; max-width: 100%; font-weight: 500; margin-top: 8px; }
+    .next-date { font-size: 13px; color: var(--muted); }
+    #next-task > .priority-tag { margin-top: 9px; }
+    .deadline-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 126px; border-radius: 16px; border: 1px solid #dfe5f5; border-top: 5px solid #c6d2f2; background: linear-gradient(140deg, #f9fbff, #e6ecfc); color: #5f74b0; box-shadow: 0 6px 20px #8191c50b; }
+    .deadline-tile > span { font-size: 13px; }
+    .deadline-tile strong { color: var(--ink); font-size: 43px; line-height: 1.15; font-weight: 500; letter-spacing: -2px; }
+    .focus-important { margin-top: 14px; font-size: 12px; background: #ffffff8c; border-radius: 10px; padding: 8px 11px; color: #795861; overflow-wrap: anywhere; }
+    .focus-panel .text-button { margin-top: 16px; align-self: flex-start; }
+    .summary-stats { grid-column: 1 / -1; grid-row: 3; border-radius: 15px; background: #f9f9fd80; }
+    .summary-stats > summary { min-height: 48px; padding: 13px 20px; cursor: pointer; font-size: 13px; color: var(--muted); }
+    .summary-stats .stats { padding: 0 12px 12px; }
+    @media (min-width: 851px) { .bento-board { grid-template-rows: 450px minmax(310px, auto) auto; } }
+    @media (max-width: 850px) {
+      .deadline-panel::before, .list-section::before { display: none; }
+      .summary-stats { grid-column: 1; grid-row: 5; }
+    }
+    @media (max-width: 560px) {
+      .focus-layout { grid-template-columns: minmax(0, 1fr) 84px; gap: 12px; }
+      .deadline-tile { min-height: 112px; }
+      .deadline-tile strong { font-size: 36px; }
+      .next-title { font-size: 20px; }
+      .completion-title-row { flex-wrap: wrap; gap: 8px; }
+      .completion-title-row .subtle-chip, .completion-note { font-size: 11px; }
+      .completion-x-axis { font-size: 10px; }
+      .completion-details > summary { min-height: 44px; line-height: 44px; }
+      .task-list { max-height: none; }
+    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
@@ -503,6 +973,7 @@
         <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
         <div><div class="brand-name">Campus Flow</div><div class="brand-caption">대학 생활에, 나만의 흐름을.</div></div>
       </div>
+      <a class="header-completion" id="header-completion" href="#completion" hidden><strong id="header-rate">0%</strong><span>나의 과제 완료율</span></a>
       <div class="header-meta">
         <div class="account" id="account" hidden><span class="account-email" id="account-email"></span><button type="button" class="button" id="logout">로그아웃</button></div>
         <span class="date-label"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><time id="today-label"></time></span>
@@ -540,48 +1011,64 @@
       <a class="rail-link is-current" href="#overview" aria-label="대시보드 현황" title="대시보드 현황"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span>현황</span></a>
       <a class="rail-link" href="#tasks" aria-label="과제 목록" title="과제 목록"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>과제</span></a>
       <a class="rail-link" href="#task-form" aria-label="새 과제 작성" title="새 과제 작성"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span>추가</span></a>
+      <a class="rail-link" href="#calendar" aria-label="월간 달력" title="월간 달력"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span>달력</span></a>
       <a class="rail-link" href="#backup" aria-label="백업과 복원" title="백업과 복원"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><span>백업</span></a>
     </nav>
     <div class="dashboard-content">
     <section class="welcome" aria-labelledby="welcome-title">
       <div>
-        <p class="eyebrow"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>나의 학습 공간</p>
-        <h1 id="welcome-title">차근차근, 나만의 속도로.</h1>
+        <h1 id="welcome-title">오늘도, 나만의 흐름.</h1>
         <p id="smart-message" class="welcome-description">아직 등록된 과제가 없어요. 첫 과제를 추가해 보세요!</p>
       </div>
-      <svg class="welcome-art" viewBox="0 0 210 130" fill="none" aria-hidden="true">
-        <circle cx="105" cy="65" r="58" stroke="#B79555" stroke-opacity=".35"/>
-        <circle cx="105" cy="65" r="43" stroke="#B79555" stroke-opacity=".55"/>
-        <path d="M68 44c14-3 26-1 37 6 11-7 23-9 37-6v46c-14-3-26-1-37 6-11-7-23-9-37-6V44Z" stroke="#DCC391" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M105 50v46M78 58c8-1 14 0 19 3M113 61c5-3 11-4 19-3M78 70c8-1 14 0 19 3M113 73c5-3 11-4 19-3" stroke="#DCC391" stroke-width="2" stroke-linecap="round"/>
-      </svg>
+      <div class="quick-actions" aria-label="과제 바로가기">
+        <button type="button" class="button primary add-task-button" data-open-task aria-label="새 과제 추가"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+        <button class="quick-card" type="button" data-quick="today"><span>오늘 마감<strong id="quick-today">0개</strong></span><span aria-hidden="true">›</span></button>
+        <button class="quick-card" type="button" data-quick="urgent"><span>마감 임박<strong id="quick-urgent">0개</strong></span><span aria-hidden="true">›</span></button>
+        <button class="quick-card" type="button" data-quick="active"><span>진행 중<strong id="quick-active">0개</strong></span><span aria-hidden="true">›</span></button>
+      </div>
     </section>
-    <section id="overview" class="overview-section" aria-label="학습 현황">
-      <div class="stats">
+    <section class="notice cloud-notice" id="cloud-notice" role="status" aria-live="polite" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><div class="notice-content"><p id="cloud-message"></p><div class="notice-actions"><button type="button" id="retry-cloud" hidden>연결 다시 확인</button></div></div></section>
+    <div class="bento-board" id="overview">
+    <section class="overview-section" aria-label="학습 현황">
+      <article class="panel deadline-panel" id="calendar" aria-labelledby="deadline-chart-title">
+        <div class="card-heading"><h2 id="deadline-chart-title">월간 달력</h2><div class="calendar-nav"><button type="button" id="calendar-prev" class="icon-button" aria-label="이전 달">‹</button><button type="button" id="calendar-next" class="icon-button" aria-label="다음 달">›</button></div></div>
+        <div class="calendar-month-row"><h3 id="calendar-month" aria-live="polite"></h3><button class="calendar-today" id="calendar-today" type="button">오늘</button></div>
+        <p class="sr-only" id="calendar-help">방향키로 날짜 이동, Home과 End로 주의 처음과 끝, Page Up과 Page Down으로 월 이동, Enter 또는 Space로 날짜를 선택해 과제 목록을 확인하세요.</p>
+        <div class="calendar-weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+        <div id="calendar-grid" class="calendar-grid" role="group" aria-label="월간 마감일" aria-describedby="calendar-help"></div>
+        <div class="calendar-selection" aria-live="polite"><strong id="calendar-selection-title">날짜를 선택해 보세요.</strong><span id="calendar-selection-description">과제가 있는 날짜에 작은 표시가 나타나요.</span></div>
+        <div class="calendar-footer"><span class="calendar-legend"><span><i class="calendar-dot"></i>진행 중</span><span><i class="calendar-dot done"></i>완료</span></span><span>7일 내 미완료 <strong id="week-total">0</strong>개</span></div>
+      </article>
+      <details class="summary-stats" id="summary-stats"><summary>전체 과제 요약</summary><div class="stats">
         <article class="stat"><div><h2 class="stat-label">전체 과제</h2><span class="stat-value" id="stat-total">0</span><span class="stat-unit">개</span></div><span class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span></article>
         <article class="stat"><div><h2 class="stat-label">완료한 과제</h2><span class="stat-value" id="stat-completed">0</span><span class="stat-unit">개</span></div><span class="stat-icon green"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></article>
         <article class="stat"><div><h2 class="stat-label">남은 과제</h2><span class="stat-value" id="stat-remaining">0</span><span class="stat-unit">개</span></div><span class="stat-icon blue"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span></article>
         <article class="stat" title="오늘부터 3일 이내에 마감되는 미완료 과제"><div><h2 class="stat-label">마감 임박 과제</h2><span class="stat-value" id="stat-urgent">0</span><span class="stat-unit">개</span></div><span class="stat-icon orange"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span></article>
-      </div>
-      <div class="progress-panel">
-        <div class="progress-heading"><h2 class="progress-title"><svg class="icon" aria-hidden="true"><use href="#i-trend"/></svg>차곡차곡, 학습 진행률</h2><p class="progress-caption" id="progress-caption">작은 시작이 큰 변화를 만들어요.</p></div>
-        <div class="progress-detail"><div class="progress-label"><span id="progress-summary">전체 0개 중 0개 완료</span><strong class="progress-number" id="progress-number">0%</strong></div><div class="progress-track" id="progress" role="progressbar" aria-label="과제 완료율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div></div>
+      </div></details>
+      <div class="progress-panel" id="completion">
+        <div class="progress-heading"><div class="completion-title-row"><h2 class="progress-title" id="completion-title">과제 완료 현황</h2><span class="subtle-chip" id="completion-range">현재</span></div><p class="progress-caption sr-only" id="progress-caption">작은 시작이 큰 변화를 만들어요.</p></div>
+        <div id="completion-chart" class="completion-chart" role="img" aria-label="과제 완료 현황"></div>
+        <ol class="sr-only" id="completion-data" aria-label="완료 차트 데이터"></ol>
+        <p class="completion-note" id="completion-note"></p>
+        <div class="progress-detail sr-only"><div class="progress-label"><span id="progress-summary">전체 0개 중 0개 완료</span><strong class="progress-number" id="progress-number">0%</strong></div><div class="progress-track" id="progress" role="progressbar" aria-label="과제 완료율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div></div>
+        <details class="completion-details"><summary>남은 과제의 중요도 보기</summary>
         <div class="priority-chart" aria-label="남은 과제의 중요도 분포">
           <p class="chart-title">남은 과제의 중요도</p>
           <div class="priority-row"><span>높음</span><div class="priority-track"><span class="priority-fill high" id="priority-fill-high"></span></div><strong id="priority-count-high">0</strong></div>
           <div class="priority-row"><span>보통</span><div class="priority-track"><span class="priority-fill normal" id="priority-fill-normal"></span></div><strong id="priority-count-normal">0</strong></div>
           <div class="priority-row"><span>낮음</span><div class="priority-track"><span class="priority-fill low" id="priority-fill-low"></span></div><strong id="priority-count-low">0</strong></div>
         </div>
+        </details>
       </div>
-      <div class="notice deadline-notice" id="deadline-notice" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><p id="deadline-message"></p></div>
+      <article class="panel focus-panel" aria-labelledby="focus-title"><div class="card-heading"><h2 id="focus-title">다가오는 마감</h2><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></div><p class="focus-caption">가까운 마감부터, 하나씩 가볍게.</p><div class="focus-layout"><div id="next-task"></div><div class="deadline-tile" id="next-deadline-tile" aria-hidden="true"><span id="next-deadline-month"></span><strong id="next-deadline-day"></strong><span id="next-deadline-dday"></span></div></div><p id="important-task" class="focus-important" hidden></p><button class="text-button" id="view-urgent" type="button">마감 임박 과제 보기 <span aria-hidden="true">↗</span></button></article>
     </section>
-    <section class="notice cloud-notice" id="cloud-notice" role="status" aria-live="polite" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><div class="notice-content"><p id="cloud-message"></p><div class="notice-actions"><button type="button" id="retry-cloud" hidden>연결 다시 확인</button></div></div></section>
-    <section class="notice legacy-notice" id="legacy-notice" hidden aria-label="기존 브라우저 과제 가져오기"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><div class="notice-content"><p id="legacy-message"></p><div class="notice-actions"><button type="button" id="import-legacy">현재 계정으로 가져오기</button><button type="button" id="download-legacy">기존 원본 내려받기</button></div></div></section>
     <div class="workspace">
-      <section class="panel form-panel" aria-labelledby="form-title">
+      <dialog id="task-dialog" class="panel form-panel" aria-labelledby="form-title" aria-describedby="form-description">
+        <button type="button" id="close-task-form" class="icon-button form-close" aria-label="과제 입력 닫기"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
         <h2 class="section-heading" id="form-title"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span id="form-title-text">새 과제 추가</span></h2>
         <p class="section-description" id="form-description">해야 할 일을 적고, 머릿속은 가볍게.</p>
         <hr class="form-divider">
+        <p class="auth-error" id="task-save-feedback" role="status" aria-live="polite" hidden></p>
         <form id="task-form" novalidate>
           <div class="form-grid">
             <div class="field"><label for="subject">과목명<span class="required" aria-hidden="true">*</span></label><input id="subject" name="subject" maxlength="40" required autocomplete="off" placeholder="예: 사용자 경험 디자인" aria-describedby="subject-error"><p class="field-error" id="subject-error" hidden></p></div>
@@ -593,21 +1080,25 @@
           <div class="form-actions"><button class="button primary" type="submit" id="submit-task"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span id="submit-label">과제 추가</span></button><button class="button" id="cancel-edit" type="button" hidden>취소</button></div>
           <p class="form-footnote">필수 항목: 과목명 · 과제 제목 · 마감일</p>
         </form>
-      </section>
+      </dialog>
       <section class="list-section" id="tasks" aria-labelledby="list-title">
-        <div class="list-heading"><h2 class="section-heading" id="list-title">나의 과제<span class="count-pill" id="list-count">0</span></h2><span class="list-total" id="list-total">전체 0개</span></div>
-        <div class="search-box"><label for="search" class="sr-only">과제 제목 또는 과목명 검색</label><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="과제 제목이나 과목명으로 검색" autocomplete="off" maxlength="200"><button class="search-clear" id="clear-search" type="button" aria-label="검색어 지우기" hidden><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div>
+        <div class="list-search-row"><div class="list-heading"><h2 class="section-heading" id="list-title">나의 과제<span class="count-pill" id="list-count">0</span></h2><span class="list-total sr-only" id="list-total">전체 0개</span></div>
+        <div class="search-box"><label for="search" class="sr-only">과제 제목 또는 과목명 검색</label><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><input id="search" type="search" placeholder="과제 또는 과목 검색" autocomplete="off" maxlength="200"><button class="search-clear" id="clear-search" type="button" aria-label="검색어 지우기" hidden><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button></div></div>
         <div class="list-toolbar"><div class="filters" role="group" aria-label="과제 상태 필터"><button class="filter" data-filter="all" type="button" aria-pressed="true">전체</button><button class="filter" data-filter="active" type="button" aria-pressed="false">진행 중</button><button class="filter" data-filter="completed" type="button" aria-pressed="false">완료</button><button class="filter" data-filter="urgent" type="button" aria-pressed="false">마감 임박</button></div><div class="sort-control"><label for="sort" class="sr-only">과제 정렬</label><select id="sort"><option value="due">마감일 가까운 순</option><option value="priority">중요도 높은 순</option><option value="recent">최근 등록 순</option></select></div></div>
+        <div class="list-columns" aria-hidden="true"><span>과제 / 과목</span><span>마감 / 상태</span><span>관리</span></div>
+        <div class="date-filter-line" id="date-filter-line" hidden><span id="date-filter-label"></span><button type="button" id="clear-date-filter">날짜 필터 해제</button></div>
         <ul id="task-list" class="task-list" aria-label="과제 목록"></ul>
         <div class="empty-state" id="empty-state">
           <svg class="empty-art" viewBox="0 0 140 120" fill="none" aria-hidden="true"><circle cx="70" cy="60" r="52" fill="#EEF2F7"/><rect x="37" y="22" width="66" height="78" rx="9" fill="white" stroke="#C8D4E2" stroke-width="2"/><path d="M52 45h36M52 59h36M52 73h24" stroke="#9BACBF" stroke-width="3" stroke-linecap="round"/><circle cx="101" cy="91" r="16" fill="#14233D"/><path d="M101 84v14M94 91h14" stroke="#DCC391" stroke-width="2.5" stroke-linecap="round"/></svg>
           <h3 id="empty-title">가벼운 시작, 첫 번째 과제</h3><p id="empty-description">머릿속에 담아 둔 과제를 적어 보세요.<br>마감일까지 함께 챙겨 드릴게요.</p><button class="button" id="empty-action" type="button"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span id="empty-action-label">첫 과제 작성하기</span></button>
         </div>
-        <p class="list-footnote"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>하나씩 체크하며, 나만의 흐름을 만들어 보세요.</p>
         <p id="result-announcement" class="sr-only" role="status" aria-live="polite"></p>
       </section>
     </div>
-    <section class="panel backup-panel" id="backup" aria-labelledby="backup-title"><div class="backup-intro"><span class="backup-icon"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></span><div><h2 class="backup-title" id="backup-title">소중한 기록, 안전하게 보관하세요</h2><p class="backup-description">로그인한 계정에 클라우드로 저장돼요. 기존 앱의 JSON 백업도 가져올 수 있어요.</p><div class="backup-mode"><label for="import-mode">백업 가져오기 방식</label><select id="import-mode"><option value="replace">전체 교체 · 최대 500개 문서 변경</option><option value="merge">누락된 과제 추가 · 기존 과제 유지</option></select></div></div></div><div class="backup-actions"><button class="button" id="export-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>백업 내보내기</button><button class="button" id="import-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>백업 가져오기</button><input id="import-file" type="file" accept=".json,application/json" hidden aria-label="JSON 백업 파일 선택"></div></section>
+    </div>
+    <div class="notice deadline-notice" id="deadline-notice" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><p id="deadline-message"></p></div>
+    <section class="notice legacy-notice" id="legacy-notice" hidden aria-label="기존 브라우저 과제 가져오기"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><div class="notice-content"><p id="legacy-message"></p><div class="notice-actions"><button type="button" id="import-legacy">현재 계정으로 가져오기</button><button type="button" id="download-legacy">기존 원본 내려받기</button></div></div></section>
+    <details class="panel backup-disclosure" id="backup"><summary><span><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg>기록 보관함 <span class="backup-summary-caption">JSON 백업 · 복원</span></span><span aria-hidden="true">＋</span></summary><section class="backup-panel" aria-labelledby="backup-title"><div class="backup-intro"><span class="backup-icon"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg></span><div><h2 class="backup-title" id="backup-title">소중한 기록, 안전하게 보관하세요</h2><p class="backup-description">로그인한 계정에 클라우드로 저장돼요. 기존 앱의 JSON 백업도 가져올 수 있어요.</p><div class="backup-mode"><label for="import-mode">백업 가져오기 방식</label><select id="import-mode"><option value="replace">전체 교체 · 최대 500개 문서 변경</option><option value="merge">누락된 과제 추가 · 기존 과제 유지</option></select></div></div></div><div class="backup-actions"><button class="button" id="export-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>백업 내보내기</button><button class="button" id="import-data" type="button"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>백업 가져오기</button><input id="import-file" type="file" accept=".json,application/json" hidden aria-label="JSON 백업 파일 선택"></div></section></details>
     </div>
   </main>
   <footer class="wrap footer"><p><span class="footer-brand">Campus Flow</span><span class="footer-dot">·</span>대학 생활을 조금 더 가볍게.</p><p>바이브코딩 특강 · 서연경 교수님</p></footer>
@@ -634,7 +1125,8 @@
       const PRIORITIES = { high: { label: '높음', rank: 0 }, normal: { label: '보통', rank: 1 }, low: { label: '낮음', rank: 2 } };
       const $ = id => document.getElementById(id);
       const form = $('task-form');
-      const state = { tasks: [], filter: 'all', query: '', sort: 'due', editingId: null, editingRevision: null,
+      const state = { tasks: [], filter: 'all', query: '', sort: 'due', dateFilter: null,
+        calendarMonth: localDateKey().slice(0, 7), calendarSelection: null, calendarFocus: localDateKey(), editingId: null, editingRevision: null,
         user: null, authReady: false, authMode: 'login', authBusy: false, loggingOut: false,
         ready: false, loaded: false, busy: false, preparing: false, progress: '', error: '', epoch: 0, watch: 0, snapshotVersion: 0,
         legacyRaw: null, legacyTasks: [], legacyError: '' };
@@ -709,10 +1201,14 @@
         $('storage-label').textContent = '연결 확인 필요'; $('storage-chip').classList.add('warning');
       }
       function clearSession() {
+        closeTaskForm();
+        $('backup').open = false;
+        $('summary-stats').open = false;
         state.epoch++; state.watch++; if (unsubscribe) unsubscribe(); unsubscribe = null; clearTimeout(readTimer);
         if ($('confirm-dialog').open) $('confirm-dialog').close('cancel');
         state.user = null; state.tasks = []; state.ready = false; state.loaded = false; state.busy = false; state.preparing = false;
-        state.progress = ''; state.error = ''; state.query = ''; state.filter = 'all'; state.sort = 'due';
+        state.progress = ''; state.error = ''; state.query = ''; state.filter = 'all'; state.sort = 'due'; state.dateFilter = null;
+        state.calendarMonth = localDateKey().slice(0, 7); state.calendarSelection = null; state.calendarFocus = localDateKey();
         state.legacyRaw = null; state.legacyTasks = []; state.legacyError = '';
         $('search').value = ''; $('sort').value = 'due'; $('auth-email').value = ''; $('auth-password').value = ''; $('auth-password-confirm').value = '';
         $('account').hidden = true; $('account-email').textContent = ''; $('account-email').title = '';
@@ -732,6 +1228,7 @@
         $('auth-loading').hidden = state.authReady && !state.loggingOut;
         $('auth-layout').hidden = !state.authReady || state.loggingOut;
         $('account').hidden = !signedIn;
+        $('header-completion').hidden = !signedIn;
         $('account-email').textContent = signedIn ? state.user.email || '로그인한 계정' : '';
         $('account-email').title = signedIn ? state.user.email || '' : '';
         cloudFeedback();
@@ -915,6 +1412,8 @@
           else if (!state.ready) message = state.loaded ? '서버 연결을 다시 확인하고 있어요. 마지막으로 확인한 과제를 표시해요.' : '내 계정의 과제를 안전하게 불러오고 있어요.';
         }
         $('cloud-notice').hidden = !message; $('cloud-message').textContent = message;
+        $('task-save-feedback').hidden = !state.error && !state.busy;
+        $('task-save-feedback').textContent = state.error || (state.busy ? state.progress || '클라우드에서 저장을 확인하고 있어요.' : '');
         $('retry-cloud').hidden = !state.user || state.busy || (state.ready && !state.error);
         $('empty-state').hidden = !state.loaded || visibleTasks().length > 0;
         syncControls();
@@ -965,8 +1464,8 @@
           }
         }, { maxAttempts: 3 }), editing ? '과제 수정을 클라우드에 저장했어요.' : '새 과제를 클라우드에 저장했어요.');
         if (succeeded && isCurrent(ticket)) {
-          if (!editing) { state.filter = 'all'; state.query = ''; $('search').value = ''; }
-          resetForm(true); renderList(); cloudFeedback();
+          if (!editing) { state.filter = 'all'; state.query = ''; state.dateFilter = null; state.calendarSelection = null; $('search').value = ''; }
+          resetForm(); closeTaskForm(); renderCalendar(); renderList(); cloudFeedback();
         }
       }
       async function toggleTask(event) {
@@ -1029,11 +1528,33 @@
         const stats = calculateStats(state.tasks);
         for (const key of ['total', 'completed', 'remaining', 'urgent']) $(`stat-${key}`).textContent = stats[key].toLocaleString('ko-KR');
         $('progress-number').textContent = `${stats.percent}%`;
+        $('header-rate').textContent = `${stats.percent}%`;
+        $('quick-today').textContent = `${state.tasks.filter(task => !task.completed && task.dueDate === localDateKey()).length}개`;
+        $('quick-urgent').textContent = `${stats.urgent}개`;
+        $('quick-active').textContent = `${stats.remaining}개`;
+        $('progress-number').style.setProperty('--completion', stats.percent);
         $('progress-fill').style.width = `${stats.percent}%`;
         $('progress').setAttribute('aria-valuenow', stats.percent);
         $('progress-summary').textContent = `전체 ${stats.total}개 중 ${stats.completed}개 완료`;
         $('progress-caption').textContent = stats.total && stats.completed === stats.total ? '오늘의 노력이 차곡차곡 쌓였어요.' : '작은 시작이 큰 변화를 만들어요.';
         const active = state.tasks.filter(task => !task.completed);
+        renderCalendar();
+        renderCompletionChart();
+        const next = [...active].sort((a, b) => a.dueDate.localeCompare(b.dueDate) || PRIORITIES[a.priority].rank - PRIORITIES[b.priority].rank)[0];
+        $('next-task').replaceChildren();
+        if (next) {
+          $('next-task').append(element('p', 'next-subject', next.subject), element('h3', 'next-title', next.title), element('p', 'next-date', `${dateLabel(next.dueDate)} · ${deadlineState(next).text}`));
+          $('next-task').append(element('span', `priority-tag ${next.priority}`, `중요도 ${PRIORITIES[next.priority].label}`));
+          $('next-deadline-month').textContent = `${Number(next.dueDate.slice(5, 7))}월`;
+          $('next-deadline-day').textContent = Number(next.dueDate.slice(8));
+          $('next-deadline-dday').textContent = deadlineState(next).text;
+        } else {
+          $('next-task').append(element('p', 'next-subject', '여유로운 나의 흐름'), element('h3', 'next-title', stats.total ? '모두 마쳤어요.' : '첫 과제를 기다려요.'), element('p', 'next-date', stats.total ? '완료한 만큼, 잠깐 쉬어가요.' : '새 과제를 추가해 일정을 시작하세요.'));
+        }
+        $('next-deadline-tile').hidden = !next;
+        const important = [...active].filter(task => task.priority === 'high' && task.id !== next?.id).sort((a, b) => a.dueDate.localeCompare(b.dueDate))[0];
+        $('important-task').hidden = !important;
+        $('important-task').textContent = important ? `중요도 높음 · ${important.title} (${deadlineState(important).text})` : '';
         for (const priority of ['high', 'normal', 'low']) {
           const count = active.filter(task => task.priority === priority).length;
           $(`priority-count-${priority}`).textContent = count.toLocaleString('ko-KR');
@@ -1054,9 +1575,138 @@
         $('today-label').dateTime = localDateKey();
       }
 
+      // 기존 구독 결과만 집계합니다. 차트용 서버 요청이나 저장 필드는 없습니다.
+      function renderCalendar() {
+        const focusedDate = document.activeElement?.dataset?.calendarDate;
+        const [year, month] = state.calendarMonth.split('-').map(Number);
+        const start = new Date(Date.UTC(year, month - 1, 1));
+        const firstDay = Math.floor(start.getTime() / 86400000) - start.getUTCDay();
+        const today = localDateKey();
+        const byDate = new Map();
+        for (const task of state.tasks) {
+          const counts = byDate.get(task.dueDate) || { active: 0, done: 0 };
+          counts[task.completed ? 'done' : 'active']++; byDate.set(task.dueDate, counts);
+        }
+        $('calendar-month').textContent = `${year}년 ${month}월`;
+        $('calendar-grid').setAttribute('aria-label', `${year}년 ${month}월 마감일`);
+        $('calendar-prev').disabled = state.calendarMonth === '1900-01';
+        $('calendar-next').disabled = state.calendarMonth === '9999-12';
+        const focusDate = state.calendarFocus?.startsWith(state.calendarMonth) ? state.calendarFocus : `${state.calendarMonth}-01`;
+        const cells = Array.from({ length: 42 }, (_, index) => {
+          const key = new Date((firstDay + index) * 86400000).toISOString().slice(0, 10);
+          const day = Number(key.slice(8)); const counts = byDate.get(key) || { active: 0, done: 0 };
+          const total = counts.active + counts.done;
+          const button = element('button', `calendar-day${key.startsWith(state.calendarMonth) ? '' : ' outside-month'}${key === today ? ' is-today' : ''}${key === state.calendarSelection ? ' is-selected' : ''}${total ? ' has-tasks' : ''}`);
+          button.type = 'button'; button.dataset.calendarDate = key; button.tabIndex = key === focusDate ? 0 : -1;
+          button.disabled = !validDate(key);
+          button.setAttribute('aria-label', validDate(key) ? `${key.replace(/^(\d+)-(\d+)-(\d+)$/, '$1년 $2월 $3일')}, 미완료 ${counts.active}개, 완료 ${counts.done}개` : '지원 범위 밖 날짜');
+          button.setAttribute('aria-pressed', String(key === state.calendarSelection));
+          if (key === today) button.setAttribute('aria-current', 'date');
+          const number = element('span', 'calendar-day-number', validDate(key) ? day : ''); number.setAttribute('aria-hidden', 'true'); button.append(number);
+          const marks = element('span', 'calendar-marks'); marks.setAttribute('aria-hidden', 'true');
+          if (counts.active) marks.append(element('i', 'calendar-dot'));
+          if (counts.done) marks.append(element('i', 'calendar-dot done'));
+          if (total) marks.append(element('span', 'calendar-day-count', total > 99 ? '99+' : total));
+          button.append(marks); return button;
+        });
+        $('calendar-grid').replaceChildren(...cells);
+        const selected = state.calendarSelection; const counts = byDate.get(selected) || { active: 0, done: 0 };
+        $('calendar-selection-title').textContent = selected ? `${dateLabel(selected)} · 과제 ${counts.active + counts.done}개` : '날짜를 선택해 보세요.';
+        $('calendar-selection-description').textContent = selected ? '선택한 날짜의 과제를 목록에서 확인하세요.' : '작은 점은 마감 과제예요. 날짜를 누르면 목록과 연결돼요.';
+        $('week-total').textContent = state.tasks.filter(task => !task.completed && daysUntil(task.dueDate) >= 0 && daysUntil(task.dueDate) <= 6).length;
+        if (focusedDate) $('calendar-grid').querySelector(`[data-calendar-date="${focusedDate}"]`)?.focus({ preventScroll: true });
+      }
+      function selectCalendarDate(key, focus = false) {
+        if (!validDate(key)) return;
+        state.calendarMonth = key.slice(0, 7); state.calendarSelection = key; state.calendarFocus = key;
+        state.dateFilter = key; state.filter = 'all'; state.query = ''; $('search').value = '';
+        renderCalendar(); renderList(); cloudFeedback();
+        if (focus) $('calendar-grid').querySelector(`[data-calendar-date="${key}"]`)?.focus({ preventScroll: true });
+      }
+      function moveCalendarMonth(offset, focus = false) {
+        const [year, month] = state.calendarMonth.split('-').map(Number);
+        const serial = year * 12 + month - 1 + offset;
+        if (serial < 1900 * 12 || serial >= 10000 * 12) return;
+        state.calendarMonth = `${Math.floor(serial / 12)}-${String(serial % 12 + 1).padStart(2, '0')}`;
+        state.calendarFocus = `${state.calendarMonth}-01`; state.calendarSelection = null; state.dateFilter = null;
+        renderCalendar(); renderList(); cloudFeedback();
+        if (focus) $('calendar-grid').querySelector(`[data-calendar-date="${state.calendarFocus}"]`)?.focus({ preventScroll: true });
+      }
+
+      function chartSVG(tag, attributes = {}) {
+        const node = document.createElementNS('http://www.w3.org/2000/svg', tag);
+        for (const [name, value] of Object.entries(attributes)) node.setAttribute(name, String(value));
+        return node;
+      }
+      // Daily counts describe currently completed tasks, not an immutable activity log.
+      // Interpolation stays between real observations; no decorative/fabricated points.
+      function renderCompletionChart() {
+        const completed = state.tasks.filter(task => task.completed);
+        const records = completed.filter(task => Number.isSafeInteger(task.completedAt));
+        const chart = $('completion-chart'); chart.replaceChildren();
+        $('completion-data').replaceChildren();
+        if (!records.length) {
+          chart.dataset.mode = 'status';
+          $('completion-title').textContent = '과제 완료 현황'; $('completion-range').textContent = `전체 ${state.tasks.length}개`;
+          const counts = [['완료', completed.length, 'done'], ['미완료', state.tasks.length - completed.length, 'active']];
+          chart.setAttribute('aria-label', counts.map(([label, count]) => `${label} ${count}개`).join(', '));
+          const bars = element('div', 'completion-status');
+          for (const [label, count, kind] of counts) {
+            const row = element('div', `completion-status-row ${kind}`);
+            const heading = element('div', 'completion-status-heading'); heading.append(element('span', '', label), element('strong', '', `${count}개`));
+            const track = element('div', 'completion-status-track'), fill = element('span');
+            fill.style.width = `${state.tasks.length ? count / state.tasks.length * 100 : 0}%`; track.append(fill);
+            row.append(heading, track); bars.append(row);
+            $('completion-data').append(element('li', '', `${label} ${count}개`));
+          }
+          chart.append(bars);
+          $('completion-note').textContent = state.tasks.length ? '완료 날짜 기록이 없어 현재 상태를 표시해요. 첫 완료를 체크해 보세요.' : '아직 과제가 없어요. 과제를 추가하고 첫 완료를 기록해 보세요.';
+          return;
+        }
+        chart.dataset.mode = 'trend';
+        const today = dayNumber(localDateKey());
+        const days = Array.from({ length: 7 }, (_, i) => {
+          const key = new Date((today - 6 + i) * 86400000).toISOString().slice(0, 10);
+          return { key, label: `${Number(key.slice(5, 7))}/${Number(key.slice(8))}`, count: records.filter(task => localDateKey(new Date(task.completedAt)) === key).length };
+        });
+        const total = days.reduce((sum, day) => sum + day.count, 0);
+        $('completion-title').textContent = '과제 완료 추이'; $('completion-range').textContent = `7일 · ${total}개 완료`;
+        chart.setAttribute('aria-label', `최근 7일의 현재 완료 과제. ${days.map(day => `${day.label} ${day.count}개`).join(', ')}`);
+        $('completion-data').append(...days.map(day => element('li', '', `${day.key}: ${day.count}개`)));
+        const top = Math.max(2, Math.ceil(Math.max(...days.map(day => day.count)) / 2) * 2);
+        const svg = chartSVG('svg', { viewBox: '0 0 640 150', preserveAspectRatio: 'none', 'aria-hidden': 'true' });
+        const defs = chartSVG('defs'), gradient = chartSVG('linearGradient', { id: 'completion-area-gradient', x1: '0', x2: '0', y1: '0', y2: '1' });
+        gradient.append(chartSVG('stop', { offset: '0%', 'stop-color': '#8ea5f1', 'stop-opacity': '.48' }), chartSVG('stop', { offset: '100%', 'stop-color': '#bfcaf4', 'stop-opacity': '.05' }));
+        defs.append(gradient); svg.append(defs);
+        const left = 30, right = 626, bottom = 140, height = 128;
+        for (const count of [0, top / 2, top]) {
+          const y = bottom - count / top * height;
+          svg.append(chartSVG('line', { x1: left, x2: right, y1: y, y2: y, stroke: '#cfd3e2', 'stroke-width': 1, 'stroke-dasharray': count ? '1 7' : 'none' }));
+        }
+        const points = days.map((day, index) => ({ x: left + index / 6 * (right - left), y: bottom - day.count / top * height, ...day }));
+        let line = `M ${points[0].x} ${points[0].y}`;
+        for (let i = 1; i < points.length; i++) {
+          const previous = points[i - 1], point = points[i], mid = (previous.x + point.x) / 2;
+          line += ` C ${mid} ${previous.y}, ${mid} ${point.y}, ${point.x} ${point.y}`;
+        }
+        svg.append(chartSVG('path', { d: `${line} L ${right} ${bottom} L ${left} ${bottom} Z`, fill: 'url(#completion-area-gradient)' }));
+        svg.append(chartSVG('path', { d: line, fill: 'none', stroke: '#7c96e3', 'stroke-width': 2.3, 'vector-effect': 'non-scaling-stroke' }));
+        for (const point of points) {
+          const circle = chartSVG('circle', { cx: point.x, cy: point.y, r: 3.2, fill: '#859de8' });
+          const title = chartSVG('title'); title.textContent = `${point.key}: ${point.count}개 완료`; circle.append(title); svg.append(circle);
+        }
+        const plot = element('div', 'completion-plot'), axis = element('div', 'completion-y-axis'); axis.setAttribute('aria-hidden', 'true');
+        axis.append(...[top, top / 2, 0].map(count => element('span', '', count)));
+        plot.append(svg, axis);
+        const labels = element('div', 'completion-x-axis'); labels.setAttribute('aria-hidden', 'true'); labels.append(...days.map(day => element('span', '', day.label)));
+        chart.append(plot, labels);
+        $('completion-note').textContent = total ? '현재 완료된 과제의 완료일 기준 · 삭제·완료 취소 시 집계가 바뀌어요.' : '최근 7일 안에 완료된 과제가 없어요. 이전 완료 과제는 그대로 보관돼요.';
+      }
+
       function visibleTasks() {
         const query = state.query.trim().normalize('NFC').toLocaleLowerCase('ko-KR');
         return state.tasks.filter(task => {
+          if (state.dateFilter && task.dueDate !== state.dateFilter) return false;
           if (state.filter === 'active' && task.completed) return false;
           if (state.filter === 'completed' && !task.completed) return false;
           if (state.filter === 'urgent' && !isUrgent(task)) return false;
@@ -1081,21 +1731,23 @@
         checkbox.setAttribute('aria-label', `${task.title} ${task.completed ? '완료 취소' : '완료하기'}`);
         completeLabel.append(checkbox);
         titleRow.append(completeLabel, element('h3', 'task-title', task.title));
-        const bottom = element('div', 'task-bottom');
         const meta = element('div', 'task-meta');
         const time = element('time', 'task-date'); time.dateTime = task.dueDate;
         time.append(icon('calendar'), document.createTextNode(dateLabel(task.dueDate)));
         meta.append(time);
-        if (!task.completed) meta.append(element('span', 'badge', '진행 중'));
         meta.append(element('span', `badge ${deadline.kind}`, deadline.text));
         const actions = element('div', 'task-actions');
         for (const [action, glyph, label] of [['edit', 'edit', '수정'], ['delete', 'trash', '삭제']]) {
           const button = element('button', `icon-button ${action}`);
           button.type = 'button'; button.dataset.action = action; button.setAttribute('aria-label', `${task.title} ${label}`); button.title = label; button.append(icon(glyph)); actions.append(button);
         }
-        bottom.append(meta, actions); card.append(top, titleRow);
-        if (task.note) card.append(element('p', 'task-note', task.note));
-        card.append(bottom); return card;
+        card.append(titleRow, top, meta, actions);
+        if (task.note) {
+          const note = element('details', 'task-note');
+          note.append(element('summary', '', '메모 보기'), element('p', '', task.note));
+          card.append(note);
+        }
+        return card;
       }
 
       function renderList() {
@@ -1103,10 +1755,14 @@
         const focusId = focused.closest?.('[data-id]')?.dataset.id;
         const focusAction = focused.dataset?.action;
         const focusIndex = [...$('task-list').children].findIndex(card => card.dataset.id === focusId);
+        const openNotes = new Set([...$('task-list').querySelectorAll('.task-note[open]')].map(note => note.closest('[data-id]').dataset.id));
         const tasks = visibleTasks();
         $('task-list').replaceChildren(...tasks.map(taskCard));
+        for (const note of $('task-list').querySelectorAll('.task-note')) note.open = openNotes.has(note.closest('[data-id]').dataset.id);
         $('list-count').textContent = tasks.length;
         $('list-total').textContent = `전체 ${state.tasks.length}개`;
+        $('date-filter-line').hidden = !state.dateFilter;
+        $('date-filter-label').textContent = state.dateFilter ? `${dateLabel(state.dateFilter)} 마감 과제` : '';
         $('clear-search').hidden = !state.query;
         document.querySelectorAll('[data-filter]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === state.filter)));
         $('empty-state').hidden = tasks.length > 0;
@@ -1149,6 +1805,22 @@
         if (focus) $('subject').focus();
       }
 
+      let taskFormOpener;
+      function openTaskForm() {
+        if (!state.user) return;
+        taskFormOpener = document.activeElement;
+        if (!$('task-dialog').open) $('task-dialog').showModal();
+        document.querySelectorAll('.rail-link').forEach(link => {
+          const current = link.getAttribute('href') === '#task-form';
+          link.classList.toggle('is-current', current);
+          if (current) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
+        });
+        $('subject').focus();
+      }
+      function closeTaskForm() {
+        if ($('task-dialog').open) $('task-dialog').close();
+      }
+
 
       function hasFormDraft() {
         if (!state.editingId) return Boolean($('subject').value || $('title').value || $('due-date').value || $('note').value || form.elements.priority.value !== 'normal');
@@ -1159,7 +1831,7 @@
       async function editTask(task) {
         if (!canWrite()) return;
         const ticket = session();
-        if (state.editingId === task.id) { $('subject').focus(); return; }
+        if (state.editingId === task.id) { openTaskForm(); return; }
         if (hasFormDraft() && !await confirmAction('작성 중인 내용을 바꿀까요?', '아직 저장하지 않은 입력 내용이 사라지고 선택한 과제를 수정하게 돼요.', '수정하기')) return;
         if (!isCurrent(ticket) || !canWrite()) return;
         state.editingId = task.id; state.editingRevision = task.revision; clearErrors();
@@ -1168,7 +1840,7 @@
         $('note-counter').textContent = `${task.note.length.toLocaleString('ko-KR')} / 2,000`;
         $('form-title-text').textContent = '과제 수정'; $('submit-label').textContent = '수정 저장';
         $('form-description').textContent = '변경한 내용은 수정 저장을 눌러 반영하세요.'; $('cancel-edit').hidden = false;
-        $('subject').focus();
+        openTaskForm();
       }
 
 
@@ -1286,7 +1958,7 @@
             } catch (error) { throw appError(`${imported}개를 저장한 뒤 가져오기를 멈췄어요. ${errorMessage(error)} 같은 파일로 다시 가져오면 이미 있는 ID는 건너뛰어요.`); }
           }
         }, () => mode === 'replace' ? `${imported}개의 과제로 교체했어요.` : `${imported}개를 추가했어요. 이미 있는 과제는 그대로 유지했어요.`);
-        if (succeeded && isCurrent(ticket)) { state.query = ''; state.filter = 'all'; $('search').value = ''; resetForm(); render(); }
+        if (succeeded && isCurrent(ticket)) { state.query = ''; state.filter = 'all'; state.dateFilter = null; state.calendarSelection = null; $('search').value = ''; resetForm(); render(); }
       }
       async function importBackup(event) {
         const file = event.target.files[0]; event.target.value = '';
@@ -1320,6 +1992,41 @@
       $('logout').addEventListener('click', logout);
       $('restart-app').addEventListener('click', () => location.reload());
       $('retry-cloud').addEventListener('click', () => { if (!state.busy) subscribeTasks(); });
+      document.querySelectorAll('[data-open-task]').forEach(button => button.addEventListener('click', openTaskForm));
+      $('close-task-form').addEventListener('click', closeTaskForm);
+      $('calendar-prev').addEventListener('click', () => moveCalendarMonth(-1));
+      $('calendar-next').addEventListener('click', () => moveCalendarMonth(1));
+      $('calendar-today').addEventListener('click', () => selectCalendarDate(localDateKey(), true));
+      $('calendar-grid').addEventListener('click', event => {
+        const button = event.target.closest('[data-calendar-date]');
+        if (button && !button.disabled) selectCalendarDate(button.dataset.calendarDate);
+      });
+      $('calendar-grid').addEventListener('focusin', event => {
+        const key = event.target.dataset.calendarDate; if (!key) return;
+        state.calendarFocus = key;
+        $('calendar-grid').querySelectorAll('[data-calendar-date]').forEach(button => { button.tabIndex = button.dataset.calendarDate === key ? 0 : -1; });
+      });
+      $('calendar-grid').addEventListener('keydown', event => {
+        const key = event.target.dataset.calendarDate; if (!key) return;
+        if (['PageUp', 'PageDown'].includes(event.key)) { event.preventDefault(); moveCalendarMonth(event.key === 'PageUp' ? -1 : 1, true); return; }
+        const weekday = new Date(dayNumber(key) * 86400000).getUTCDay();
+        const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7, Home: -weekday, End: 6 - weekday };
+        if (!Object.hasOwn(offsets, event.key)) return;
+        event.preventDefault();
+        const next = new Date((dayNumber(key) + offsets[event.key]) * 86400000).toISOString().slice(0, 10);
+        if (!validDate(next)) return;
+        if (next.slice(0, 7) !== state.calendarMonth) {
+          state.calendarMonth = next.slice(0, 7); state.calendarSelection = null; state.dateFilter = null; renderList(); cloudFeedback();
+        }
+        state.calendarFocus = next; renderCalendar();
+        $('calendar-grid').querySelector(`[data-calendar-date="${next}"]`)?.focus({ preventScroll: true });
+      });
+      $('task-dialog').addEventListener('close', () => {
+        if (taskFormOpener?.isConnected && !taskFormOpener.closest('[hidden]')) taskFormOpener.focus();
+        if (location.hash === '#task-form') { history.replaceState(null, '', '#tasks'); syncRail(); }
+        syncRail();
+      });
+      $('view-urgent').addEventListener('click', () => { state.filter = 'urgent'; state.dateFilter = null; state.calendarSelection = null; renderCalendar(); renderList(); cloudFeedback(); location.hash = '#tasks'; $('search').focus({ preventScroll: true }); });
       form.addEventListener('submit', submitTask);
       $('cancel-edit').addEventListener('click', () => { resetForm(true); notify('수정을 취소했어요. 원래 과제는 유지돼요.'); });
       $('note').addEventListener('input', () => { $('note-counter').textContent = `${$('note').value.length.toLocaleString('ko-KR')} / 2,000`; });
@@ -1328,18 +2035,27 @@
       $('task-list').addEventListener('change', toggleTask);
       $('search').addEventListener('input', () => { state.query = $('search').value; renderList(); cloudFeedback(); });
       $('clear-search').addEventListener('click', () => { state.query = ''; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); });
-      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; renderList(); cloudFeedback(); }));
+      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; state.dateFilter = null; state.calendarSelection = null; renderCalendar(); renderList(); cloudFeedback(); }));
+      document.querySelectorAll('[data-quick]').forEach(button => button.addEventListener('click', () => {
+        state.query = ''; $('search').value = '';
+        state.dateFilter = button.dataset.quick === 'today' ? localDateKey() : null;
+        state.calendarSelection = state.dateFilter;
+        if (state.dateFilter) { state.calendarMonth = state.dateFilter.slice(0, 7); state.calendarFocus = state.dateFilter; }
+        state.filter = button.dataset.quick === 'urgent' ? 'urgent' : 'active';
+        renderCalendar(); renderList(); cloudFeedback(); $('search').focus({ preventScroll: true });
+      }));
       $('sort').addEventListener('change', () => { state.sort = $('sort').value; renderList(); cloudFeedback(); });
+      $('clear-date-filter').addEventListener('click', () => { state.dateFilter = null; state.calendarSelection = null; renderCalendar(); renderList(); cloudFeedback(); $('search').focus(); });
       $('empty-action').addEventListener('click', () => {
-        if (!state.tasks.length) $('subject').focus();
-        else { state.query = ''; state.filter = 'all'; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); }
+        if (!state.tasks.length) openTaskForm();
+        else { state.query = ''; state.filter = 'all'; state.dateFilter = null; state.calendarSelection = null; $('search').value = ''; renderCalendar(); renderList(); cloudFeedback(); $('search').focus(); }
       });
       $('export-data').addEventListener('click', exportBackup);
       $('import-data').addEventListener('click', () => { if (canWrite()) $('import-file').click(); });
       $('import-file').addEventListener('change', importBackup);
       // 앵커 이동 후 현재 메뉴를 키보드·스크린리더 사용자에게 함께 알려 줍니다.
       function syncRail() {
-        const target = ['#overview', '#tasks', '#task-form', '#backup'].includes(location.hash) ? location.hash : '#overview';
+        const target = ['#overview', '#tasks', '#task-form', '#calendar', '#backup'].includes(location.hash) ? location.hash : '#overview';
         document.querySelectorAll('.rail-link').forEach(link => {
           const current = link.getAttribute('href') === target;
           link.classList.toggle('is-current', current);
@@ -1348,6 +2064,8 @@
         });
       }
       window.addEventListener('hashchange', syncRail);
+      document.querySelector('a[href="#task-form"]').addEventListener('click', event => { event.preventDefault(); openTaskForm(); });
+      document.querySelector('a[href="#backup"]').addEventListener('click', () => { $('backup').open = true; });
       syncRail();
       $('import-legacy').addEventListener('click', importLegacy);
       $('download-legacy').addEventListener('click', () => {

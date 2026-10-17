@@ -1,0 +1,188 @@
+{
+  "environment": "Local mock Firebase + real Chromium, Asia/Seoul",
+  "passed": 43,
+  "failed": 0,
+  "results": [
+    {
+      "name": "인증 확인 전 대시보드 숨김 / 로그인 화면",
+      "status": "passed"
+    },
+    {
+      "name": "잘못된 비밀번호 오류",
+      "status": "passed"
+    },
+    {
+      "name": "회원가입 확인 불일치 검증",
+      "status": "passed"
+    },
+    {
+      "name": "모의 회원가입 / 실시간 초기 과제",
+      "status": "passed"
+    },
+    {
+      "name": "실제 과제 통계 / 진행률 / 중요도 / 7일 집계",
+      "status": "passed"
+    },
+    {
+      "name": "필수 입력 검증",
+      "status": "passed"
+    },
+    {
+      "name": "모달 키보드 포커스 제한 / Escape / 초안 보존",
+      "status": "passed"
+    },
+    {
+      "name": "과제 생성 / XSS 문자열을 텍스트로 표시",
+      "status": "passed"
+    },
+    {
+      "name": "상단 완료율과 오늘/임박/진행 중 실제 바로가기",
+      "status": "passed"
+    },
+    {
+      "name": "메모 펼치기 / 실제 내용",
+      "status": "passed"
+    },
+    {
+      "name": "완료 / 차트와 메모 열림 동시 갱신",
+      "status": "passed"
+    },
+    {
+      "name": "완료 취소",
+      "status": "passed"
+    },
+    {
+      "name": "수정 폼 / 취소",
+      "status": "passed"
+    },
+    {
+      "name": "과제 수정 저장",
+      "status": "passed"
+    },
+    {
+      "name": "모의 서버 스냅샷 변경 반영 / 단일 구독",
+      "status": "passed"
+    },
+    {
+      "name": "검색 / 검색 해제",
+      "status": "passed"
+    },
+    {
+      "name": "진행 중 / 완료 / 마감 임박 필터",
+      "status": "passed"
+    },
+    {
+      "name": "중요도 / 최근 / 마감일 정렬",
+      "status": "passed"
+    },
+    {
+      "name": "삭제 확인 취소 / 삭제",
+      "status": "passed"
+    },
+    {
+      "name": "저장 실패 시 입력과 모달 내부 오류 보존",
+      "status": "passed"
+    },
+    {
+      "name": "실패 후 재시도",
+      "status": "passed"
+    },
+    {
+      "name": "사이드바 백업 열기 / JSON 다운로드",
+      "status": "passed"
+    },
+    {
+      "name": "JSON 병합 복원 / 기존 기록 보존",
+      "status": "passed"
+    },
+    {
+      "name": "같은 백업 재가져오기 중복 방지",
+      "status": "passed"
+    },
+    {
+      "name": "잘못된 JSON 복원 거부 / 원본 보존",
+      "status": "passed"
+    },
+    {
+      "name": "JSON 전체 교체 취소 후 확인 / 원본 백업으로 복원",
+      "status": "passed"
+    },
+    {
+      "name": "오프라인 오류 표시 / 쓰기 차단 / 재연결",
+      "status": "passed"
+    },
+    {
+      "name": "로그아웃 시 과제 / 폼 / 모달 / 구독 초기화",
+      "status": "passed"
+    },
+    {
+      "name": "다른 계정 데이터 격리 / 모의 로그인",
+      "status": "passed"
+    },
+    {
+      "name": "기존 계정 재로그인 / 기존 데이터 유지",
+      "status": "passed"
+    },
+    {
+      "name": "기존 브라우저 기록 명시적 가져오기 / 원본 보존",
+      "status": "passed"
+    },
+    {
+      "name": "긴 과목 / 제목 / 메모 / 360px 입력",
+      "status": "passed"
+    },
+    {
+      "name": "반응형 360px / 넘침 / 폼 / 주요 기능",
+      "status": "passed"
+    },
+    {
+      "name": "반응형 390px / 넘침 / 폼 / 주요 기능",
+      "status": "passed"
+    },
+    {
+      "name": "반응형 768px / 넘침 / 폼 / 주요 기능",
+      "status": "passed"
+    },
+    {
+      "name": "반응형 1280px / 넘침 / 폼 / 주요 기능",
+      "status": "passed"
+    },
+    {
+      "name": "반응형 1440px / 넘침 / 폼 / 주요 기능",
+      "status": "passed"
+    },
+    {
+      "name": "모션 감소 / 키보드 focus 표시 / DOM ID 중복 없음",
+      "status": "passed"
+    },
+    {
+      "name": "내비게이션 현재 위치 / 마감 바로 보기",
+      "status": "passed"
+    },
+    {
+      "name": "1440×900 Taskly 42:58 배치 / 상하 카드 정렬",
+      "status": "passed"
+    },
+    {
+      "name": "390px 모바일 캡처 / 전체 과제 기능",
+      "status": "passed"
+    },
+    {
+      "name": "빈 대시보드 / 차트 0 / 첫 과제 폼",
+      "status": "passed"
+    },
+    {
+      "name": "브라우저 콘솔 / 런타임 오류 / 외부 Firebase 요청 없음",
+      "status": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "consoleErrors": [],
+  "externalRequests": [],
+  "unverified": [
+    "Live Firebase Authentication/Firestore",
+    "Published Firestore security rules",
+    "Real authentication persistence across browser restarts",
+    "Production Hosting"
+  ]
+}
