@@ -846,6 +846,46 @@
       .next-title { font-size: 22px; max-width: 100%; }
       .chart-summary strong { font-size: 32px; }
     }
+    .calendar-nav { display: flex; gap: 4px; }
+    .calendar-nav .icon-button { border: 0; border-radius: 50%; background: #fff9; font-size: 25px; width: 44px; height: 44px; }
+    .calendar-month-row { display: flex; justify-content: space-between; align-items: center; min-height: 32px; margin: 3px 0 7px; }
+    .calendar-month-row h3 { font-size: 16px; font-weight: 550; }
+    .calendar-today { border: 0; border-radius: 100px; background: #e9ecf7; min-height: 32px; padding: 5px 13px; font-size: 12px; color: #455781; }
+    .calendar-weekdays { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); text-align: center; min-height: 22px; color: var(--muted); font-size: 11px; }
+    .calendar-weekdays > :first-child { color: #9a5e72; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-template-rows: repeat(6, 32px); gap: 1px; }
+    .calendar-day { border: 0; border-radius: 10px; padding: 2px; background: transparent; color: var(--ink); min-width: 0; min-height: 32px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px; font-size: 13px; line-height: 1; }
+    .calendar-day:hover { background: #e7ebf8; }
+    .calendar-day.outside-month { color: #8b8e9d; background: transparent; }
+    .calendar-day.is-today { color: #3f5caa; background: #e1e7fb; }
+    .calendar-day.is-selected { box-shadow: inset 0 0 0 1.5px #7892de; background: #e8edfc; }
+    .calendar-day:focus-visible { outline: 2px solid #4868bf; outline-offset: -2px; }
+    .calendar-day.has-tasks .calendar-day-number { font-weight: 650; }
+    .calendar-marks { display: flex; justify-content: center; align-items: center; gap: 3px; min-height: 8px; font-size: 9px; color: #586b9d; }
+    .calendar-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: #7e97df; }
+    .calendar-dot.done { background: #65a48c; }
+    .calendar-selection { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 8px; display: flex; flex-direction: column; gap: 2px; }
+    .calendar-selection strong { font-size: 12px; font-weight: 550; }
+    .calendar-selection > span { font-size: 11px; color: var(--muted); }
+    .calendar-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; font-size: 10px; color: var(--muted); }
+    .calendar-legend { display: flex; gap: 10px; }
+    .calendar-legend > span { display: flex; align-items: center; gap: 4px; }
+    @media (min-width: 851px) {
+      .bento-board { grid-template-rows: 450px minmax(270px, auto) auto; }
+      .list-section { height: 450px; }
+    }
+    @media (max-width: 850px) {
+      .calendar-grid { grid-template-rows: repeat(6, 40px); }
+      .calendar-day { min-height: 40px; }
+    }
+    @media (max-width: 560px) {
+      .calendar-grid { grid-template-rows: repeat(6, 44px); }
+      .calendar-day { min-height: 44px; font-size: 14px; }
+      .calendar-today { min-height: 44px; }
+      .calendar-selection > span { font-size: 12px; }
+      .calendar-footer { font-size: 10px; flex-wrap: wrap; }
+      .date-filter-line button { min-height: 44px; }
+    }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
   </style>
 </head>
@@ -917,6 +957,7 @@
       <a class="rail-link is-current" href="#overview" aria-label="대시보드 현황" title="대시보드 현황"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg><span>현황</span></a>
       <a class="rail-link" href="#tasks" aria-label="과제 목록" title="과제 목록"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>과제</span></a>
       <a class="rail-link" href="#task-form" aria-label="새 과제 작성" title="새 과제 작성"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg><span>추가</span></a>
+      <a class="rail-link" href="#calendar" aria-label="월간 달력" title="월간 달력"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg><span>달력</span></a>
       <a class="rail-link" href="#backup" aria-label="백업과 복원" title="백업과 복원"><svg class="icon" aria-hidden="true"><use href="#i-folder"/></svg><span>백업</span></a>
     </nav>
     <div class="dashboard-content">
@@ -935,11 +976,14 @@
     <section class="notice cloud-notice" id="cloud-notice" role="status" aria-live="polite" hidden><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg><div class="notice-content"><p id="cloud-message"></p><div class="notice-actions"><button type="button" id="retry-cloud" hidden>연결 다시 확인</button></div></div></section>
     <div class="bento-board" id="overview">
     <section class="overview-section" aria-label="학습 현황">
-      <article class="panel deadline-panel" aria-labelledby="deadline-chart-title">
-        <div class="card-heading"><div><p class="card-kicker">이번 주의 일정</p><h2 id="deadline-chart-title">마감 일정</h2></div><span class="subtle-chip">7일</span></div>
-        <div class="chart-summary"><strong id="week-total">0</strong><span>개의 과제가 기다려요</span></div>
-        <div id="deadline-chart" class="deadline-chart" role="img" aria-label="앞으로 7일간의 미완료 과제 마감 분포"></div>
-        <p class="chart-footnote" id="week-caption">등록한 과제의 마감일을 기준으로 표시해요.</p>
+      <article class="panel deadline-panel" id="calendar" aria-labelledby="deadline-chart-title">
+        <div class="card-heading"><h2 id="deadline-chart-title">월간 달력</h2><div class="calendar-nav"><button type="button" id="calendar-prev" class="icon-button" aria-label="이전 달">‹</button><button type="button" id="calendar-next" class="icon-button" aria-label="다음 달">›</button></div></div>
+        <div class="calendar-month-row"><h3 id="calendar-month" aria-live="polite"></h3><button class="calendar-today" id="calendar-today" type="button">오늘</button></div>
+        <p class="sr-only" id="calendar-help">방향키로 날짜 이동, Home과 End로 주의 처음과 끝, Page Up과 Page Down으로 월 이동, Enter 또는 Space로 날짜를 선택해 과제 목록을 확인하세요.</p>
+        <div class="calendar-weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+        <div id="calendar-grid" class="calendar-grid" role="group" aria-label="월간 마감일" aria-describedby="calendar-help"></div>
+        <div class="calendar-selection" aria-live="polite"><strong id="calendar-selection-title">날짜를 선택해 보세요.</strong><span id="calendar-selection-description">과제가 있는 날짜에 작은 표시가 나타나요.</span></div>
+        <div class="calendar-footer"><span class="calendar-legend"><span><i class="calendar-dot"></i>진행 중</span><span><i class="calendar-dot done"></i>완료</span></span><span>7일 내 미완료 <strong id="week-total">0</strong>개</span></div>
       </article>
       <div class="stats">
         <article class="stat"><div><h2 class="stat-label">전체 과제</h2><span class="stat-value" id="stat-total">0</span><span class="stat-unit">개</span></div><span class="stat-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span></article>
@@ -1022,7 +1066,8 @@
       const PRIORITIES = { high: { label: '높음', rank: 0 }, normal: { label: '보통', rank: 1 }, low: { label: '낮음', rank: 2 } };
       const $ = id => document.getElementById(id);
       const form = $('task-form');
-      const state = { tasks: [], filter: 'all', query: '', sort: 'due', dateFilter: null, editingId: null, editingRevision: null,
+      const state = { tasks: [], filter: 'all', query: '', sort: 'due', dateFilter: null,
+        calendarMonth: localDateKey().slice(0, 7), calendarSelection: null, calendarFocus: localDateKey(), editingId: null, editingRevision: null,
         user: null, authReady: false, authMode: 'login', authBusy: false, loggingOut: false,
         ready: false, loaded: false, busy: false, preparing: false, progress: '', error: '', epoch: 0, watch: 0, snapshotVersion: 0,
         legacyRaw: null, legacyTasks: [], legacyError: '' };
@@ -1103,6 +1148,7 @@
         if ($('confirm-dialog').open) $('confirm-dialog').close('cancel');
         state.user = null; state.tasks = []; state.ready = false; state.loaded = false; state.busy = false; state.preparing = false;
         state.progress = ''; state.error = ''; state.query = ''; state.filter = 'all'; state.sort = 'due'; state.dateFilter = null;
+        state.calendarMonth = localDateKey().slice(0, 7); state.calendarSelection = null; state.calendarFocus = localDateKey();
         state.legacyRaw = null; state.legacyTasks = []; state.legacyError = '';
         $('search').value = ''; $('sort').value = 'due'; $('auth-email').value = ''; $('auth-password').value = ''; $('auth-password-confirm').value = '';
         $('account').hidden = true; $('account-email').textContent = ''; $('account-email').title = '';
@@ -1358,8 +1404,8 @@
           }
         }, { maxAttempts: 3 }), editing ? '과제 수정을 클라우드에 저장했어요.' : '새 과제를 클라우드에 저장했어요.');
         if (succeeded && isCurrent(ticket)) {
-          if (!editing) { state.filter = 'all'; state.query = ''; state.dateFilter = null; $('search').value = ''; }
-          resetForm(); closeTaskForm(); renderList(); cloudFeedback();
+          if (!editing) { state.filter = 'all'; state.query = ''; state.dateFilter = null; state.calendarSelection = null; $('search').value = ''; }
+          resetForm(); closeTaskForm(); renderCalendar(); renderList(); cloudFeedback();
         }
       }
       async function toggleTask(event) {
@@ -1432,7 +1478,7 @@
         $('progress-summary').textContent = `전체 ${stats.total}개 중 ${stats.completed}개 완료`;
         $('progress-caption').textContent = stats.total && stats.completed === stats.total ? '오늘의 노력이 차곡차곡 쌓였어요.' : '작은 시작이 큰 변화를 만들어요.';
         const active = state.tasks.filter(task => !task.completed);
-        renderDeadlineChart(active);
+        renderCalendar();
         const next = [...active].sort((a, b) => a.dueDate.localeCompare(b.dueDate) || PRIORITIES[a.priority].rank - PRIORITIES[b.priority].rank)[0];
         $('next-task').replaceChildren();
         if (next) {
@@ -1461,24 +1507,61 @@
       }
 
       // 기존 구독 결과만 집계합니다. 차트용 서버 요청이나 저장 필드는 없습니다.
-      function renderDeadlineChart(active) {
-        const days = Array.from({ length: 7 }, (_, index) => {
-          const date = new Date(); date.setDate(date.getDate() + index);
-          const key = localDateKey(date);
-          return { key, label: index === 0 ? '오늘' : `${date.getMonth() + 1}/${date.getDate()}`, count: active.filter(task => task.dueDate === key).length };
+      function renderCalendar() {
+        const focusedDate = document.activeElement?.dataset?.calendarDate;
+        const [year, month] = state.calendarMonth.split('-').map(Number);
+        const start = new Date(Date.UTC(year, month - 1, 1));
+        const firstDay = Math.floor(start.getTime() / 86400000) - start.getUTCDay();
+        const today = localDateKey();
+        const byDate = new Map();
+        for (const task of state.tasks) {
+          const counts = byDate.get(task.dueDate) || { active: 0, done: 0 };
+          counts[task.completed ? 'done' : 'active']++; byDate.set(task.dueDate, counts);
+        }
+        $('calendar-month').textContent = `${year}년 ${month}월`;
+        $('calendar-grid').setAttribute('aria-label', `${year}년 ${month}월 마감일`);
+        $('calendar-prev').disabled = state.calendarMonth === '1900-01';
+        $('calendar-next').disabled = state.calendarMonth === '9999-12';
+        const focusDate = state.calendarFocus?.startsWith(state.calendarMonth) ? state.calendarFocus : `${state.calendarMonth}-01`;
+        const cells = Array.from({ length: 42 }, (_, index) => {
+          const key = new Date((firstDay + index) * 86400000).toISOString().slice(0, 10);
+          const day = Number(key.slice(8)); const counts = byDate.get(key) || { active: 0, done: 0 };
+          const total = counts.active + counts.done;
+          const button = element('button', `calendar-day${key.startsWith(state.calendarMonth) ? '' : ' outside-month'}${key === today ? ' is-today' : ''}${key === state.calendarSelection ? ' is-selected' : ''}${total ? ' has-tasks' : ''}`);
+          button.type = 'button'; button.dataset.calendarDate = key; button.tabIndex = key === focusDate ? 0 : -1;
+          button.disabled = !validDate(key);
+          button.setAttribute('aria-label', validDate(key) ? `${key.replace(/^(\d+)-(\d+)-(\d+)$/, '$1년 $2월 $3일')}, 미완료 ${counts.active}개, 완료 ${counts.done}개` : '지원 범위 밖 날짜');
+          button.setAttribute('aria-pressed', String(key === state.calendarSelection));
+          if (key === today) button.setAttribute('aria-current', 'date');
+          const number = element('span', 'calendar-day-number', validDate(key) ? day : ''); number.setAttribute('aria-hidden', 'true'); button.append(number);
+          const marks = element('span', 'calendar-marks'); marks.setAttribute('aria-hidden', 'true');
+          if (counts.active) marks.append(element('i', 'calendar-dot'));
+          if (counts.done) marks.append(element('i', 'calendar-dot done'));
+          if (total) marks.append(element('span', 'calendar-day-count', total > 99 ? '99+' : total));
+          button.append(marks); return button;
         });
-        const total = days.reduce((sum, day) => sum + day.count, 0);
-        const max = Math.max(1, ...days.map(day => day.count));
-        $('week-total').textContent = total;
-        $('deadline-chart').setAttribute('aria-label', `앞으로 7일간 미완료 과제 ${total}개. ${days.map(day => `${day.label} ${day.count}개`).join(', ')}`);
-        $('deadline-chart').replaceChildren(...days.map((day, index) => {
-          const column = element('div', `day-column${index === 0 ? ' is-today' : ''}${day.count && index === days.findIndex(day => day.count === max) ? ' is-peak' : ''}`);
-          column.setAttribute('aria-hidden', 'true');
-          const bar = element('span', 'day-bar'); bar.style.height = `${Math.max(3, day.count / max * 100)}px`;
-          column.append(element('b', '', day.count), bar, element('span', '', day.label));
-          return column;
-        }));
-        $('week-caption').textContent = total ? '오늘부터 7일 · 미완료 과제의 마감일 기준' : '이번 7일 안에 마감되는 미완료 과제가 없어요.';
+        $('calendar-grid').replaceChildren(...cells);
+        const selected = state.calendarSelection; const counts = byDate.get(selected) || { active: 0, done: 0 };
+        $('calendar-selection-title').textContent = selected ? `${dateLabel(selected)} · 과제 ${counts.active + counts.done}개` : '날짜를 선택해 보세요.';
+        $('calendar-selection-description').textContent = selected ? '선택한 날짜의 과제를 목록에서 확인하세요.' : '작은 점은 마감 과제예요. 날짜를 누르면 목록과 연결돼요.';
+        $('week-total').textContent = state.tasks.filter(task => !task.completed && daysUntil(task.dueDate) >= 0 && daysUntil(task.dueDate) <= 6).length;
+        if (focusedDate) $('calendar-grid').querySelector(`[data-calendar-date="${focusedDate}"]`)?.focus({ preventScroll: true });
+      }
+      function selectCalendarDate(key, focus = false) {
+        if (!validDate(key)) return;
+        state.calendarMonth = key.slice(0, 7); state.calendarSelection = key; state.calendarFocus = key;
+        state.dateFilter = key; state.filter = 'all'; state.query = ''; $('search').value = '';
+        renderCalendar(); renderList(); cloudFeedback();
+        if (focus) $('calendar-grid').querySelector(`[data-calendar-date="${key}"]`)?.focus({ preventScroll: true });
+      }
+      function moveCalendarMonth(offset, focus = false) {
+        const [year, month] = state.calendarMonth.split('-').map(Number);
+        const serial = year * 12 + month - 1 + offset;
+        if (serial < 1900 * 12 || serial >= 10000 * 12) return;
+        state.calendarMonth = `${Math.floor(serial / 12)}-${String(serial % 12 + 1).padStart(2, '0')}`;
+        state.calendarFocus = `${state.calendarMonth}-01`; state.calendarSelection = null; state.dateFilter = null;
+        renderCalendar(); renderList(); cloudFeedback();
+        if (focus) $('calendar-grid').querySelector(`[data-calendar-date="${state.calendarFocus}"]`)?.focus({ preventScroll: true });
       }
 
       function visibleTasks() {
@@ -1736,7 +1819,7 @@
             } catch (error) { throw appError(`${imported}개를 저장한 뒤 가져오기를 멈췄어요. ${errorMessage(error)} 같은 파일로 다시 가져오면 이미 있는 ID는 건너뛰어요.`); }
           }
         }, () => mode === 'replace' ? `${imported}개의 과제로 교체했어요.` : `${imported}개를 추가했어요. 이미 있는 과제는 그대로 유지했어요.`);
-        if (succeeded && isCurrent(ticket)) { state.query = ''; state.filter = 'all'; $('search').value = ''; resetForm(); render(); }
+        if (succeeded && isCurrent(ticket)) { state.query = ''; state.filter = 'all'; state.dateFilter = null; state.calendarSelection = null; $('search').value = ''; resetForm(); render(); }
       }
       async function importBackup(event) {
         const file = event.target.files[0]; event.target.value = '';
@@ -1772,12 +1855,39 @@
       $('retry-cloud').addEventListener('click', () => { if (!state.busy) subscribeTasks(); });
       document.querySelectorAll('[data-open-task]').forEach(button => button.addEventListener('click', openTaskForm));
       $('close-task-form').addEventListener('click', closeTaskForm);
+      $('calendar-prev').addEventListener('click', () => moveCalendarMonth(-1));
+      $('calendar-next').addEventListener('click', () => moveCalendarMonth(1));
+      $('calendar-today').addEventListener('click', () => selectCalendarDate(localDateKey(), true));
+      $('calendar-grid').addEventListener('click', event => {
+        const button = event.target.closest('[data-calendar-date]');
+        if (button && !button.disabled) selectCalendarDate(button.dataset.calendarDate);
+      });
+      $('calendar-grid').addEventListener('focusin', event => {
+        const key = event.target.dataset.calendarDate; if (!key) return;
+        state.calendarFocus = key;
+        $('calendar-grid').querySelectorAll('[data-calendar-date]').forEach(button => { button.tabIndex = button.dataset.calendarDate === key ? 0 : -1; });
+      });
+      $('calendar-grid').addEventListener('keydown', event => {
+        const key = event.target.dataset.calendarDate; if (!key) return;
+        if (['PageUp', 'PageDown'].includes(event.key)) { event.preventDefault(); moveCalendarMonth(event.key === 'PageUp' ? -1 : 1, true); return; }
+        const weekday = new Date(dayNumber(key) * 86400000).getUTCDay();
+        const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7, Home: -weekday, End: 6 - weekday };
+        if (!Object.hasOwn(offsets, event.key)) return;
+        event.preventDefault();
+        const next = new Date((dayNumber(key) + offsets[event.key]) * 86400000).toISOString().slice(0, 10);
+        if (!validDate(next)) return;
+        if (next.slice(0, 7) !== state.calendarMonth) {
+          state.calendarMonth = next.slice(0, 7); state.calendarSelection = null; state.dateFilter = null; renderList(); cloudFeedback();
+        }
+        state.calendarFocus = next; renderCalendar();
+        $('calendar-grid').querySelector(`[data-calendar-date="${next}"]`)?.focus({ preventScroll: true });
+      });
       $('task-dialog').addEventListener('close', () => {
         if (taskFormOpener?.isConnected && !taskFormOpener.closest('[hidden]')) taskFormOpener.focus();
         if (location.hash === '#task-form') { history.replaceState(null, '', '#tasks'); syncRail(); }
         syncRail();
       });
-      $('view-urgent').addEventListener('click', () => { state.filter = 'urgent'; state.dateFilter = null; renderList(); cloudFeedback(); location.hash = '#tasks'; $('search').focus({ preventScroll: true }); });
+      $('view-urgent').addEventListener('click', () => { state.filter = 'urgent'; state.dateFilter = null; state.calendarSelection = null; renderCalendar(); renderList(); cloudFeedback(); location.hash = '#tasks'; $('search').focus({ preventScroll: true }); });
       form.addEventListener('submit', submitTask);
       $('cancel-edit').addEventListener('click', () => { resetForm(true); notify('수정을 취소했어요. 원래 과제는 유지돼요.'); });
       $('note').addEventListener('input', () => { $('note-counter').textContent = `${$('note').value.length.toLocaleString('ko-KR')} / 2,000`; });
@@ -1786,25 +1896,27 @@
       $('task-list').addEventListener('change', toggleTask);
       $('search').addEventListener('input', () => { state.query = $('search').value; renderList(); cloudFeedback(); });
       $('clear-search').addEventListener('click', () => { state.query = ''; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); });
-      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; state.dateFilter = null; renderList(); cloudFeedback(); }));
+      document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => { state.filter = button.dataset.filter; state.dateFilter = null; state.calendarSelection = null; renderCalendar(); renderList(); cloudFeedback(); }));
       document.querySelectorAll('[data-quick]').forEach(button => button.addEventListener('click', () => {
         state.query = ''; $('search').value = '';
         state.dateFilter = button.dataset.quick === 'today' ? localDateKey() : null;
+        state.calendarSelection = state.dateFilter;
+        if (state.dateFilter) { state.calendarMonth = state.dateFilter.slice(0, 7); state.calendarFocus = state.dateFilter; }
         state.filter = button.dataset.quick === 'urgent' ? 'urgent' : 'active';
-        renderList(); cloudFeedback(); $('search').focus({ preventScroll: true });
+        renderCalendar(); renderList(); cloudFeedback(); $('search').focus({ preventScroll: true });
       }));
       $('sort').addEventListener('change', () => { state.sort = $('sort').value; renderList(); cloudFeedback(); });
-      $('clear-date-filter').addEventListener('click', () => { state.dateFilter = null; renderList(); cloudFeedback(); $('search').focus(); });
+      $('clear-date-filter').addEventListener('click', () => { state.dateFilter = null; state.calendarSelection = null; renderCalendar(); renderList(); cloudFeedback(); $('search').focus(); });
       $('empty-action').addEventListener('click', () => {
         if (!state.tasks.length) openTaskForm();
-        else { state.query = ''; state.filter = 'all'; state.dateFilter = null; $('search').value = ''; renderList(); cloudFeedback(); $('search').focus(); }
+        else { state.query = ''; state.filter = 'all'; state.dateFilter = null; state.calendarSelection = null; $('search').value = ''; renderCalendar(); renderList(); cloudFeedback(); $('search').focus(); }
       });
       $('export-data').addEventListener('click', exportBackup);
       $('import-data').addEventListener('click', () => { if (canWrite()) $('import-file').click(); });
       $('import-file').addEventListener('change', importBackup);
       // 앵커 이동 후 현재 메뉴를 키보드·스크린리더 사용자에게 함께 알려 줍니다.
       function syncRail() {
-        const target = ['#overview', '#tasks', '#task-form', '#backup'].includes(location.hash) ? location.hash : '#overview';
+        const target = ['#overview', '#tasks', '#task-form', '#calendar', '#backup'].includes(location.hash) ? location.hash : '#overview';
         document.querySelectorAll('.rail-link').forEach(link => {
           const current = link.getAttribute('href') === target;
           link.classList.toggle('is-current', current);
